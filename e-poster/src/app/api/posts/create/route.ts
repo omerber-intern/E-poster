@@ -1,0 +1,97 @@
+import { NextRequest, NextResponse } from 'next/server';
+import {
+  ETORO_API_BASE_URL,
+  API_ENDPOINTS,
+  getPostHeaders,
+  getPortfolioCredentials,
+} from '@/lib/etoro-api-config';
+
+/**
+ * POST /api/posts/create
+ *
+ * Body: { portfolioUsername, message, tags? }
+ *
+ * Publishes a post on behalf of the specified portfolio account using
+ * its per-portfolio credentials from PORTFOLIO_CREDENTIALS env var.
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const { portfolioUsername, message, tags } = (await request.json()) as {
+      portfolioUsername: string;
+      message: string;
+      tags?: Array<{ name: string; id: string }>;
+    };
+
+    if (!portfolioUsername || !message) {
+      return NextResponse.json(
+        { error: 'portfolioUsername and message are required' },
+        { status: 400 },
+      );
+    }
+
+    const creds = getPortfolioCredentials(portfolioUsername);
+    if (!creds) {
+      return NextResponse.json(
+        { error: `No API credentials configured for ${portfolioUsername}` },
+        { status: 403 },
+      );
+    }
+
+    const headers = getPostHeaders(portfolioUsername);
+    if (!headers) {
+      return NextResponse.json(
+        { error: `Could not build headers for ${portfolioUsername}` },
+        { status: 500 },
+      );
+    }
+
+    const payload: Record<string, unknown> = {
+      owner: parseInt(creds.gcid, 10),
+      message,
+    };
+
+    if (tags && tags.length > 0) {
+      payload.tags = { tags };
+    }
+
+    const url = `${ETORO_API_BASE_URL}${API_ENDPOINTS.FEEDS_POST}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(30000),
+    });
+
+    const responseText = await response.text();
+
+    if (!response.ok) {
+      return NextResponse.json(
+        {
+          error: 'eToro API rejected the post',
+          status: response.status,
+          details: responseText.substring(0, 500),
+        },
+        { status: response.status },
+      );
+    }
+
+    const data = JSON.parse(responseText);
+
+    return NextResponse.json({
+      success: true,
+      postId: data.id,
+      portfolioUsername,
+      postedAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Create post error:', error);
+    return NextResponse.json(
+      {
+        error: 'Failed to create post',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
+  }
+}

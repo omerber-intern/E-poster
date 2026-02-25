@@ -1,0 +1,155 @@
+{
+  "bios": [
+    {
+      "username": "Short-Tech",
+      "displayName": "Short-Tech",
+      "userId": 6517035,
+      "bio": "If you believe that the technology sector is about to show some red figures, then consider investing in this CopyPortfolio. Short-Tech is comprised out of short positions on major tech companies, effectively hedging your portfolio against poor performance from the entire technology sector. The portfolio was created and managed by eToro’s investment committee, which periodically re-balances its allocation.",
+      "aboutMe": "If you believe that the technology sector is about to show some red figures, then consider investing in this CopyPortfolio. Short-Tech is comprised out of short positions on major tech companies, effectively hedging your portfolio against poor performance from the entire technology sector. The portfolio was created and managed by eToro’s investment committee, which periodically re-balances its allocation.",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/6231050/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:24.077Z"
+    },
+    {
+      "username": "PureMomentum",
+      "displayName": "PureMomentum",
+      "userId": 43173506,
+      "bio": "Pure Momentum is a systematic U.S.-equity growth portfolio that seeks to capture the momentum premium by investing only in stocks displaying strong, sustained price leadership. Each month it allocates up to 98 % of capital across 40–50 large- and mid-cap companies that meet strict liquidity criteria, aiming to deliver attractive risk-adjusted returns without the complexity of short selling or leverage.\n\nThe strategy screens all U.S. shares tradable on eToro, keeping those with market-capitalisation above USD 2.5 billion and average daily volume over 10 million shares. From this pool it selects the highest-ranked names according to eToro’s proprietary momentum score—derived from price action and anonymised client-flow data—and weights them equally to maintain diversification and avoid single-stock concentration.\nRebalance Frequency: Monthly\n\nMinimum Investment: USD 2,000",
+      "aboutMe": "Pure Momentum is a systematic U.S.-equity growth portfolio that seeks to capture the momentum premium by investing only in stocks displaying strong, sustained price leadership. Each month it allocates up to 98 % of capital across 40–50 large- and mid-cap companies that meet strict liquidity criteria, aiming to deliver attractive risk-adjusted returns without the complexity of short selling or leverage.\n\nThe strategy screens all U.S. shares tradable on eToro, keeping those with market-capitalisation above USD 2.5 billion and average daily volume over 10 million shares. From this pool it selects the highest-ranked names according to eToro’s proprietary momentum score—derived from price action and anonymised client-flow data—and weights them equally to maintain diversification and avoid single-stock concentration.\nRebalance Frequency: Monthly\n\nMinimum Investment: USD 2,000",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/43043086/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:24.230Z"
+    },
+    {
+      "username": "PureGrowth",
+      "displayName": "PureGrowth",
+      "userId": 46059454,
+      "bio": "Growth investing targets businesses that demonstrate above-average revenue and earnings growth, innovation leadership, and positive long-term market momentum.\nThe portfolio is constructed using a systematic, AI-driven approach that combines GuruFocus growth factor with eToro’s proprietary data. These data sources are analyzed using advanced machine learning techniques to identify companies that best represent the growth factor, while maintaining a disciplined investment process.\nPureGrowth is deliberately structured to deliver focused exposure to growth, avoiding unintended biases toward other investment styles. By concentrating on growth-oriented characteristics, the portfolio aims to capture long-term capital appreciation associated with high-growth companies.\nThe portfolio is rebalanced regularly using model insights to ensure continued alignment with its growth objective. PureGrowth is suitable for investors seeking exposure to growth equities through a data-driven strategy.",
+      "aboutMe": "Growth investing targets businesses that demonstrate above-average revenue and earnings growth, innovation leadership, and positive long-term market momentum.\nThe portfolio is constructed using a systematic, AI-driven approach that combines GuruFocus growth factor with eToro’s proprietary data. These data sources are analyzed using advanced machine learning techniques to identify companies that best represent the growth factor, while maintaining a disciplined investment process.\nPureGrowth is deliberately structured to deliver focused exposure to growth, avoiding unintended biases toward other investment styles. By concentrating on growth-oriented characteristics, the portfolio aims to capture long-term capital appreciation associated with high-growth companies.\nThe portfolio is rebalanced regularly using model insights to ensure continued alignment with its growth objective. PureGrowth is suitable for investors seeking exposure to growth equities through a data-driven strategy.",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/45974034/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:24.390Z"
+    },
+    {
+      "username": "Momentum-LS",
+      "displayName": "Momentum-LS",
+      "userId": 33172644,
+      "bio": "Momentum long-short is a systematic approach seeks to profit from price trends in equities. This strategy buys stocks that show consistent upward momentum, while simultaneously short-selling those with downward momentum, aiming for stable returns even amid volatile markets.\n\nThe Momentum-LS portfolio screens all US stocks available on eToro, selecting those with adequate market capitalization and liquidity. After identifying the strongest and weakest momentum stocks, the strategy equally weights both long and short positions to maintain balance, targeting consistent returns in varying market conditions.\n\nRebalance Frequency: Monthly\n\nMinimum Investment: $2,000",
+      "aboutMe": "Momentum long-short is a systematic approach seeks to profit from price trends in equities. This strategy buys stocks that show consistent upward momentum, while simultaneously short-selling those with downward momentum, aiming for stable returns even amid volatile markets.\n\nThe Momentum-LS portfolio screens all US stocks available on eToro, selecting those with adequate market capitalization and liquidity. After identifying the strongest and weakest momentum stocks, the strategy equally weights both long and short positions to maintain balance, targeting consistent returns in varying market conditions.\n\nRebalance Frequency: Monthly\n\nMinimum Investment: $2,000",
+      "strategy": 4,
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/32934229/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:24.537Z"
+    },
+    {
+      "username": "MarketPicks",
+      "displayName": "MarketPicks",
+      "userId": 45862002,
+      "bio": "By leveraging advanced data science and machine learning techniques, the strategy systematically identifies and mimics the trades of Popular Investors (PIs) on the eToro platform whose portfolios demonstrate high skill and low volatility. The core objective is to optimize for minimal losses while maintaining consistent, market-beating returns.\n \nSelection and Filtering\nThe methodology begins with a heavy filtering process of the eToro Popular Investor universe. PIs are evaluated based on three primary pillars:\n \nAsset Allocation: The resulting strategy maintains a dynamic and overall balanced allocation across asset classes, including Stocks, ETFs, and Cash, with minor exposure to Indices, Commodities, and Crypto\n\nBy combining rigorous investor screening with sophisticated portfolio construction, this strategy aims to significantly outperform traditional benchmarks, such as a 60/40 ETF portfolio, while maintaining a substantially lower risk profile\n ",
+      "aboutMe": "By leveraging advanced data science and machine learning techniques, the strategy systematically identifies and mimics the trades of Popular Investors (PIs) on the eToro platform whose portfolios demonstrate high skill and low volatility. The core objective is to optimize for minimal losses while maintaining consistent, market-beating returns.\n \nSelection and Filtering\nThe methodology begins with a heavy filtering process of the eToro Popular Investor universe. PIs are evaluated based on three primary pillars:\n \nAsset Allocation: The resulting strategy maintains a dynamic and overall balanced allocation across asset classes, including Stocks, ETFs, and Cash, with minor exposure to Indices, Commodities, and Crypto\n\nBy combining rigorous investor screening with sophisticated portfolio construction, this strategy aims to significantly outperform traditional benchmarks, such as a 60/40 ETF portfolio, while maintaining a substantially lower risk profile\n ",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/45776582/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:24.693Z"
+    },
+    {
+      "username": "BalancedPicks",
+      "displayName": "BalancedPicks",
+      "userId": 45862084,
+      "bio": "By leveraging advanced data science and machine learning techniques, the strategy systematically identifies and mimics the trades of Popular Investors (PIs) on the eToro platform whose portfolios demonstrate high skill and low volatility. The core objective is to optimize for minimal losses while maintaining consistent, market-beating returns.\n \nSelection and Filtering\nThe methodology begins with a heavy filtering process of the eToro Popular Investor universe. PIs are evaluated based on three primary pillars:\n \nAsset Allocation: The resulting strategy maintains a dynamic and overall balanced allocation across asset classes, including Stocks, ETFs, and Cash, with minor exposure to Indices, Commodities, and Crypto\n\nBy combining rigorous investor screening with sophisticated portfolio construction, this strategy aims to significantly outperform traditional benchmarks, such as a 60/40 ETF portfolio, while maintaining a substantially lower risk profile\n \n",
+      "aboutMe": "By leveraging advanced data science and machine learning techniques, the strategy systematically identifies and mimics the trades of Popular Investors (PIs) on the eToro platform whose portfolios demonstrate high skill and low volatility. The core objective is to optimize for minimal losses while maintaining consistent, market-beating returns.\n \nSelection and Filtering\nThe methodology begins with a heavy filtering process of the eToro Popular Investor universe. PIs are evaluated based on three primary pillars:\n \nAsset Allocation: The resulting strategy maintains a dynamic and overall balanced allocation across asset classes, including Stocks, ETFs, and Cash, with minor exposure to Indices, Commodities, and Crypto\n\nBy combining rigorous investor screening with sophisticated portfolio construction, this strategy aims to significantly outperform traditional benchmarks, such as a 60/40 ETF portfolio, while maintaining a substantially lower risk profile\n \n",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/45776664/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:24.846Z"
+    },
+    {
+      "username": "OutSmartNSDQ",
+      "displayName": "OutSmartNSDQ",
+      "userId": 7446811,
+      "bio": "The OutSmartNSDQ Alpha Portfolio applies a cutting-edge, AI-powered investment approach designed to outperform the Nasdaq 100.\n\nStock selection is guided by an AI-driven framework that analyzes key variables like growth trajectory, valuation, and current market momentum. The strategy is built to adjust in real time to evolving market dynamics, maintaining relevance and agility across cycles.\n\nIts unique structure leverages X2 long positions (without overnight fees), to enjoy potential upsides, while shorting stocks (leverage X1) to protect the portfolio against drawdowns in the market.\n\nMonthly rebalancing incorporates the latest AI insights and comprehensive market data, positioning investors to capitalize on sector and stock-specific opportunities effectively within the dynamic Nasdaq landscape.\n\nThe minimum investment for OutSmartNSDQ is $2,000.",
+      "aboutMe": "The OutSmartNSDQ Alpha Portfolio applies a cutting-edge, AI-powered investment approach designed to outperform the Nasdaq 100.\n\nStock selection is guided by an AI-driven framework that analyzes key variables like growth trajectory, valuation, and current market momentum. The strategy is built to adjust in real time to evolving market dynamics, maintaining relevance and agility across cycles.\n\nIts unique structure leverages X2 long positions (without overnight fees), to enjoy potential upsides, while shorting stocks (leverage X1) to protect the portfolio against drawdowns in the market.\n\nMonthly rebalancing incorporates the latest AI insights and comprehensive market data, positioning investors to capitalize on sector and stock-specific opportunities effectively within the dynamic Nasdaq landscape.\n\nThe minimum investment for OutSmartNSDQ is $2,000.",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/7160826/2.jpg",
+      "fetchedAt": "2026-02-21T16:42:25.029Z"
+    },
+    {
+      "username": "ProPicks",
+      "displayName": "ProPicks",
+      "userId": 45787144,
+      "bio": "ProPicks is a conservative, AI-driven strategy that invests in eToro's Popular Investors, aiming to outperform the traditional 60/40 portfolio (60% equities, 40% bonds). Unlike static allocations, ProPicks dynamically adjusts its positions to capture emerging opportunities while maintaining a balanced risk profile.\n\nDiversification & Risk Management: To protect investors, a 5% stop loss is applied to each followed investor, ensuring downside protection. The portfolio is carefully managed with a focus on capital preservation, while still offering growth potential. \n\nRebalance Frequency: Quarterly, ensuring that allocations reflect the latest AI-driven insights and investor performance.\n\nTarget Investor: Designed for conservative investors seeking steady growth, ProPicks  combines AI-powered decision-making with robust risk controls to deliver a modern alternative to the classic 60/40 strategy.\n\nMinimum Investment: $10,000",
+      "aboutMe": "ProPicks is a conservative, AI-driven strategy that invests in eToro's Popular Investors, aiming to outperform the traditional 60/40 portfolio (60% equities, 40% bonds). Unlike static allocations, ProPicks dynamically adjusts its positions to capture emerging opportunities while maintaining a balanced risk profile.\n\nDiversification & Risk Management: To protect investors, a 5% stop loss is applied to each followed investor, ensuring downside protection. The portfolio is carefully managed with a focus on capital preservation, while still offering growth potential. \n\nRebalance Frequency: Quarterly, ensuring that allocations reflect the latest AI-driven insights and investor performance.\n\nTarget Investor: Designed for conservative investors seeking steady growth, ProPicks  combines AI-powered decision-making with robust risk controls to deliver a modern alternative to the classic 60/40 strategy.\n\nMinimum Investment: $10,000",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/45701724/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:25.174Z"
+    },
+    {
+      "username": "GainersQtr",
+      "displayName": "GainersQtr",
+      "userId": 4934693,
+      "bio": "GainersQtr is a portfolio comprised of copying various users on the eToro Trading Platform that are selected by a system algorithm from our database. \nThe algorithmic score will determine the top users for the portfolio based on the following parameters:  \n-\tProfitable quarters\n-\tActive quarters\n-       Each traders selected in the portfolio has a 5% copy stop-loss\n-\tMinimum of 6 trades in the last six months for each investor\n-\tLow risk score of investors within portfolio (1-5)\n-\tAt least 50% of all the trades are manual\n-\tHighly diversified (selection of uncorrelated instruments)\n\t\nOn every quarterly rebalance, each trader in the portfolio is set a 5% stop-loss to prevent large drawdowns. \n\nIf stop losses are triggered during the quarter, the proceeds can be reallocated in Short-duration U.S Treasury ETFs, depending on market conditions, until next quarterly rebalance.\n\nThe minimum investment is $5,000.",
+      "aboutMe": "GainersQtr is a portfolio comprised of copying various users on the eToro Trading Platform that are selected by a system algorithm from our database. \nThe algorithmic score will determine the top users for the portfolio based on the following parameters:  \n-\tProfitable quarters\n-\tActive quarters\n-       Each traders selected in the portfolio has a 5% copy stop-loss\n-\tMinimum of 6 trades in the last six months for each investor\n-\tLow risk score of investors within portfolio (1-5)\n-\tAt least 50% of all the trades are manual\n-\tHighly diversified (selection of uncorrelated instruments)\n\t\nOn every quarterly rebalance, each trader in the portfolio is set a 5% stop-loss to prevent large drawdowns. \n\nIf stop losses are triggered during the quarter, the proceeds can be reallocated in Short-duration U.S Treasury ETFs, depending on market conditions, until next quarterly rebalance.\n\nThe minimum investment is $5,000.",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/4657429/4.jpg",
+      "fetchedAt": "2026-02-21T16:42:25.342Z"
+    },
+    {
+      "username": "ActiveTraders",
+      "displayName": "ActiveTraders",
+      "userId": 4934697,
+      "bio": "ActiveTraders is a portfolio comprised of copying various users on the eToro Trading Platform that are selected by a system algorithm from our database. \n\nThe algorithmic score will determine the top users for the portfolio based on the following parameters:  \n-\tProfitable quarters\n-\tActive quarters\n-\tCopy stop loss per trader of 10%\n-\tLow-mid risk score\n-\tHighly diversified\n\nOn every quarterly rebalance, each trader in the portfolio is set a 10% stop-loss to prevent large drawdowns. \n\nIf stop losses are triggered during the quarter, the proceeds can be reallocated in Short-duration U.S Treasury ETFs, depending on market conditions, until next quarterly rebalance.\n\nThe minimum investment is $5,000.",
+      "aboutMe": "ActiveTraders is a portfolio comprised of copying various users on the eToro Trading Platform that are selected by a system algorithm from our database. \n\nThe algorithmic score will determine the top users for the portfolio based on the following parameters:  \n-\tProfitable quarters\n-\tActive quarters\n-\tCopy stop loss per trader of 10%\n-\tLow-mid risk score\n-\tHighly diversified\n\nOn every quarterly rebalance, each trader in the portfolio is set a 10% stop-loss to prevent large drawdowns. \n\nIf stop losses are triggered during the quarter, the proceeds can be reallocated in Short-duration U.S Treasury ETFs, depending on market conditions, until next quarterly rebalance.\n\nThe minimum investment is $5,000.",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/4657433/4.jpg",
+      "fetchedAt": "2026-02-21T16:42:25.490Z"
+    },
+    {
+      "username": "SharpTraders",
+      "displayName": "SharpTraders",
+      "userId": 4934708,
+      "bio": "SharpTraders investment strategy bundles investors with yearly average risk scores ranging from 2 to 7 in a descending rate. It is rebalanced quarterly and comprises only investors with high sharpe ratio results and significant gains. \n\nOn every quarterly rebalance, each trader in the portfolio is set a 5% stop-loss to prevent large drawdowns. \n\nIf stop losses are triggered during the quarter, the proceeds can be reallocated in Short-duration U.S Treasury ETFs, depending on market conditions, until next quarterly rebalance.\n\nThe rebalance process requires the closing of all existing investments within the Smart Portfolio’s and the reinvestment of funds in new positions.\n\nThe minimum investment is $5,000.\n\nKindly note that no action is required on your behalf. The new allocation and asset weight will be automatically adjusted in your portfolio.",
+      "aboutMe": "SharpTraders investment strategy bundles investors with yearly average risk scores ranging from 2 to 7 in a descending rate. It is rebalanced quarterly and comprises only investors with high sharpe ratio results and significant gains. \n\nOn every quarterly rebalance, each trader in the portfolio is set a 5% stop-loss to prevent large drawdowns. \n\nIf stop losses are triggered during the quarter, the proceeds can be reallocated in Short-duration U.S Treasury ETFs, depending on market conditions, until next quarterly rebalance.\n\nThe rebalance process requires the closing of all existing investments within the Smart Portfolio’s and the reinvestment of funds in new positions.\n\nThe minimum investment is $5,000.\n\nKindly note that no action is required on your behalf. The new allocation and asset weight will be automatically adjusted in your portfolio.",
+      "strategy": "",
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/4657444/2.jpg",
+      "fetchedAt": "2026-02-21T16:42:25.628Z"
+    },
+    {
+      "username": "SectorNeutral",
+      "displayName": "SectorNeutral",
+      "userId": 36755095,
+      "bio": "SectorNeutral strategy creates a beta-neutral long/short portfolio within the S&P 500, balancing risk across sectors. By maintaining low correlation to overall market trends, this portfolio consists of 70 stocks, up to 35 long and 35 short positions, providing a unique opportunity for investors to diversify their exposure to liquid, listed instruments while mitigating market risk. \n\nRebalance Frequency: Monthly\n\nTarget Investor: Suited for retail and professional investors seeking growth through a moderate-risk strategy. Its focus on market-neutral performance makes it a compelling choice for those looking to diversify without exposure to alternatives or leverage.\n\nKey Differentiators: By harnessing proprietary eToro data and cutting-edge AI, this portfolio offers a well-balanced stock selection that provides diversification and low correlation to market trends.\n\nMinimum Investment: $2,000",
+      "aboutMe": "SectorNeutral strategy creates a beta-neutral long/short portfolio within the S&P 500, balancing risk across sectors. By maintaining low correlation to overall market trends, this portfolio consists of 70 stocks, up to 35 long and 35 short positions, providing a unique opportunity for investors to diversify their exposure to liquid, listed instruments while mitigating market risk. \n\nRebalance Frequency: Monthly\n\nTarget Investor: Suited for retail and professional investors seeking growth through a moderate-risk strategy. Its focus on market-neutral performance makes it a compelling choice for those looking to diversify without exposure to alternatives or leverage.\n\nKey Differentiators: By harnessing proprietary eToro data and cutting-edge AI, this portfolio offers a well-balanced stock selection that provides diversification and low correlation to market trends.\n\nMinimum Investment: $2,000",
+      "strategy": 8,
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/36543675/2.jpg",
+      "fetchedAt": "2026-02-21T16:42:25.777Z"
+    },
+    {
+      "username": "Pure-Value",
+      "displayName": "Pure-Value",
+      "userId": 46001041,
+      "bio": "Value investing seeks to benefit from market inefficiencies by investing in companies that are priced below their perceived intrinsic value.\nThe portfolio employs an AI-based, systematic approach that combines GuruFocus value factor data with eToro’s proprietary data. Machine learning techniques are used to select stocks that best reflect value characteristics, while maintaining a consistent and disciplined investment framework.\nPureValue is intentionally constructed to deliver focused exposure to the value factor, minimizing overlap with growth- or momentum-driven strategies. This targeted approach aims to capture the long-term return potential associated with undervalued equities.\nThe portfolio is rebalanced on a regular basis to reflect updated factor data and market conditions. PureValue is designed for investors seeking systematic value exposure through a transparent, data-driven investment approach.",
+      "aboutMe": "Value investing seeks to benefit from market inefficiencies by investing in companies that are priced below their perceived intrinsic value.\nThe portfolio employs an AI-based, systematic approach that combines GuruFocus value factor data with eToro’s proprietary data. Machine learning techniques are used to select stocks that best reflect value characteristics, while maintaining a consistent and disciplined investment framework.\nPureValue is intentionally constructed to deliver focused exposure to the value factor, minimizing overlap with growth- or momentum-driven strategies. This targeted approach aims to capture the long-term return potential associated with undervalued equities.\nThe portfolio is rebalanced on a regular basis to reflect updated factor data and market conditions. PureValue is designed for investors seeking systematic value exposure through a transparent, data-driven investment approach.",
+      "strategy": 1,
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/45915621/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:25.916Z"
+    },
+    {
+      "username": "SectorGurus",
+      "displayName": "SectorGurus",
+      "userId": 43029478,
+      "bio": "SectorGurus seeks enhanced growth through a high-conviction, long/short strategy that targets volatile yet high-performing stocks within the S&P 500. This portfolio consists of 70 stocks,  up to 35 long and 35 short positions, utilizing advanced AI to dynamically allocate across sectors. By focusing on more volatile stocks, offers higher growth potential, providing an attractive opportunity for aggressive investors.\n\nRebalance Frequency: Monthly\n\nTarget Investor: Suited for growth-oriented investors seeking higher returns and willing to accept greater volatility. The portfolio caters to both retail and professional investors looking for a moderate risk profile \n\nKey Differentiators: By utilizing eToro’s proprietary data and advanced AI, this portfolio focuses on high-volatility stocks to maximize return potential, making it a standout option for dynamic market strategies.\n\nMinimum investment: $2,000",
+      "aboutMe": "SectorGurus seeks enhanced growth through a high-conviction, long/short strategy that targets volatile yet high-performing stocks within the S&P 500. This portfolio consists of 70 stocks,  up to 35 long and 35 short positions, utilizing advanced AI to dynamically allocate across sectors. By focusing on more volatile stocks, offers higher growth potential, providing an attractive opportunity for aggressive investors.\n\nRebalance Frequency: Monthly\n\nTarget Investor: Suited for growth-oriented investors seeking higher returns and willing to accept greater volatility. The portfolio caters to both retail and professional investors looking for a moderate risk profile \n\nKey Differentiators: By utilizing eToro’s proprietary data and advanced AI, this portfolio focuses on high-volatility stocks to maximize return potential, making it a standout option for dynamic market strategies.\n\nMinimum investment: $2,000",
+      "strategy": 8,
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/42899058/1.jpg",
+      "fetchedAt": "2026-02-21T16:42:26.058Z"
+    },
+    {
+      "username": "NasdaqAI-Inverse",
+      "displayName": "NasdaqAI-Inverse",
+      "userId": 37154870,
+      "bio": "Nasdaq AI-Inverse is a designed to protect investors from market downturns by shorting 50 stocks from the Nasdaq 100 index. Powered by AI, this portfolio identifies stocks likely to decline in value, positioning investors to profit from bear markets. It serves as a hedge for long-only portfolios or as a standalone strategy for those anticipating market corrections.\n\nRebalance Frequency: Monthly\n\nTarget Investor: This portfolio is suited for experienced retail and professional investors looking to hedge their long portfolios or capitalize on declining markets. It offers a high-risk, with attractive reward strategy for those seeking protection during market downturns.\n\nKey Differentiators: With the ability to outperform the Short Nasdaq ETFs, Nasdaq AI-Inverse leverages AI and unique data insights to deliver superior short exposure, providing investors with an effective hedge in volatile markets.\n\nMinimum Investment: $2,000",
+      "aboutMe": "Nasdaq AI-Inverse is a designed to protect investors from market downturns by shorting 50 stocks from the Nasdaq 100 index. Powered by AI, this portfolio identifies stocks likely to decline in value, positioning investors to profit from bear markets. It serves as a hedge for long-only portfolios or as a standalone strategy for those anticipating market corrections.\n\nRebalance Frequency: Monthly\n\nTarget Investor: This portfolio is suited for experienced retail and professional investors looking to hedge their long portfolios or capitalize on declining markets. It offers a high-risk, with attractive reward strategy for those seeking protection during market downturns.\n\nKey Differentiators: With the ability to outperform the Short Nasdaq ETFs, Nasdaq AI-Inverse leverages AI and unique data insights to deliver superior short exposure, providing investors with an effective hedge in volatile markets.\n\nMinimum Investment: $2,000",
+      "strategy": 11,
+      "avatarUrl": "https://etoro-cdn.etorostatic.com/avatars/original/36961450/2.jpg",
+      "fetchedAt": "2026-02-21T16:42:26.207Z"
+    }
+  ],
+  "fetchedAt": "2026-02-21T16:42:26.207Z"
+}
