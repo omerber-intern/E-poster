@@ -1,0 +1,1720 @@
+{
+  "GFI.US": [
+    {
+      "topic": "Gold Mining",
+      "subcategory": "Precious Metals Extraction",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "RNAM": [
+    {
+      "topic": "Biopharmaceuticals",
+      "subcategory": "Drug Development & Manufacturing",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "IAG.US": [
+    {
+      "topic": "Gold Mining",
+      "subcategory": "Precious Metals Extraction",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "AVNT.US": [
+    {
+      "topic": "Specialty Materials & Polymers",
+      "subcategory": "Advanced Materials Manufacturing",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "NESN.ZU": [
+    {
+      "topic": "Food & Beverage Manufacturing",
+      "subcategory": "Packaged Foods & Beverages",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "VOW3.DE": [
+    {
+      "topic": "Automotive Manufacturing",
+      "subcategory": "Vehicle Production & Sales",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "SWDA.L": [
+    {
+      "topic": "Diversified Index Funds",
+      "subcategory": "Global Equity ETFs",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "FISV": [
+    {
+      "topic": "Payment Processing & Financial Software",
+      "subcategory": "Fintech Infrastructure",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "FCX.RTH": [
+    {
+      "topic": "Copper & Molybdenum Mining",
+      "subcategory": "Base Metals Extraction",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "RI.PA": [
+    {
+      "topic": "Alcoholic Beverages",
+      "subcategory": "Spirits & Wine Production",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "RR.L": [
+    {
+      "topic": "Aerospace & Defense Manufacturing",
+      "subcategory": "Aircraft Engines & Components",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "OR.PA": [
+    {
+      "topic": "Cosmetics & Personal Care",
+      "subcategory": "Beauty Products Manufacturing",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "BOSS.DE": [
+    {
+      "topic": "Apparel & Fashion Retail",
+      "subcategory": "Designer Clothing & Accessories",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "CVX.US": [
+    {
+      "topic": "Oil & Gas Exploration & Production",
+      "subcategory": "Integrated Energy",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "ADS.DE": [
+    {
+      "topic": "Sportswear & Athletic Apparel",
+      "subcategory": "Footwear & Sports Equipment",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "NOVO-B.CO": [
+    {
+      "topic": "Pharmaceuticals & Biologics",
+      "subcategory": "Diabetes & Obesity Treatment",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "SAP.DE": [
+    {
+      "topic": "Enterprise Software",
+      "subcategory": "ERP & Business Management",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "MONC.MI": [
+    {
+      "topic": "Luxury Fashion & Apparel",
+      "subcategory": "Designer Outerwear & Accessories",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "EXPN.L": [
+    {
+      "topic": "Data & Analytics",
+      "subcategory": "Credit Information & Risk Management",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "T.US": [
+    {
+      "topic": "Telecommunications",
+      "subcategory": "Wireless & Broadband Services",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "ABBN.ZU": [
+    {
+      "topic": "Industrial Automation & Robotics",
+      "subcategory": "Power & Automation Equipment",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "KER.PA": [
+    {
+      "topic": "Luxury Fashion & Apparel",
+      "subcategory": "Designer Fashion & Accessories",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "IDEM.L": [
+    {
+      "topic": "Index Funds & ETFs",
+      "subcategory": "Emerging Markets Equity",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "BRBY.L": [
+    {
+      "topic": "Luxury Fashion & Apparel",
+      "subcategory": "Designer Fashion & Accessories",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "PNDORA.CO": [
+    {
+      "topic": "Luxury Jewelry & Accessories",
+      "subcategory": "Designer Jewelry",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "ADI.US": [
+    {
+      "topic": "Semiconductors & Semiconductor Equipment",
+      "subcategory": "Analog & Mixed-Signal Semiconductors",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "HOLN.ZU": [
+    {
+      "topic": "Building Materials & Construction",
+      "subcategory": "Cement & Aggregates",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "IFX.DE": [
+    {
+      "topic": "Semiconductors & Semiconductor Equipment",
+      "subcategory": "Power Semiconductors & Microcontrollers",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "CPR.MI": [
+    {
+      "topic": "Beverages",
+      "subcategory": "Spirits & Liqueurs",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "VTY.L": [
+    {
+      "topic": "Residential Real Estate Development",
+      "subcategory": "Homebuilding & Property Development",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "PLUS.L": [
+    {
+      "topic": "Online Trading & Brokerage",
+      "subcategory": "Retail Trading Platforms",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "HSBA.L": [
+    {
+      "topic": "Universal Banking",
+      "subcategory": "Commercial & Investment Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 60
+    },
+    {
+      "topic": "Wealth Management",
+      "subcategory": "Asset Management & Advisory",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 25
+    },
+    {
+      "topic": "Insurance Services",
+      "subcategory": "Insurance Products",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 15
+    }
+  ],
+  "HOC.L": [
+    {
+      "topic": "Precious Metals Mining",
+      "subcategory": "Silver & Gold Extraction",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "ALV.DE": [
+    {
+      "topic": "Property & Casualty Insurance",
+      "subcategory": "General Insurance",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 50
+    },
+    {
+      "topic": "Life Insurance",
+      "subcategory": "Life & Pension Products",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 35
+    },
+    {
+      "topic": "Asset Management",
+      "subcategory": "Investment Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 15
+    }
+  ],
+  "AXIA": [
+    {
+      "topic": "Oil & Gas Exploration & Production",
+      "subcategory": "Upstream Energy",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "DGE.L": [
+    {
+      "topic": "Alcoholic Beverages",
+      "subcategory": "Spirits & Beer Production",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "ISP.MI": [
+    {
+      "topic": "Universal Banking",
+      "subcategory": "Commercial & Investment Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 70
+    },
+    {
+      "topic": "Wealth Management",
+      "subcategory": "Asset Management & Advisory",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 30
+    }
+  ],
+  "ANTO.L": [
+    {
+      "topic": "Base Metals Mining",
+      "subcategory": "Copper & Molybdenum Extraction",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "SRP.L": [
+    {
+      "topic": "Defense & Security Services",
+      "subcategory": "Government Services Contracting",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 60
+    },
+    {
+      "topic": "Facilities Management",
+      "subcategory": "Outsourced Services",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 40
+    }
+  ],
+  "GBF.DE": [
+    {
+      "topic": "Engineering & Construction Services",
+      "subcategory": "Industrial Services & Maintenance",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "PHNX.L": [
+    {
+      "topic": "Life Insurance",
+      "subcategory": "Life & Pension Products",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 85
+    },
+    {
+      "topic": "Asset Management",
+      "subcategory": "Investment Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 15
+    }
+  ],
+  "EN.PA": [
+    {
+      "topic": "Construction & Real Estate Development",
+      "subcategory": "Building & Infrastructure Construction",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 50
+    },
+    {
+      "topic": "Telecommunications",
+      "subcategory": "Telecom Services",
+      "majorCategory": "Tech & Data",
+      "weight": 30
+    },
+    {
+      "topic": "Media & Broadcasting",
+      "subcategory": "Television & Media Services",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 20
+    }
+  ],
+  "EMG.L": [
+    {
+      "topic": "Alternative Asset Management",
+      "subcategory": "Hedge Funds & Alternatives",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "BAB.L": [
+    {
+      "topic": "Defense & Aerospace Services",
+      "subcategory": "Defense Contracting",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 60
+    },
+    {
+      "topic": "Engineering & Technical Services",
+      "subcategory": "Support Services",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 40
+    }
+  ],
+  "BAYN.DE": [
+    {
+      "topic": "Pharmaceuticals",
+      "subcategory": "Drug Development & Manufacturing",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 50
+    },
+    {
+      "topic": "Agricultural Chemicals",
+      "subcategory": "Crop Protection & Seeds",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 35
+    },
+    {
+      "topic": "Consumer Health",
+      "subcategory": "Over-the-Counter Products",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 15
+    }
+  ],
+  "FSJ.L": [
+    {
+      "topic": "Marine Services & Engineering",
+      "subcategory": "Industrials, Transport & Infrastructure",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "DTE.DE": [
+    {
+      "topic": "Telecommunications",
+      "subcategory": "Telecom & Connectivity",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "ABTC": [
+    {
+      "topic": "Bitcoin Mining & Cryptocurrency",
+      "subcategory": "Digital Assets",
+      "majorCategory": "Crypto & Digital Assets",
+      "weight": 100
+    }
+  ],
+  "IJPD.L": [
+    {
+      "topic": "Equity Index Funds",
+      "subcategory": "Multi-Asset Indices",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "IDR.MC": [
+    {
+      "topic": "Defense & Aerospace Technology",
+      "subcategory": "Advanced Technology Systems",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "UCG.MI": [
+    {
+      "topic": "Commercial Banking",
+      "subcategory": "Banking Services",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "MPLX.US": [
+    {
+      "topic": "Midstream Energy Infrastructure",
+      "subcategory": "Oil & Gas Transportation",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "CARD.L": [
+    {
+      "topic": "Retail & Greeting Cards",
+      "subcategory": "Specialty Retail",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "CAP.PA": [
+    {
+      "topic": "IT Consulting & Services",
+      "subcategory": "Software & IT Services",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "IUKP.L": [
+    {
+      "topic": "Real Estate Investment Funds",
+      "subcategory": "Property & Real Assets",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "BP.L": [
+    {
+      "topic": "Integrated Oil & Gas",
+      "subcategory": "Oil & Gas Exploration & Production",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "BNP.PA": [
+    {
+      "topic": "Universal Banking",
+      "subcategory": "Banking Services",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "BWLPG.OL": [
+    {
+      "topic": "Liquefied Petroleum Gas Shipping",
+      "subcategory": "Maritime Transport & Logistics",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "FORTUM.HE": [
+    {
+      "topic": "Utilities & Energy Generation",
+      "subcategory": "Electric Power & Utilities",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "FXPO.L": [
+    {
+      "topic": "Iron Ore Mining",
+      "subcategory": "Mining & Commodities",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "TBCG.L": [
+    {
+      "topic": "Banking & Financial Services",
+      "subcategory": "Retail & Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "SVT.L": [
+    {
+      "topic": "Water & Sewerage Utilities",
+      "subcategory": "Water Management",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "ATHM.CH": [
+    {
+      "topic": "Online Automotive Marketplace",
+      "subcategory": "Digital Commerce Platforms",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "DBMF": [
+    {
+      "topic": "Managed Futures Strategy",
+      "subcategory": "Multi-Strategy ETF",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "MFEB.MI": [
+    {
+      "topic": "Broadcasting & Media",
+      "subcategory": "Television & Entertainment",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "ISF.L": [
+    {
+      "topic": "Index Tracking ETF",
+      "subcategory": "Broad Market Index Fund",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "ENI.MI": [
+    {
+      "topic": "Oil & Gas Exploration & Production",
+      "subcategory": "Integrated Energy",
+      "majorCategory": "Energy & Utilities",
+      "weight": 60
+    },
+    {
+      "topic": "Renewable Energy",
+      "subcategory": "Clean Energy Transition",
+      "majorCategory": "Energy & Utilities",
+      "weight": 40
+    }
+  ],
+  "WEIR.L": [
+    {
+      "topic": "Industrial Equipment Manufacturing",
+      "subcategory": "Flow Control & Pumping Systems",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "KYIV": [
+    {
+      "topic": "Mobile Telecommunications",
+      "subcategory": "Wireless Communications",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "BX.RTH": [
+    {
+      "topic": "Alternative Asset Management",
+      "subcategory": "Private Equity & Real Assets",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "SAN.PA": [
+    {
+      "topic": "Pharmaceutical Manufacturing",
+      "subcategory": "Prescription Drugs & Biologics",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "IMB.L": [
+    {
+      "topic": "Tobacco & Nicotine Products",
+      "subcategory": "Cigarettes & Alternatives",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "DFTX": [
+    {
+      "topic": "Biopharmaceutical Development",
+      "subcategory": "Drug Discovery & Development",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "VOLV-A.ST": [
+    {
+      "topic": "Commercial Vehicle Manufacturing",
+      "subcategory": "Trucks & Heavy Equipment",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 70
+    },
+    {
+      "topic": "Industrial Equipment Manufacturing",
+      "subcategory": "Construction & Mining Equipment",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 30
+    }
+  ],
+  "AIR.PA": [
+    {
+      "topic": "Aerospace & Defense Manufacturing",
+      "subcategory": "Commercial Aircraft Production",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "GAW.L": [
+    {
+      "topic": "Tabletop Gaming & Miniatures",
+      "subcategory": "Entertainment & Leisure",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "PRU.L": [
+    {
+      "topic": "Insurance",
+      "subcategory": "Life & General Insurance",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 70
+    },
+    {
+      "topic": "Asset Management",
+      "subcategory": "Investment Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 30
+    }
+  ],
+  "GNS.L": [
+    {
+      "topic": "Animal Genetics & Breeding",
+      "subcategory": "Agricultural Biotechnology",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "PRY.MI": [
+    {
+      "topic": "Power Transmission & Distribution",
+      "subcategory": "Electrical Infrastructure",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "TSCO.L": [
+    {
+      "topic": "Grocery & Food Retail",
+      "subcategory": "Retail & Distribution",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "BGEO.L": [
+    {
+      "topic": "Banking & Financial Services",
+      "subcategory": "Commercial & Retail Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "OTF": [
+    {
+      "topic": "Technology Lending & Finance",
+      "subcategory": "Specialty Finance",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "DUOL.RTH": [
+    {
+      "topic": "Online Education & Language Learning",
+      "subcategory": "EdTech",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "RIO.L": [
+    {
+      "topic": "Mining & Metals Extraction",
+      "subcategory": "Precious & Base Metals",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "IJPE.L": [
+    {
+      "topic": "Equity Index Funds",
+      "subcategory": "Passive Index Tracking",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "AZN.L": [
+    {
+      "topic": "Pharmaceutical Manufacturing",
+      "subcategory": "Prescription Drugs & Biologics",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "SAF.PA": [
+    {
+      "topic": "Aerospace & Defense",
+      "subcategory": "Aircraft Components & Systems",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "PHP.L": [
+    {
+      "topic": "Healthcare Real Estate",
+      "subcategory": "Medical Facilities & Properties",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "SU.PA": [
+    {
+      "topic": "Electrical Equipment & Automation",
+      "subcategory": "Industrial Automation & Controls",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 60
+    },
+    {
+      "topic": "Energy Management & Efficiency",
+      "subcategory": "Smart Grid & Utilities",
+      "majorCategory": "Energy & Utilities",
+      "weight": 40
+    }
+  ],
+  "SRG.MI": [
+    {
+      "topic": "Natural Gas Distribution & Storage",
+      "subcategory": "Gas Infrastructure",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "STAN.L": [
+    {
+      "topic": "Commercial Banking",
+      "subcategory": "Retail & Corporate Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "WIZZ.L": [
+    {
+      "topic": "Airlines & Air Transport",
+      "subcategory": "Passenger Aviation",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "SCT.L": [
+    {
+      "topic": "IT Services & Software",
+      "subcategory": "Software Distribution & Services",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "ABT.US": [
+    {
+      "topic": "Pharmaceuticals & Biotech",
+      "subcategory": "Diversified Healthcare",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "IGG.L": [
+    {
+      "topic": "Financial Services",
+      "subcategory": "Online Trading & Broking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "LGEN.L": [
+    {
+      "topic": "Insurance",
+      "subcategory": "Life & Pension Insurance",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "MSDL": [
+    {
+      "topic": "Asset Management & Investment Funds",
+      "subcategory": "Direct Lending Funds",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "DG.PA": [
+    {
+      "topic": "Construction & Infrastructure",
+      "subcategory": "Engineering & Construction Services",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "ENEL.MI": [
+    {
+      "topic": "Utilities",
+      "subcategory": "Electric Power Generation & Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "TTE.PA": [
+    {
+      "topic": "Oil & Gas",
+      "subcategory": "Integrated Energy",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "SIE.DE": [
+    {
+      "topic": "Industrial Manufacturing",
+      "subcategory": "Diversified Industrials & Engineering",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "BARC.L": [
+    {
+      "topic": "Commercial Banking",
+      "subcategory": "Retail & Investment Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "CSG.NV": [
+    {
+      "topic": "Defense & Aerospace",
+      "subcategory": "Defense Manufacturing",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "SSE.L": [
+    {
+      "topic": "Utilities",
+      "subcategory": "Electric Power & Energy Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "NDX1.DE": [
+    {
+      "topic": "Renewable Energy",
+      "subcategory": "Wind Power Manufacturing",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "AMS.MC": [
+    {
+      "topic": "Travel & Hospitality IT Solutions",
+      "subcategory": "Software & IT Services",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "OSB.L": [
+    {
+      "topic": "Retail Banking",
+      "subcategory": "Banking Services",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "GSK.L": [
+    {
+      "topic": "Pharmaceuticals",
+      "subcategory": "Drug Development & Manufacturing",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "VOF.L": [
+    {
+      "topic": "Multi-Asset Fund",
+      "subcategory": "Investment Funds",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "LMP.L": [
+    {
+      "topic": "Real Estate Investment",
+      "subcategory": "Property & Real Assets",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "SUBC.OL": [
+    {
+      "topic": "Subsea Engineering & Construction",
+      "subcategory": "Oil & Gas Infrastructure",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "DRX.L": [
+    {
+      "topic": "Renewable Energy Generation",
+      "subcategory": "Power Generation",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "BT.L": [
+    {
+      "topic": "Telecommunications",
+      "subcategory": "Telecom Services",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "DNB.OL": [
+    {
+      "topic": "Universal Banking",
+      "subcategory": "Banking Services",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "RWE.DE": [
+    {
+      "topic": "Integrated Energy Utilities",
+      "subcategory": "Power Generation & Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "STLAM.MI": [
+    {
+      "topic": "Automotive Manufacturing",
+      "subcategory": "Vehicle Production",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "QQ.L": [
+    {
+      "topic": "Defense & Aerospace Technology",
+      "subcategory": "Defense Contracting",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "ENG.MC": [
+    {
+      "topic": "Gas Infrastructure & Distribution",
+      "subcategory": "Energy Utilities",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "JD.US": [
+    {
+      "topic": "E-Commerce & Retail",
+      "subcategory": "Online Retail",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "ULVR.L": [
+    {
+      "topic": "Consumer Goods & Personal Care",
+      "subcategory": "FMCG Manufacturing",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "IAPD.L": [
+    {
+      "topic": "Diversified Asia Pacific Equities",
+      "subcategory": "Multi-sector dividend-focused index",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "HLAG.DE": [
+    {
+      "topic": "Shipping & Logistics",
+      "subcategory": "Container shipping",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "HVPE.L": [
+    {
+      "topic": "Private Equity Fund",
+      "subcategory": "Global private equity investment",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "EQDS.L": [
+    {
+      "topic": "Diversified European Equities",
+      "subcategory": "Quality dividend-focused index",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "RMV.L": [
+    {
+      "topic": "Real Estate Portals & Marketplaces",
+      "subcategory": "Online property listings",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "BAS.DE": [
+    {
+      "topic": "Chemicals & Materials",
+      "subcategory": "Specialty chemicals and plastics",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "DXJA.L": [
+    {
+      "topic": "Diversified Japanese Equities",
+      "subcategory": "Multi-sector index",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "AC.PA": [
+    {
+      "topic": "Hospitality & Hotels",
+      "subcategory": "Hotel chains and accommodation",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "DHL.DE": [
+    {
+      "topic": "Postal & Logistics Services",
+      "subcategory": "Parcel delivery and mail",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "PIN.L": [
+    {
+      "topic": "International Equity Fund",
+      "subcategory": "Global equity investment trust",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "PSH.L": [
+    {
+      "topic": "Hedge Fund & Investment Company",
+      "subcategory": "Multi-strategy investment fund",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "TMPL.L": [
+    {
+      "topic": "Diversified Equity Investment Trust",
+      "subcategory": "Multi-sector equity portfolio",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "RCP.L": [
+    {
+      "topic": "Diversified Investment Trust",
+      "subcategory": "Multi-asset global portfolio",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "ADM.L": [
+    {
+      "topic": "Insurance",
+      "subcategory": "Car and general insurance",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "AVGO.EUR": [
+    {
+      "topic": "Semiconductors & Semiconductor Equipment",
+      "subcategory": "Broadband and infrastructure semiconductors",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "3IN.L": [
+    {
+      "topic": "Infrastructure Investment",
+      "subcategory": "Private Infrastructure Assets",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "SMTC.L": [
+    {
+      "topic": "Money Market & Fixed Income ETF",
+      "subcategory": "Diversified ETF Strategy",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "PZC.L": [
+    {
+      "topic": "Personal Care & Consumer Products",
+      "subcategory": "Beauty & Personal Care",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "LXS.DE": [
+    {
+      "topic": "Specialty Chemicals",
+      "subcategory": "Chemical Manufacturing",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "MPT": [
+    {
+      "topic": "Healthcare Real Estate",
+      "subcategory": "Medical Facilities & REIT",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "GRF.MC": [
+    {
+      "topic": "Pharmaceuticals & Biopharmaceuticals",
+      "subcategory": "Plasma & Blood Products",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "JDW.L": [
+    {
+      "topic": "Hospitality & Restaurants",
+      "subcategory": "Pub & Bar Operations",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "IMEU.L": [
+    {
+      "topic": "European Equity Index",
+      "subcategory": "Broad Market ETF",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "MELI.RTH": [
+    {
+      "topic": "E-Commerce & Digital Marketplace",
+      "subcategory": "Online Retail & Fintech Services",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 70
+    },
+    {
+      "topic": "Digital Payments & Fintech",
+      "subcategory": "Payment Processing",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 30
+    }
+  ],
+  "EMXC.L": [
+    {
+      "topic": "Emerging Markets Equity Index",
+      "subcategory": "Diversified Emerging Markets ETF",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "A2A.MI": [
+    {
+      "topic": "Utilities & Energy Distribution",
+      "subcategory": "Electric & Gas Utilities",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "DOM.L": [
+    {
+      "topic": "Hospitality & Restaurants",
+      "subcategory": "Pizza & Quick Service Restaurants",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "ENGI.PA": [
+    {
+      "topic": "Utilities & Energy Services",
+      "subcategory": "Renewable Energy & Utilities",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "IBE.MC": [
+    {
+      "topic": "Utilities & Renewable Energy",
+      "subcategory": "Electric Utilities & Wind Power",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "MSLH.L": [
+    {
+      "topic": "Real Estate & Property Development",
+      "subcategory": "Commercial Real Estate",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "EZJ.L": [
+    {
+      "topic": "Airlines & Air Transport",
+      "subcategory": "Passenger Aviation",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "RNO.PA": [
+    {
+      "topic": "Automotive Manufacturing",
+      "subcategory": "Passenger Vehicles",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "BAMI.MI": [
+    {
+      "topic": "Banking & Financial Services",
+      "subcategory": "Retail & Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "BNZL.L": [
+    {
+      "topic": "Distribution & Logistics",
+      "subcategory": "Wholesale Distribution",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "BAG.L": [
+    {
+      "topic": "Beverages",
+      "subcategory": "Non-Alcoholic Beverages",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "SDR.L": [
+    {
+      "topic": "Asset Management & Wealth Management",
+      "subcategory": "Investment Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "GRG.L": [
+    {
+      "topic": "Food Retail & Quick Service Restaurants",
+      "subcategory": "Bakery & Casual Dining",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "LLOY.L": [
+    {
+      "topic": "Banking & Financial Services",
+      "subcategory": "Retail & Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "IAEX.L": [
+    {
+      "topic": "Exchange Traded Funds",
+      "subcategory": "Equity Index Funds",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "PRAB.DE": [
+    {
+      "topic": "Exchange Traded Funds",
+      "subcategory": "Fixed Income & Bond Funds",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "RIOU.L": [
+    {
+      "topic": "Exchange Traded Funds",
+      "subcategory": "Regional Equity Funds",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "ALAU.L": [
+    {
+      "topic": "Exchange Traded Funds",
+      "subcategory": "Regional Equity Funds",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "DSV.CO": [
+    {
+      "topic": "Logistics & Transportation Services",
+      "subcategory": "Freight & Courier Services",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "GMAB.CO": [
+    {
+      "topic": "Biopharmaceuticals",
+      "subcategory": "Specialty Pharmaceuticals",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "ELE.MC": [
+    {
+      "topic": "Electric Utilities",
+      "subcategory": "Power Generation & Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "VWS.CO": [
+    {
+      "topic": "Wind Energy",
+      "subcategory": "Renewable Energy Equipment",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "SAB.MC": [
+    {
+      "topic": "Retail Banking",
+      "subcategory": "Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "DANSKE.CO": [
+    {
+      "topic": "Retail Banking",
+      "subcategory": "Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "GFRD.L": [
+    {
+      "topic": "Construction & Engineering",
+      "subcategory": "Infrastructure Development",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "CBK.DE": [
+    {
+      "topic": "Retail Banking",
+      "subcategory": "Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "ONDS": [
+    {
+      "topic": "Wireless Communications",
+      "subcategory": "Telecommunications Infrastructure",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "UBSG.ZU": [
+    {
+      "topic": "Investment Banking",
+      "subcategory": "Universal Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 60
+    },
+    {
+      "topic": "Wealth Management",
+      "subcategory": "Asset Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 40
+    }
+  ],
+  "FER.MC": [
+    {
+      "topic": "Construction & Engineering",
+      "subcategory": "Infrastructure Development",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 70
+    },
+    {
+      "topic": "Transportation Services",
+      "subcategory": "Toll Roads & Concessions",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 30
+    }
+  ],
+  "BMW.DE": [
+    {
+      "topic": "Automotive Manufacturing",
+      "subcategory": "Passenger Vehicles",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "NDA_SE.ST": [
+    {
+      "topic": "Retail Banking",
+      "subcategory": "Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "NAS.OL": [
+    {
+      "topic": "Airlines",
+      "subcategory": "Passenger Air Transportation",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "TKA.DE": [
+    {
+      "topic": "Steel & Metal Manufacturing",
+      "subcategory": "Industrial Metals",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 60
+    },
+    {
+      "topic": "Industrial Equipment",
+      "subcategory": "Machinery & Components",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 40
+    }
+  ],
+  "TKMS.DE": [
+    {
+      "topic": "Defense & Aerospace",
+      "subcategory": "Naval & Marine Systems",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "ITX.MC": [
+    {
+      "topic": "Apparel & Fashion Retail",
+      "subcategory": "Specialty Retail",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "NSIS-B.CO": [
+    {
+      "topic": "Biotechnology & Biosciences",
+      "subcategory": "Industrial Biotechnology",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "ORSTED.CO": [
+    {
+      "topic": "Renewable Energy",
+      "subcategory": "Wind Power & Offshore Energy",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "IAG.L": [
+    {
+      "topic": "Airlines & Air Transport",
+      "subcategory": "Passenger Aviation",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "HIK.L": [
+    {
+      "topic": "Pharmaceuticals",
+      "subcategory": "Generic & Specialty Drugs",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "CGON": [
+    {
+      "topic": "Biotechnology & Oncology",
+      "subcategory": "Cancer Treatment & Therapeutics",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ],
+  "NG.L": [
+    {
+      "topic": "Utilities & Grid Infrastructure",
+      "subcategory": "Electricity & Gas Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "ARKX.L": [
+    {
+      "topic": "Space & Defence Technology",
+      "subcategory": "Aerospace & Defence Innovation",
+      "majorCategory": "Tech & Data",
+      "weight": 50
+    },
+    {
+      "topic": "Diversified ETF Holdings",
+      "subcategory": "Multi-Sector Technology & Innovation",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 50
+    }
+  ],
+  "MICC.L": [
+    {
+      "topic": "Food & Beverages",
+      "subcategory": "Frozen Desserts & Ice Cream",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "ATCO-A.ST": [
+    {
+      "topic": "Industrial Equipment & Machinery",
+      "subcategory": "Compressors & Pneumatic Tools",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "LAND.L": [
+    {
+      "topic": "Real Estate & Property",
+      "subcategory": "Commercial Real Estate & REIT",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "DNLM.L": [
+    {
+      "topic": "Retail & Consumer Goods",
+      "subcategory": "Home Furnishings & Textiles",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "GFTU.L": [
+    {
+      "topic": "Building Materials & Distribution",
+      "subcategory": "Construction Materials & Merchant Distribution",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "FR.PA": [
+    {
+      "topic": "Automotive Components",
+      "subcategory": "Auto Parts & Systems",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "IUSA.L": [
+    {
+      "topic": "Broad Market Index Fund",
+      "subcategory": "US Large-Cap Equity Index",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "NWG.L": [
+    {
+      "topic": "Banking & Financial Services",
+      "subcategory": "Retail & Commercial Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "ORLA": [
+    {
+      "topic": "Precious Metals Mining",
+      "subcategory": "Gold & Silver Extraction",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "TCOM.CH": [
+    {
+      "topic": "Online Travel & Booking",
+      "subcategory": "Travel & Hospitality Platforms",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "HAFN": [
+    {
+      "topic": "Shipping & Maritime Transport",
+      "subcategory": "Tanker Shipping",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "TELFY": [
+    {
+      "topic": "Telecommunications",
+      "subcategory": "Telecom Services & Infrastructure",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "ACH.US": [
+    {
+      "topic": "Healthcare Services & Management",
+      "subcategory": "Healthcare IT & Services",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 100
+    }
+  ]
+}

@@ -16,25 +16,30 @@ import { toast } from 'react-hot-toast';
 
 type ImpactLevel = 'low' | 'medium' | 'high';
 
-interface AssetImpact {
+interface TopicImpact {
+  topic: string;
+  impactScore: number;
+  direction: 'positive' | 'negative' | 'neutral';
+}
+
+interface HoldingImpact {
   symbol: string;
   instrumentName: string;
   impactLevel: ImpactLevel;
   direction: 'positive' | 'negative' | 'neutral';
   reasoning: string;
   allocation: number;
-  relevanceContribution: number;
 }
 
-interface NewsImpactResult {
+interface NewsEvaluationResult {
   portfolioUsername: string;
   relevancePercent: number;
-  affectedAssets: AssetImpact[];
-  reasoning: string;
+  topicImpacts: TopicImpact[];
+  affectedHoldings: HoldingImpact[];
 }
 
 interface EvaluationResponse {
-  results: NewsImpactResult[];
+  results: NewsEvaluationResult[];
   portfoliosWithCredentials: string[];
   totalPortfolios: number;
   filteredCount: number;
@@ -50,6 +55,12 @@ const IMPACT_LEVEL_STYLES: Record<
   low: { label: 'LOW', bg: 'bg-gray-50 border-gray-200', text: 'text-gray-600' },
 };
 
+const SCORE_COLOR = (score: number) => {
+  if (score >= 70) return 'text-purple-700 font-semibold';
+  if (score >= 40) return 'text-blue-600';
+  return 'text-gray-500';
+};
+
 export default function EvaluatePage() {
   const router = useRouter();
   const [news, setNews] = useState<{
@@ -57,25 +68,28 @@ export default function EvaluatePage() {
     body: string;
     url?: string;
   } | null>(null);
-  const [evaluation, setEvaluation] = useState<EvaluationResponse | null>(
-    null,
-  );
+  const [evaluation, setEvaluation] = useState<EvaluationResponse | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
-  const [selectedPortfolios, setSelectedPortfolios] = useState<Set<string>>(
-    new Set(),
-  );
+  const [selectedPortfolios, setSelectedPortfolios] = useState<Set<string>>(new Set());
+  const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const newsData = sessionStorage.getItem('newsContent');
     if (!newsData) {
-      toast.error(
-        'No news content found. Please start from the news input page.',
-      );
+      toast.error('No news content found. Please start from the news input page.');
       router.push('/e-poster/news-input');
       return;
     }
     const parsed = JSON.parse(newsData);
     setNews(parsed);
+
+    // Use cached result if available (e.g. navigating back from review page)
+    const cached = sessionStorage.getItem('evaluationData');
+    if (cached) {
+      setEvaluation(JSON.parse(cached));
+      return;
+    }
+
     runEvaluation(parsed);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -115,6 +129,15 @@ export default function EvaluatePage() {
     });
   };
 
+  const toggleTopics = (username: string) => {
+    setExpandedTopics((prev) => {
+      const next = new Set(prev);
+      if (next.has(username)) next.delete(username);
+      else next.add(username);
+      return next;
+    });
+  };
+
   const handleContinue = () => {
     if (selectedPortfolios.size === 0) {
       toast.error('Select at least one portfolio');
@@ -128,10 +151,8 @@ export default function EvaluatePage() {
   };
 
   const directionIcon = (dir: string) => {
-    if (dir === 'positive')
-      return <TrendingUp className="h-3 w-3 text-green-600" />;
-    if (dir === 'negative')
-      return <TrendingDown className="h-3 w-3 text-red-600" />;
+    if (dir === 'positive') return <TrendingUp className="h-3 w-3 text-green-600" />;
+    if (dir === 'negative') return <TrendingDown className="h-3 w-3 text-red-600" />;
     return <Minus className="h-3 w-3 text-gray-400" />;
   };
 
@@ -166,9 +187,7 @@ export default function EvaluatePage() {
             </CardHeader>
             <CardContent>
               <h3 className="font-semibold mb-1">{news.headline}</h3>
-              <p className="text-sm text-muted-foreground line-clamp-3">
-                {news.body}
-              </p>
+              <p className="text-sm text-muted-foreground line-clamp-3">{news.body}</p>
             </CardContent>
           </Card>
 
@@ -177,10 +196,10 @@ export default function EvaluatePage() {
               <CardContent className="py-16 text-center">
                 <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
                 <p className="text-muted-foreground">
-                  Analyzing relevance across all portfolios with Claude AI...
+                  Scoring industry topics across all portfolios with Claude Haiku...
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  This may take a minute.
+                  Phase 1: parallel topic batches → Phase 2: holding tagging for relevant portfolios
                 </p>
               </CardContent>
             </Card>
@@ -193,46 +212,38 @@ export default function EvaluatePage() {
                     {evaluation.results.length} relevant portfolio(s) found
                     {evaluation.filteredCount > 0 && (
                       <span className="text-muted-foreground">
-                        {' '}
-                        ({evaluation.filteredCount} filtered out below 5%
-                        relevance)
+                        {' '}({evaluation.filteredCount} filtered below 5% relevance)
                       </span>
                     )}
                     {' — '}select which ones to generate posts for
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {evaluation.results.map((result) => {
-                      const hasCredentials =
-                        evaluation.portfoliosWithCredentials.includes(
-                          result.portfolioUsername,
-                        );
-                      const isSelected = selectedPortfolios.has(
+                      const hasCredentials = evaluation.portfoliosWithCredentials.includes(
                         result.portfolioUsername,
                       );
+                      const isSelected = selectedPortfolios.has(result.portfolioUsername);
+                      const showTopics = expandedTopics.has(result.portfolioUsername);
 
                       return (
                         <div
                           key={result.portfolioUsername}
                           className={`rounded-lg border p-4 cursor-pointer transition-colors ${
-                            isSelected
-                              ? 'border-primary bg-primary/5'
-                              : 'hover:bg-muted/50'
+                            isSelected ? 'border-primary bg-primary/5' : 'hover:bg-muted/50'
                           }`}
-                          onClick={() =>
-                            togglePortfolio(result.portfolioUsername)
-                          }
+                          onClick={() => togglePortfolio(result.portfolioUsername)}
                         >
+                          {/* Header row */}
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <input
                                 type="checkbox"
                                 checked={isSelected}
-                                onChange={() =>
-                                  togglePortfolio(result.portfolioUsername)
-                                }
+                                onChange={() => togglePortfolio(result.portfolioUsername)}
                                 className="rounded"
+                                onClick={(e) => e.stopPropagation()}
                               />
                               <span className="font-semibold">
                                 @{result.portfolioUsername}
@@ -243,42 +254,62 @@ export default function EvaluatePage() {
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center gap-1">
-                              <span
-                                className={`font-bold ${relevanceColor(result.relevancePercent)}`}
-                              >
-                                {result.relevancePercent}% relevant
-                              </span>
-                            </div>
+                            <span className={`font-bold ${relevanceColor(result.relevancePercent)}`}>
+                              {result.relevancePercent}% relevant
+                            </span>
                           </div>
 
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {result.reasoning}
-                          </p>
-
-                          {result.affectedAssets.length > 0 && (
-                            <div className="flex flex-wrap gap-2">
-                              {result.affectedAssets.map((asset) => {
-                                const style =
-                                  IMPACT_LEVEL_STYLES[asset.impactLevel];
+                          {/* Affected Holdings */}
+                          {result.affectedHoldings.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-3">
+                              {result.affectedHoldings.map((h) => {
+                                const style = IMPACT_LEVEL_STYLES[h.impactLevel];
                                 return (
                                   <span
-                                    key={asset.symbol}
+                                    key={h.symbol}
                                     className={`text-xs px-2 py-1 rounded-full border inline-flex items-center gap-1.5 ${style.bg}`}
-                                    title={`${asset.reasoning}\nAllocation: ${asset.allocation}% | Contribution: ${asset.relevanceContribution}%`}
+                                    title={`${h.reasoning}\nAllocation: ${h.allocation}%`}
                                   >
-                                    {directionIcon(asset.direction)}
-                                    <span className={style.text}>
-                                      ${asset.symbol}
-                                    </span>
-                                    <span
-                                      className={`text-[10px] font-semibold ${style.text} opacity-75`}
-                                    >
+                                    {directionIcon(h.direction)}
+                                    <span className={style.text}>${h.symbol}</span>
+                                    <span className={`text-[10px] font-semibold ${style.text} opacity-75`}>
                                       {style.label}
                                     </span>
                                   </span>
                                 );
                               })}
+                            </div>
+                          )}
+
+                          {/* Topic impacts (expandable) */}
+                          {result.topicImpacts.length > 0 && (
+                            <div>
+                              <button
+                                className="text-xs text-muted-foreground hover:text-foreground transition-colors underline-offset-2 hover:underline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleTopics(result.portfolioUsername);
+                                }}
+                              >
+                                {showTopics ? 'Hide' : 'Show'} industry topic scores
+                                ({result.topicImpacts.length})
+                              </button>
+                              {showTopics && (
+                                <div className="mt-2 grid grid-cols-2 gap-1">
+                                  {result.topicImpacts.slice(0, 20).map((t) => (
+                                    <div
+                                      key={t.topic}
+                                      className="flex items-center gap-1.5 text-xs text-muted-foreground"
+                                    >
+                                      {directionIcon(t.direction)}
+                                      <span className="truncate flex-1">{t.topic}</span>
+                                      <span className={`shrink-0 ${SCORE_COLOR(t.impactScore)}`}>
+                                        {t.impactScore}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -292,10 +323,7 @@ export default function EvaluatePage() {
                 <p className="text-sm text-muted-foreground">
                   {selectedPortfolios.size} portfolio(s) selected
                 </p>
-                <Button
-                  onClick={handleContinue}
-                  disabled={selectedPortfolios.size === 0}
-                >
+                <Button onClick={handleContinue} disabled={selectedPortfolios.size === 0}>
                   Generate Posts ({selectedPortfolios.size})
                 </Button>
               </div>

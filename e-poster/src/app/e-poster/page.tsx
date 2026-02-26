@@ -1,6 +1,6 @@
 'use client';
 
-import { Newspaper, GraduationCap, RefreshCw, History, TrendingUp } from 'lucide-react';
+import { PenSquare, RefreshCw, History } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -65,59 +65,18 @@ export default function DashboardPage() {
 
           <div className="grid gap-6 md:grid-cols-2 mb-8">
             <Link
-              href="/e-poster/news-input"
+              href="/e-poster/create"
               className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start gap-4">
                 <div className="rounded-lg bg-primary/10 p-3">
-                  <Newspaper className="h-6 w-6 text-primary" />
+                  <PenSquare className="h-6 w-6 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">News Post</h3>
+                  <h3 className="font-semibold text-lg mb-1">Create a post</h3>
                   <p className="text-sm text-muted-foreground">
-                    Submit a news article, analyze portfolio impact with AI, and
-                    generate tailored posts for each affected portfolio.
-                  </p>
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              href="/e-poster/educational"
-              className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary/10 p-3">
-                  <GraduationCap className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">
-                    Educational Content{' '}
-                    <span className="text-xs font-normal text-muted-foreground">
-                      (beta)
-                    </span>
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Generate educational posts about portfolio strategies,
-                    factor investing, and diversification benefits.
-                  </p>
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              href="/e-poster/monthly-update"
-              className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary/10 p-3">
-                  <TrendingUp className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">Monthly Update</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Publish monthly performance updates with revenue data and
-                    portfolio strategy summaries.
+                    News posts, educational content, monthly updates, and
+                    performance highlights.
                   </p>
                 </div>
               </div>

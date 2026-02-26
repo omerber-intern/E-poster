@@ -23,6 +23,22 @@ export interface SmartPortfolio {
   totalPositions: number;
   lastUpdated: string;
   gainData?: PortfolioGainData;
+  /** Pre-computed topic-level industry weights, sorted descending. Set during sync. */
+  industryWeights?: IndustryWeight[];
+}
+
+export interface IndustryBreakdown {
+  topic: string;
+  subcategory: string;
+  majorCategory: string;
+  /** Normalized weight (0-100, sums to 100 per holding) */
+  weight: number;
+}
+
+export interface IndustryWeight {
+  topic: string;
+  /** Portfolio allocation percentage contributed by this topic (0-100) */
+  weight: number;
 }
 
 export interface PortfolioHolding {
@@ -34,7 +50,10 @@ export interface PortfolioHolding {
   positionType: 'Long' | 'Short';
   leverage: number;
   positionId?: number;
+  /** Broad sector from eToro (9 categories) — kept for reference */
   sector?: string;
+  /** Revenue-based industry breakdown from taxonomy, normalized to sum 100 */
+  industries?: IndustryBreakdown[];
 }
 
 export interface PortfolioBio {

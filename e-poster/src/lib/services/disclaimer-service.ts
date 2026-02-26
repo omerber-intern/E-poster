@@ -1,6 +1,9 @@
 /**
  * Disclaimer Service — auto-detects applicable disclaimers
  * based on portfolio holdings and post content.
+ *
+ * Content-based detection uses AI classification (Claude) for
+ * semantic understanding instead of brittle regex matching.
  */
 
 import type { PortfolioHolding } from '../models/portfolio';
@@ -11,16 +14,21 @@ import {
   type DisclaimerRule,
   type SelectedDisclaimer,
 } from '../config/disclaimers';
+import { classifyContentDisclaimers } from './ai-service';
 
 /**
  * Detect which disclaimers apply to a post given the portfolio's
  * holdings and the current post content.
+ *
+ * - "always" and "holdings" rules are evaluated deterministically.
+ * - "content" rules are classified by AI for semantic accuracy.
  */
-export function getApplicableDisclaimers(
+export async function getApplicableDisclaimers(
   holdings: PortfolioHolding[],
   postContent: string,
-): SelectedDisclaimer[] {
+): Promise<SelectedDisclaimer[]> {
   const results: SelectedDisclaimer[] = [];
+  const contentRules: DisclaimerRule[] = [];
 
   for (const rule of DISCLAIMER_RULES) {
     if (rule.detectionType === 'manual') continue;
@@ -46,9 +54,17 @@ export function getApplicableDisclaimers(
       continue;
     }
 
-    if (rule.detectionType === 'content' && rule.contentPatterns) {
-      const match = detectFromContent(postContent, rule.contentPatterns);
-      if (match) {
+    if (rule.detectionType === 'content') {
+      contentRules.push(rule);
+    }
+  }
+
+  if (contentRules.length > 0 && postContent.trim()) {
+    const ruleMap = new Map(contentRules.map((r) => [r.id, r]));
+    const aiMatches = await classifyContentDisclaimers(postContent, contentRules);
+    for (const match of aiMatches) {
+      const rule = ruleMap.get(match.ruleId);
+      if (rule) {
         results.push({
           rule,
           isAutoDetected: true,
@@ -140,17 +156,3 @@ function detectFromHoldings(
   }
 }
 
-function detectFromContent(
-  content: string,
-  patterns: RegExp[],
-): { reason: string } | null {
-  for (const pattern of patterns) {
-    const match = content.match(pattern);
-    if (match) {
-      return {
-        reason: `Content contains: "${match[0]}"`,
-      };
-    }
-  }
-  return null;
-}

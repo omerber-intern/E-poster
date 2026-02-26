@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const detected = getApplicableDisclaimers(portfolio.holdings, content);
+    const detected = await getApplicableDisclaimers(portfolio.holdings, content);
     const allRules = getAllDisclaimerRules();
 
     return NextResponse.json({
