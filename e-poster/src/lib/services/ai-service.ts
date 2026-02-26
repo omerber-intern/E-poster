@@ -392,7 +392,7 @@ export async function generateMonthlyUpdateContent(
   const performanceLines =
     templateStyle === 'stats-bottom'
       ? `Performance Stats: @${portfolio.username} -> ${monthName}: ${monthlyGainStr}${ytdGainStr ? ` , YTD: ${ytdGainStr}` : ''}`
-      : `${monthName} ${year}: ${monthlyGainStr}`;
+      : `Monthly: ${monthlyGainStr}${ytdGainStr ? `\nYTD: ${ytdGainStr}` : ''}`;
 
   const examples =
     templateStyle === 'stats-bottom'
@@ -421,8 +421,11 @@ Rules:
 - Open with "Dear Investors 🤝,"
 - Second line: "Here is your monthly update for ${monthName} ${year}"
 - Third line: an emoji + "@${portfolio.username} — ${monthName} ${year} Pulse" or similar heading
-- Fourth line: the revenue prominently: "${monthName} ${year}: ${monthlyGainStr}" with a rocket or chart emoji${ytdGainStr ? `\n- If you reference YTD, use: YTD: ${ytdGainStr}` : ''}
+- Fourth and fifth lines: the performance figures stacked EXACTLY like this (no other placement):
+  Monthly: ${monthlyGainStr}${ytdGainStr ? `\n  YTD: ${ytdGainStr}` : ''}
+- Add an emoji (🚀 or 📈) on the same line as Monthly
 - Write 2 paragraphs of narrative market commentary tailored to the portfolio's strategy and sectors
+- Do NOT mention the revenue figures again anywhere else in the post
 - End by listing @${portfolio.username} and top holdings in $TICKER (Name) format
 - Use emojis frequently to match the energetic style of the examples
 - Maximum 350 words
@@ -443,7 +446,7 @@ ${monthName} ${year}: ${monthlyGainStr}${ytdGainStr ? `\nYTD: ${ytdGainStr}` : '
 EXAMPLE POSTS (match this style, tone, and structure closely):
 ${examples.join('\n---\n')}
 
-The performance stats line to include verbatim:
+The performance figures to include verbatim (stacked, one per line, right after the heading):
 ${performanceLines}
 
 Top holdings to mention at the end:

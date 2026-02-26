@@ -206,7 +206,7 @@ export default function MonthlyUpdatePage() {
                       energetic style with emojis.
                     </p>
                     <p className="text-xs text-muted-foreground mt-2 font-mono">
-                      "{monthName} {year}: +10.03% 🚀"
+                      &quot;{monthName} {year}: +10.03% 🚀&quot;
                     </p>
                   </button>
 
@@ -224,7 +224,7 @@ export default function MonthlyUpdatePage() {
                       end. Professional tone.
                     </p>
                     <p className="text-xs text-muted-foreground mt-2 font-mono">
-                      "Performance Stats: @Portfolio → {monthName}: +2.72%"
+                      &quot;Performance Stats: @Portfolio → {monthName}: +2.72%&quot;
                     </p>
                   </button>
                 </div>
