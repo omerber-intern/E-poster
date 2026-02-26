@@ -19,8 +19,6 @@ export interface DisclaimerRule {
   holdingsDetection?: {
     type: 'crypto' | 'cfd' | 'futures' | 'options';
   };
-  /** For content-based: regex patterns to scan the post text */
-  contentPatterns?: RegExp[];
 }
 
 export interface SelectedDisclaimer {
@@ -100,29 +98,16 @@ export const DISCLAIMER_RULES: DisclaimerRule[] = [
   {
     id: 'past-performance',
     category: 'Performance',
-    useCase: 'Past performance',
+    useCase: 'Past performance — any reference to historical returns, gains, losses, or performance figures',
     text: 'Past performance is not a reliable indicator of future results',
     detectionType: 'content',
-    contentPatterns: [
-      /\b(past\s+performance|historical\s+(performance|returns?))\b/i,
-      /\b(returned|gained|grew|rose|surged|rallied|jumped|climbed|outperformed|underperformed)\s+\d/i,
-      /\b\d+%?\s+(return|gain|growth|increase|rise)\b/i,
-      /\b(year-to-date|ytd|quarter(ly)?|annual)\s+(return|gain|performance|growth)\b/i,
-      /\b(up|down|gained|lost)\s+\d+(\.\d+)?%/i,
-    ],
   },
   {
     id: 'future-performance',
     category: 'Performance',
-    useCase: 'Future performance / Forecasts',
+    useCase: 'Future performance / Forecasts — predictions, price targets, forward-looking statements',
     text: 'Forecasts are not a reliable indicator of future performance',
     detectionType: 'content',
-    contentPatterns: [
-      /\b(forecast|predict|projection|outlook|forward[\s-]looking)\b/i,
-      /\b(is\s+expected\s+to|will\s+(likely|probably)|could\s+(reach|hit|grow))\b/i,
-      /\b(price\s+target|upside\s+potential|target\s+price)\b/i,
-      /\b(analysts?\s+(expect|estimate|forecast|predict))\b/i,
-    ],
   },
 
   // ── Manual-only (available for user toggle) ────────────────────────────────

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   generatePostContent,
-  type NewsImpactResult,
+  type NewsEvaluationResult,
 } from '@/lib/services/ai-service';
 import {
   getPortfolioByUsername,
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       body: string;
       url?: string;
       portfolioUsername: string;
-      impact: NewsImpactResult;
+      impact: NewsEvaluationResult;
       examplePosts?: string[];
     };
 

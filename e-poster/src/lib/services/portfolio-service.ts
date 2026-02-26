@@ -19,11 +19,13 @@ import {
 } from '../etoro-api-config';
 import { ALPHA_PORTFOLIOS } from '../config/portfolios';
 import { getInstrumentsByIds, getIndustryNames } from '../utils/instrument-helper';
+import { resolveAllIndustries } from '../utils/taxonomy-helper';
 import type {
   SmartPortfolio,
   PortfolioBio,
   PortfolioHolding,
   PortfolioGainData,
+  IndustryWeight,
   CachedPortfolioData,
   CachedBioData,
 } from '../models/portfolio';
@@ -35,6 +37,23 @@ const BIOS_FILE = path.join(DATA_DIR, 'bios.json');
 function requestHeaders(): Record<string, string> {
   const h = getBaseHeaders();
   return h;
+}
+
+function computeIndustryWeights(holdings: PortfolioHolding[]): IndustryWeight[] {
+  const map = new Map<string, number>();
+  for (const h of holdings) {
+    if (h.industries && h.industries.length > 0) {
+      for (const ib of h.industries) {
+        const contribution = (h.allocation * ib.weight) / 100;
+        map.set(ib.topic, (map.get(ib.topic) ?? 0) + contribution);
+      }
+    } else {
+      map.set('Other', (map.get('Other') ?? 0) + h.allocation);
+    }
+  }
+  return [...map.entries()]
+    .map(([topic, weight]) => ({ topic, weight: Math.round(weight * 100) / 100 }))
+    .sort((a, b) => b.weight - a.weight);
 }
 
 // ---------------------------------------------------------------------------
@@ -217,6 +236,35 @@ export async function syncPortfolioData(): Promise<{
       lastUpdated: new Date().toISOString(),
       gainData,
     });
+  }
+
+  // Step 4: Resolve industry breakdowns for all unique symbols across all portfolios
+  const allUniqueHoldings = new Map<string, string>(); // symbol -> instrumentName
+  for (const p of portfolios) {
+    for (const h of p.holdings) {
+      if (h.symbol && !allUniqueHoldings.has(h.symbol)) {
+        allUniqueHoldings.set(h.symbol, h.instrumentName);
+      }
+    }
+  }
+
+  const holdingsList = [...allUniqueHoldings.entries()].map(([symbol, name]) => ({
+    symbol,
+    name,
+  }));
+
+  console.log(`[sync] Resolving industries for ${holdingsList.length} unique symbols...`);
+  const industriesMap = await resolveAllIndustries(holdingsList);
+
+  // Step 5: Enrich holdings with industry data and compute portfolio-level weights
+  for (const portfolio of portfolios) {
+    for (const holding of portfolio.holdings) {
+      const breakdown = industriesMap.get(holding.symbol);
+      if (breakdown) {
+        holding.industries = breakdown;
+      }
+    }
+    portfolio.industryWeights = computeIndustryWeights(portfolio.holdings);
   }
 
   const cached: CachedPortfolioData = {

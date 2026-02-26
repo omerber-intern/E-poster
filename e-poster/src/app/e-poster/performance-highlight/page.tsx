@@ -3,7 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Search, Loader2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import {
+  ArrowLeft,
+  Search,
+  Loader2,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  AlertTriangle,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,7 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
 
-type TemplateStyle = 'stats-bottom' | 'revenue-opening';
+type PostLength = 'short' | 'medium' | 'long';
 
 interface PortfolioInfo {
   username: string;
@@ -57,18 +65,13 @@ function getLatestGain(entries: { timestamp: string; gain: number }[]): number |
   return latest.gain;
 }
 
-export default function MonthlyUpdatePage() {
+export default function PerformanceHighlightPage() {
   const router = useRouter();
   const [portfolios, setPortfolios] = useState<PortfolioInfo[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
-  const [templateStyle, setTemplateStyle] = useState<TemplateStyle>('revenue-opening');
+  const [postLength, setPostLength] = useState<PostLength>('medium');
   const [isLoading, setIsLoading] = useState(true);
-
-  const now = new Date();
-  const isJanuary = now.getMonth() === 0;
-  const monthName = now.toLocaleString('en-US', { month: 'long' });
-  const year = now.getFullYear();
 
   useEffect(() => {
     async function load() {
@@ -100,8 +103,6 @@ export default function MonthlyUpdatePage() {
             };
           }),
         );
-
-        setSelected(new Set(allUsernames));
       } catch {
         toast.error('Failed to load portfolios');
       } finally {
@@ -134,6 +135,11 @@ export default function MonthlyUpdatePage() {
     return p && p.monthlyGain === null;
   });
 
+  const negativePerformance = [...selected].filter((u) => {
+    const p = portfolios.find((x) => x.username === u);
+    return p && p.monthlyGain !== null && p.monthlyGain < 0;
+  });
+
   const handleGenerate = () => {
     if (selected.size === 0) {
       toast.error('Select at least one portfolio');
@@ -146,13 +152,13 @@ export default function MonthlyUpdatePage() {
       return;
     }
     sessionStorage.setItem(
-      'monthlyUpdateData',
+      'performanceHighlightData',
       JSON.stringify({
         portfolioUsernames: Array.from(selected),
-        templateStyle,
+        postLength,
       }),
     );
-    router.push('/e-poster/monthly-update/review');
+    router.push('/e-poster/performance-highlight/review');
   };
 
   if (isLoading) {
@@ -176,55 +182,58 @@ export default function MonthlyUpdatePage() {
 
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Monthly Update — {monthName} {year}</CardTitle>
+              <CardTitle>Performance Highlight</CardTitle>
               <CardDescription>
-                Select portfolios and choose a post style. Revenue data is
-                pulled from the latest sync.
-                {isJanuary && (
-                  <span className="block mt-1 text-amber-600 font-medium">
-                    January mode: YTD figures will be omitted from posts.
-                  </span>
-                )}
+                Generate promotional posts that highlight and compliment your
+                portfolios&apos; strong performance. Select portfolios and choose
+                a post length.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {/* Template style picker */}
+              {/* Post length picker */}
               <div className="mb-6">
-                <p className="text-sm font-medium mb-3">Post Style</p>
-                <div className="grid grid-cols-2 gap-3">
+                <p className="text-sm font-medium mb-3">Post Length</p>
+                <div className="grid grid-cols-3 gap-3">
                   <button
-                    onClick={() => setTemplateStyle('revenue-opening')}
+                    onClick={() => setPostLength('short')}
                     className={`rounded-lg border p-4 text-left transition-colors ${
-                      templateStyle === 'revenue-opening'
+                      postLength === 'short'
                         ? 'border-primary bg-primary/5'
                         : 'border-border hover:bg-muted/50'
                     }`}
                   >
-                    <p className="font-medium text-sm mb-1">Revenue in Opening</p>
+                    <p className="font-medium text-sm mb-1">Short</p>
                     <p className="text-xs text-muted-foreground">
-                      Revenue figure prominently in the first lines. Narrative,
-                      energetic style with emojis.
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-2 font-mono">
-                      &quot;{monthName} {year}: +10.03% 🚀&quot;
+                      ~150 words. Quick highlight with key stats.
                     </p>
                   </button>
 
                   <button
-                    onClick={() => setTemplateStyle('stats-bottom')}
+                    onClick={() => setPostLength('medium')}
                     className={`rounded-lg border p-4 text-left transition-colors ${
-                      templateStyle === 'stats-bottom'
+                      postLength === 'medium'
                         ? 'border-primary bg-primary/5'
                         : 'border-border hover:bg-muted/50'
                     }`}
                   >
-                    <p className="font-medium text-sm mb-1">Stats at Bottom</p>
+                    <p className="font-medium text-sm mb-1">Medium</p>
                     <p className="text-xs text-muted-foreground">
-                      Market commentary first, structured stats block at the
-                      end. Professional tone.
+                      ~250 words. Balanced coverage of strategy and performance.
                     </p>
-                    <p className="text-xs text-muted-foreground mt-2 font-mono">
-                      &quot;Performance Stats: @Portfolio → {monthName}: +2.72%&quot;
+                  </button>
+
+                  <button
+                    onClick={() => setPostLength('long')}
+                    className={`rounded-lg border p-4 text-left transition-colors ${
+                      postLength === 'long'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:bg-muted/50'
+                    }`}
+                  >
+                    <p className="font-medium text-sm mb-1">Long</p>
+                    <p className="text-xs text-muted-foreground">
+                      ~350+ words. Full promotional post with detailed
+                      breakdown.
                     </p>
                   </button>
                 </div>
@@ -251,54 +260,69 @@ export default function MonthlyUpdatePage() {
 
               {/* Portfolio list */}
               <div className="border rounded-lg divide-y max-h-[480px] overflow-y-auto">
-                {filteredPortfolios.map((p) => (
-                  <label
-                    key={p.username}
-                    className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/50 transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selected.has(p.username)}
-                      onChange={() => togglePortfolio(p.username)}
-                      className="rounded"
-                    />
-                    <span className="flex-1 font-medium text-sm">
-                      @{p.username}
-                    </span>
+                {filteredPortfolios.map((p) => {
+                  const isNegative = p.monthlyGain !== null && p.monthlyGain < 0;
+                  return (
+                    <label
+                      key={p.username}
+                      className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/50 transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selected.has(p.username)}
+                        onChange={() => togglePortfolio(p.username)}
+                        className="rounded"
+                      />
+                      <span className="flex-1 font-medium text-sm">
+                        @{p.username}
+                      </span>
 
-                    {/* Revenue data display */}
-                    <div className="flex items-center gap-3 text-xs">
-                      <div className="text-right">
-                        <p className="text-muted-foreground">Monthly</p>
-                        <GainBadge value={p.monthlyGain} />
-                      </div>
-                      {!isJanuary && (
+                      <div className="flex items-center gap-3 text-xs">
+                        <div className="text-right">
+                          <p className="text-muted-foreground">Monthly</p>
+                          <GainBadge value={p.monthlyGain} />
+                        </div>
                         <div className="text-right">
                           <p className="text-muted-foreground">YTD</p>
                           <GainBadge value={p.ytdGain} />
                         </div>
-                      )}
-                    </div>
+                      </div>
 
-                    {!p.hasCredentials && (
-                      <span className="text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded">
-                        No API key
-                      </span>
-                    )}
-                  </label>
-                ))}
+                      {isNegative && selected.has(p.username) && (
+                        <span className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded">
+                          <AlertTriangle className="h-3 w-3" />
+                          Negative
+                        </span>
+                      )}
+
+                      {!p.hasCredentials && (
+                        <span className="text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded">
+                          No API key
+                        </span>
+                      )}
+                    </label>
+                  );
+                })}
               </div>
 
               <div className="flex items-center justify-between mt-2">
                 <p className="text-xs text-muted-foreground">
                   {selected.size} of {portfolios.length} selected
                 </p>
-                {missingGainData.length > 0 && (
-                  <p className="text-xs text-amber-600">
-                    ⚠ {missingGainData.length} selected portfolio(s) missing gain
-                    data — refresh portfolio data first
-                  </p>
-                )}
+                <div className="flex flex-col items-end gap-1">
+                  {missingGainData.length > 0 && (
+                    <p className="text-xs text-amber-600">
+                      {missingGainData.length} selected portfolio(s) missing
+                      gain data — refresh portfolio data first
+                    </p>
+                  )}
+                  {negativePerformance.length > 0 && (
+                    <p className="text-xs text-amber-600">
+                      {negativePerformance.length} selected portfolio(s) have
+                      negative monthly performance
+                    </p>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>

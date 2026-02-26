@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { analyzeNewsImpact, type NewsImpactResult } from '@/lib/services/ai-service';
+import {
+  analyzeNewsTopicImpact,
+  analyzeHoldingImpact,
+  type NewsEvaluationResult,
+} from '@/lib/services/ai-service';
 import {
   getPortfoliosFromCache,
-  getBioByUsername,
   getPortfoliosWithCredentials,
 } from '@/lib/services/portfolio-service';
 
@@ -11,8 +14,11 @@ import {
  *
  * Body: { headline, body, url? }
  *
- * Runs Claude impact analysis against every cached portfolio
- * and returns per-portfolio impact results sorted by absolute impact.
+ * Two-phase evaluation:
+ *   Phase 1 — Haiku scores every topic in every portfolio (parallel batches).
+ *              All portfolios run in parallel.
+ *   Phase 2 — For portfolios above the relevance threshold, Haiku evaluates
+ *              the ~10 most-exposed individual holdings.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -34,43 +40,72 @@ export async function POST(request: NextRequest) {
     }
 
     const withCredentials = getPortfoliosWithCredentials();
+    const news = { headline, body, url };
 
-    const results: NewsImpactResult[] = [];
-    const errors: string[] = [];
-
-    // Run impact analysis for each portfolio (in parallel, batches of 5)
-    const batchSize = 5;
-    for (let i = 0; i < portfolios.length; i += batchSize) {
-      const batch = portfolios.slice(i, i + batchSize);
-      const batchResults = await Promise.allSettled(
-        batch.map(async (portfolio) => {
-          const bio = getBioByUsername(portfolio.username);
-          return analyzeNewsImpact({ headline, body, url }, portfolio, bio);
-        }),
-      );
-
-      batchResults.forEach((result, idx) => {
-        if (result.status === 'fulfilled') {
-          results.push(result.value);
-        } else {
-          errors.push(`${batch[idx].username}: ${result.reason}`);
-        }
-      });
-    }
+    // -----------------------------------------------------------------------
+    // Phase 1: Topic-level impact for all portfolios in parallel
+    // -----------------------------------------------------------------------
+    const phase1Results = await Promise.allSettled(
+      portfolios.map((portfolio) => analyzeNewsTopicImpact(news, portfolio)),
+    );
 
     const MIN_RELEVANCE_THRESHOLD = 5;
+    const errors: string[] = [];
 
-    const filtered = results.filter(
+    const phase1Successes = phase1Results
+      .map((r, idx) => {
+        if (r.status === 'fulfilled') return r.value;
+        errors.push(`${portfolios[idx].username} (Phase 1): ${r.reason}`);
+        return null;
+      })
+      .filter((r) => r !== null);
+
+    const relevantPhase1 = phase1Successes.filter(
       (r) => r.relevancePercent >= MIN_RELEVANCE_THRESHOLD,
     );
 
-    filtered.sort((a, b) => b.relevancePercent - a.relevancePercent);
+    // -----------------------------------------------------------------------
+    // Phase 2: Holding-level tagging for relevant portfolios (in parallel)
+    // -----------------------------------------------------------------------
+    const portfolioMap = new Map(portfolios.map((p) => [p.username, p]));
+
+    const phase2Results = await Promise.allSettled(
+      relevantPhase1.map((p1) => {
+        const portfolio = portfolioMap.get(p1.portfolioUsername)!;
+        return analyzeHoldingImpact(news, portfolio, p1);
+      }),
+    );
+
+    const results: NewsEvaluationResult[] = [];
+
+    phase2Results.forEach((r, idx) => {
+      const p1 = relevantPhase1[idx];
+      if (r.status === 'fulfilled') {
+        results.push({
+          portfolioUsername: p1.portfolioUsername,
+          relevancePercent: p1.relevancePercent,
+          topicImpacts: p1.topicImpacts,
+          affectedHoldings: r.value.affectedHoldings,
+        });
+      } else {
+        errors.push(`${p1.portfolioUsername} (Phase 2): ${r.reason}`);
+        // Still include Phase 1 data with empty holdings
+        results.push({
+          portfolioUsername: p1.portfolioUsername,
+          relevancePercent: p1.relevancePercent,
+          topicImpacts: p1.topicImpacts,
+          affectedHoldings: [],
+        });
+      }
+    });
+
+    results.sort((a, b) => b.relevancePercent - a.relevancePercent);
 
     return NextResponse.json({
-      results: filtered,
+      results,
       portfoliosWithCredentials: withCredentials,
       totalPortfolios: portfolios.length,
-      filteredCount: results.length - filtered.length,
+      filteredCount: phase1Successes.length - relevantPhase1.length,
       evaluatedAt: new Date().toISOString(),
       errors: errors.length > 0 ? errors : undefined,
     });
