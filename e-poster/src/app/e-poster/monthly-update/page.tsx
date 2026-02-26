@@ -63,6 +63,7 @@ export default function MonthlyUpdatePage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [templateStyle, setTemplateStyle] = useState<TemplateStyle>('revenue-opening');
+  const [postLength, setPostLength] = useState<'short' | 'medium' | 'long'>('medium');
   const [isLoading, setIsLoading] = useState(true);
 
   const now = new Date();
@@ -150,6 +151,7 @@ export default function MonthlyUpdatePage() {
       JSON.stringify({
         portfolioUsernames: Array.from(selected),
         templateStyle,
+        postLength,
       }),
     );
     router.push('/e-poster/monthly-update/review');
@@ -225,6 +227,54 @@ export default function MonthlyUpdatePage() {
                     </p>
                     <p className="text-xs text-muted-foreground mt-2 font-mono">
                       &quot;Performance Stats: @Portfolio → {monthName}: +2.72%&quot;
+                    </p>
+                  </button>
+                </div>
+              </div>
+
+              {/* Post length picker */}
+              <div className="mb-6">
+                <p className="text-sm font-medium mb-3">Post Length</p>
+                <div className="grid grid-cols-3 gap-3">
+                  <button
+                    onClick={() => setPostLength('short')}
+                    className={`rounded-lg border p-4 text-left transition-colors ${
+                      postLength === 'short'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:bg-muted/50'
+                    }`}
+                  >
+                    <p className="font-medium text-sm mb-1">Short</p>
+                    <p className="text-xs text-muted-foreground">
+                      ~150 words. Concise update with key stats.
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => setPostLength('medium')}
+                    className={`rounded-lg border p-4 text-left transition-colors ${
+                      postLength === 'medium'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:bg-muted/50'
+                    }`}
+                  >
+                    <p className="font-medium text-sm mb-1">Medium</p>
+                    <p className="text-xs text-muted-foreground">
+                      ~250 words. Balanced commentary and performance.
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => setPostLength('long')}
+                    className={`rounded-lg border p-4 text-left transition-colors ${
+                      postLength === 'long'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:bg-muted/50'
+                    }`}
+                  >
+                    <p className="font-medium text-sm mb-1">Long</p>
+                    <p className="text-xs text-muted-foreground">
+                      ~350+ words. Detailed market commentary and breakdown.
                     </p>
                   </button>
                 </div>

@@ -91,3 +91,23 @@ export interface CachedBioData {
   bios: PortfolioBio[];
   fetchedAt: string;
 }
+
+export interface PortfolioConfigEntry {
+  username: string;
+  credentials: PortfolioCredentials | null;
+}
+
+export interface PortfolioConfigData {
+  portfolios: PortfolioConfigEntry[];
+  updatedAt: string;
+}
+
+export interface MaskedPortfolioConfigEntry {
+  username: string;
+  hasCredentials: boolean;
+  credentials: {
+    apiKey: string;
+    userKey: string;
+    gcid: string;
+  } | null;
+}

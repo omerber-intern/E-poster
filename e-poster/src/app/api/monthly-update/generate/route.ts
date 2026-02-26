@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   generateMonthlyUpdateContent,
   type MonthlyUpdateTemplateStyle,
+  type PostLength,
 } from '@/lib/services/ai-service';
 import {
   getPortfolioByUsername,
@@ -11,17 +12,26 @@ import {
 /**
  * POST /api/monthly-update/generate
  *
- * Body: { portfolioUsernames: string[], templateStyle: 'stats-bottom' | 'revenue-opening' }
+ * Body: { portfolioUsernames: string[], templateStyle: 'stats-bottom' | 'revenue-opening', postLength?: PostLength }
  *
  * Generates monthly update posts for each requested portfolio using
  * cached gain data (synced from eToro /gain endpoint).
  */
 export async function POST(request: NextRequest) {
   try {
-    const { portfolioUsernames, templateStyle } = (await request.json()) as {
+    const { portfolioUsernames, templateStyle, postLength = 'medium' } = (await request.json()) as {
       portfolioUsernames: string[];
       templateStyle: MonthlyUpdateTemplateStyle;
+      postLength?: PostLength;
     };
+
+    const validLengths: PostLength[] = ['short', 'medium', 'long'];
+    if (!validLengths.includes(postLength)) {
+      return NextResponse.json(
+        { error: 'postLength must be "short", "medium", or "long"' },
+        { status: 400 },
+      );
+    }
 
     if (!portfolioUsernames || portfolioUsernames.length === 0) {
       return NextResponse.json(
@@ -92,6 +102,7 @@ export async function POST(request: NextRequest) {
             templateStyle,
             month,
             year,
+            postLength,
           );
 
           return {

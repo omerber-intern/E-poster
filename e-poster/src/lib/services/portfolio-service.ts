@@ -13,11 +13,11 @@ import {
   ETORO_API_BASE_URL,
   API_ENDPOINTS,
   getBaseHeaders,
-  getPortfolioCredentials,
   getPortfolioInfoUrl,
   getPortfolioGainUrl,
 } from '../etoro-api-config';
-import { ALPHA_PORTFOLIOS } from '../config/portfolios';
+import { getAlphaPortfolios } from '../config/portfolios';
+import { getUsernamesWithCredentials } from './portfolio-config-service';
 import { getInstrumentsByIds, getIndustryNames } from '../utils/instrument-helper';
 import { resolveAllIndustries } from '../utils/taxonomy-helper';
 import type {
@@ -89,9 +89,7 @@ export function getBioByUsername(username: string): PortfolioBio | null {
 }
 
 export function getPortfoliosWithCredentials(): string[] {
-  return ALPHA_PORTFOLIOS.filter(
-    (u) => getPortfolioCredentials(u) !== null,
-  ) as string[];
+  return getUsernamesWithCredentials();
 }
 
 // ---------------------------------------------------------------------------
@@ -130,8 +128,9 @@ export async function syncPortfolioData(): Promise<{
 
   // Step 1: Fetch raw positions for every portfolio
   const rawByUsername: Record<string, { positions: any[] }> = {};
+  const portfolioList = getAlphaPortfolios();
 
-  for (const username of ALPHA_PORTFOLIOS) {
+  for (const username of portfolioList) {
     try {
       const url = `${ETORO_API_BASE_URL}${getPortfolioInfoUrl(username)}`;
 
@@ -183,8 +182,8 @@ export async function syncPortfolioData(): Promise<{
   // Step 3: Build portfolio objects — merge positions by (instrumentId, positionType)
   const portfolios: SmartPortfolio[] = [];
 
-  for (const username of ALPHA_PORTFOLIOS) {
-    const entry = rawByUsername[username as string];
+  for (const username of portfolioList) {
+    const entry = rawByUsername[username];
     if (!entry) continue;
 
     const mergeKey = (instrumentId: number, positionType: string) =>
@@ -291,9 +290,10 @@ export async function syncBioData(forceAll = false): Promise<{
   const existing = getBiosFromCache();
   const existingUsernames = new Set(existing.bios.map((b) => b.username));
 
+  const portfolioList = getAlphaPortfolios();
   const toFetch = forceAll
-    ? ([...ALPHA_PORTFOLIOS] as string[])
-    : (ALPHA_PORTFOLIOS.filter((u) => !existingUsernames.has(u)) as string[]);
+    ? portfolioList
+    : portfolioList.filter((u) => !existingUsernames.has(u));
 
   if (toFetch.length === 0) {
     return { fetched: 0, errors: [] };

@@ -6,6 +6,7 @@
  */
 
 import type { PortfolioCredentials } from './models/portfolio';
+import { getCredentials as getCredentialsFromConfig } from './services/portfolio-config-service';
 
 export const ETORO_API_BASE_URL =
   process.env.ETORO_API_BASE_URL || 'https://public-api.etoro.com';
@@ -37,12 +38,15 @@ export function getBaseHeaders(): Record<string, string> {
 }
 
 /**
- * Look up per-portfolio credentials from PORTFOLIO_CREDENTIALS env var.
- * Returns null when the portfolio has no credentials configured.
+ * Look up per-portfolio credentials.
+ * Reads from portfolio-config.json first, falling back to the PORTFOLIO_CREDENTIALS env var.
  */
 export function getPortfolioCredentials(
   username: string,
 ): PortfolioCredentials | null {
+  const configCreds = getCredentialsFromConfig(username);
+  if (configCreds) return configCreds;
+
   const raw = process.env.PORTFOLIO_CREDENTIALS;
   if (!raw) return null;
 

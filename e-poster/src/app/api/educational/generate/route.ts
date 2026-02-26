@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateEducationalContent } from '@/lib/services/ai-service';
+import { generateEducationalContent, type PostLength } from '@/lib/services/ai-service';
 import {
   getPortfolioByUsername,
   getBioByUsername,
@@ -8,16 +8,25 @@ import {
 /**
  * POST /api/educational/generate
  *
- * Body: { portfolioUsernames: string[], additionalContext?: string }
+ * Body: { portfolioUsernames: string[], additionalContext?: string, postLength?: PostLength }
  *
  * Generates educational content for each requested portfolio.
  */
 export async function POST(request: NextRequest) {
   try {
-    const { portfolioUsernames, additionalContext } = (await request.json()) as {
+    const { portfolioUsernames, additionalContext, postLength = 'medium' } = (await request.json()) as {
       portfolioUsernames: string[];
       additionalContext?: string;
+      postLength?: PostLength;
     };
+
+    const validLengths: PostLength[] = ['short', 'medium', 'long'];
+    if (!validLengths.includes(postLength)) {
+      return NextResponse.json(
+        { error: 'postLength must be "short", "medium", or "long"' },
+        { status: 400 },
+      );
+    }
 
     if (!portfolioUsernames || portfolioUsernames.length === 0) {
       return NextResponse.json(
@@ -47,6 +56,7 @@ export async function POST(request: NextRequest) {
             portfolio,
             bio,
             additionalContext,
+            postLength,
           );
           return { portfolioUsername: username, ...result };
         }),

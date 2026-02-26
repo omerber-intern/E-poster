@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { ArrowLeft, Loader2, TrendingUp, TrendingDown, Minus, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
 
 type ImpactLevel = 'low' | 'medium' | 'high';
@@ -71,6 +72,8 @@ export default function EvaluatePage() {
   const [evaluation, setEvaluation] = useState<EvaluationResponse | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [selectedPortfolios, setSelectedPortfolios] = useState<Set<string>>(new Set());
+  const [postLength, setPostLength] = useState<'short' | 'medium' | 'long'>('medium');
+  const [searchQuery, setSearchQuery] = useState('');
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -138,6 +141,15 @@ export default function EvaluatePage() {
     });
   };
 
+  const filteredResults = evaluation?.results.filter((r) =>
+    r.portfolioUsername.toLowerCase().includes(searchQuery.toLowerCase()),
+  ) ?? [];
+
+  const checkAll = () =>
+    setSelectedPortfolios(new Set(filteredResults.map((r) => r.portfolioUsername)));
+
+  const uncheckAll = () => setSelectedPortfolios(new Set());
+
   const handleContinue = () => {
     if (selectedPortfolios.size === 0) {
       toast.error('Select at least one portfolio');
@@ -147,6 +159,7 @@ export default function EvaluatePage() {
       'selectedPortfoliosForReview',
       JSON.stringify(Array.from(selectedPortfolios)),
     );
+    sessionStorage.setItem('newsPostLength', postLength);
     router.push('/e-poster/review');
   };
 
@@ -219,8 +232,28 @@ export default function EvaluatePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {evaluation.results.map((result) => {
+                  {/* Search + bulk actions */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search portfolios..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9"
+                      />
+                    </div>
+                    <Button variant="outline" size="sm" onClick={checkAll}>
+                      Check All
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={uncheckAll}>
+                      Uncheck All
+                    </Button>
+                  </div>
+
+                  {/* Portfolio list */}
+                  <div className="border rounded-lg max-h-[600px] overflow-y-auto divide-y">
+                    {filteredResults.map((result) => {
                       const hasCredentials = evaluation.portfoliosWithCredentials.includes(
                         result.portfolioUsername,
                       );
@@ -230,8 +263,8 @@ export default function EvaluatePage() {
                       return (
                         <div
                           key={result.portfolioUsername}
-                          className={`rounded-lg border p-4 cursor-pointer transition-colors ${
-                            isSelected ? 'border-primary bg-primary/5' : 'hover:bg-muted/50'
+                          className={`p-4 cursor-pointer transition-colors ${
+                            isSelected ? 'bg-primary/5' : 'hover:bg-muted/50'
                           }`}
                           onClick={() => togglePortfolio(result.portfolioUsername)}
                         >
@@ -315,6 +348,61 @@ export default function EvaluatePage() {
                         </div>
                       );
                     })}
+                  </div>
+
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {selectedPortfolios.size} of {evaluation.results.length} selected
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-base">Post Length</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-3">
+                    <button
+                      onClick={() => setPostLength('short')}
+                      className={`rounded-lg border p-4 text-left transition-colors ${
+                        postLength === 'short'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:bg-muted/50'
+                      }`}
+                    >
+                      <p className="font-medium text-sm mb-1">Short</p>
+                      <p className="text-xs text-muted-foreground">
+                        ~150 words. Quick news reaction.
+                      </p>
+                    </button>
+
+                    <button
+                      onClick={() => setPostLength('medium')}
+                      className={`rounded-lg border p-4 text-left transition-colors ${
+                        postLength === 'medium'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:bg-muted/50'
+                      }`}
+                    >
+                      <p className="font-medium text-sm mb-1">Medium</p>
+                      <p className="text-xs text-muted-foreground">
+                        ~250 words. Balanced news analysis.
+                      </p>
+                    </button>
+
+                    <button
+                      onClick={() => setPostLength('long')}
+                      className={`rounded-lg border p-4 text-left transition-colors ${
+                        postLength === 'long'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:bg-muted/50'
+                      }`}
+                    >
+                      <p className="font-medium text-sm mb-1">Long</p>
+                      <p className="text-xs text-muted-foreground">
+                        ~350+ words. Detailed news commentary.
+                      </p>
+                    </button>
                   </div>
                 </CardContent>
               </Card>

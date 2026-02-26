@@ -1,6 +1,6 @@
 'use client';
 
-import { PenSquare, RefreshCw, History } from 'lucide-react';
+import { PenSquare, RefreshCw, History, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -135,6 +135,26 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
+
+            <Link
+              href="/e-poster/manage-portfolios"
+              className="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-start gap-4">
+                <div className="rounded-lg bg-muted p-3">
+                  <Settings className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-1">
+                    Manage Portfolios
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Add new portfolios, manage API keys, and remove existing
+                    ones.
+                  </p>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

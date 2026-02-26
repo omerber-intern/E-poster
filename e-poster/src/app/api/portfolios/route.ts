@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSmartPortfolios, getPortfoliosWithCredentials } from '@/lib/services/portfolio-service';
-import { ALPHA_PORTFOLIOS } from '@/lib/config/portfolios';
+import { getAlphaPortfolios } from '@/lib/config/portfolios';
 
 /**
  * GET /api/portfolios
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       portfolios,
       total: portfolios.length,
-      allUsernames: [...ALPHA_PORTFOLIOS],
+      allUsernames: getAlphaPortfolios(),
       portfoliosWithCredentials: withCredentials,
     });
   } catch (error) {

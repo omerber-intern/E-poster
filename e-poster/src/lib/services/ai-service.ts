@@ -26,6 +26,26 @@ const HAIKU_MODEL = 'claude-haiku-4-5';
 const TOPIC_BATCH_SIZE = 25;
 const TOPIC_MIN_WEIGHT = 0.5;
 
+export type PostLength = 'short' | 'medium' | 'long';
+
+const NEWS_LENGTH_CONFIG: Record<PostLength, { words: number; maxTokens: number }> = {
+  short: { words: 150, maxTokens: 600 },
+  medium: { words: 250, maxTokens: 900 },
+  long: { words: 350, maxTokens: 1400 },
+};
+
+const EDU_LENGTH_CONFIG: Record<PostLength, { words: number; maxTokens: number }> = {
+  short: { words: 150, maxTokens: 600 },
+  medium: { words: 250, maxTokens: 900 },
+  long: { words: 350, maxTokens: 1400 },
+};
+
+const MONTHLY_LENGTH_CONFIG: Record<PostLength, { words: number; maxTokens: number }> = {
+  short: { words: 150, maxTokens: 600 },
+  medium: { words: 250, maxTokens: 900 },
+  long: { words: 350, maxTokens: 1400 },
+};
+
 function getClient(): Anthropic {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY is not set');
@@ -334,8 +354,11 @@ export async function generatePostContent(
   bio: PortfolioBio | null,
   impact: NewsEvaluationResult,
   examplePosts?: string[],
+  postLength: PostLength = 'medium',
 ): Promise<GeneratePostResult> {
   const client = getClient();
+
+  const { words, maxTokens } = NEWS_LENGTH_CONFIG[postLength];
 
   const topTickers = impact.affectedHoldings
     .slice(0, 6)
@@ -350,7 +373,7 @@ Rules:
 - Include the top affected tickers in $TICKER format (e.g., $NVDA, $AAPL)
 - Reference the portfolio strategy/bio when relevant
 - Keep the tone professional but accessible
-- Maximum 280 words
+- Target approximately ${words} words
 - Do NOT include disclaimers (they will be added separately)
 - Do NOT use hashtags
 - Include the news URL if provided`;
@@ -383,7 +406,7 @@ Write the post now:`;
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 800,
+    max_tokens: maxTokens,
     temperature: 0.7,
     system: systemPrompt,
     messages: [{ role: 'user', content: userPrompt }],
@@ -411,8 +434,11 @@ export async function generateEducationalContent(
   portfolio: SmartPortfolio,
   bio: PortfolioBio | null,
   additionalContext?: string,
+  postLength: PostLength = 'medium',
 ): Promise<EducationalContentResult> {
   const client = getClient();
+
+  const { words, maxTokens } = EDU_LENGTH_CONFIG[postLength];
 
   const topTickers = portfolio.holdings
     .sort((a, b) => b.allocation - a.allocation)
@@ -430,7 +456,7 @@ Rules:
 - Mention what type of investor could benefit from this portfolio
 - Explain how it could add diversification to existing holdings
 - Keep the tone educational, professional, and engaging
-- Maximum 350 words
+- Target approximately ${words} words
 - Do NOT include disclaimers (they will be added separately)
 - Do NOT use hashtags`;
 
@@ -449,7 +475,7 @@ Write the educational content now:`;
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 1000,
+    max_tokens: maxTokens,
     temperature: 0.7,
     system: systemPrompt,
     messages: [{ role: 'user', content: userPrompt }],
@@ -492,8 +518,11 @@ export async function generateMonthlyUpdateContent(
   templateStyle: MonthlyUpdateTemplateStyle,
   month: number,
   year: number,
+  postLength: PostLength = 'medium',
 ): Promise<MonthlyUpdateResult> {
   const client = getClient();
+
+  const { words, maxTokens } = MONTHLY_LENGTH_CONFIG[postLength];
 
   const topTickers = portfolio.holdings
     .sort((a, b) => b.allocation - a.allocation)
@@ -537,7 +566,7 @@ Rules:
   Performance Stats: @${portfolio.username} -> ${monthName}: ${monthlyGainStr}${ytdGainStr ? ` , YTD: ${ytdGainStr}` : ''}
 - After the stats block, list some top holdings using $TICKER (Name) format
 - Use emojis sparingly (1–2 per post)
-- Maximum 350 words
+- Target approximately ${words} words
 - Do NOT include any disclaimers (they will be added separately)
 - Do NOT use hashtags
 ${isJanuary ? '- This is January — do NOT include any YTD figure' : ''}`
@@ -555,7 +584,7 @@ Rules:
 - Do NOT mention the revenue figures again anywhere else in the post
 - End by listing @${portfolio.username} and top holdings in $TICKER (Name) format
 - Use emojis frequently to match the energetic style of the examples
-- Maximum 350 words
+- Target approximately ${words} words
 - Do NOT include any disclaimers (they will be added separately)
 - Do NOT use hashtags
 ${isJanuary ? '- This is January — do NOT include any YTD figure' : ''}`;
@@ -583,7 +612,7 @@ Write the monthly update post now:`;
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 1200,
+    max_tokens: maxTokens,
     temperature: 0.7,
     system: systemPrompt,
     messages: [{ role: 'user', content: userPrompt }],
@@ -602,7 +631,7 @@ Write the monthly update post now:`;
 // 6. Generate Performance Highlight Content
 // ---------------------------------------------------------------------------
 
-export type PerformanceHighlightLength = 'short' | 'medium' | 'long';
+export type PerformanceHighlightLength = PostLength;
 
 export interface PerformanceHighlightRevenueData {
   monthlyGain: number;

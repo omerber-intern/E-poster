@@ -1,0 +1,69 @@
+{
+  "portfolios": [
+    {
+      "username": "Short-Tech",
+      "credentials": {
+        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
+        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJibzFpblRNRk5yLlFmdUIyN1p4ZTJYT1NuV0s2WFJwZHpuVU1haUgudi05LU9KbjF3N09VOUJxeWpBMWg3ZTc3UkdFUW1pbkIzNlRoSFQ4M21pbjJZVGRkMzZ0d3FBZHZpR0hCRWg4QXpnY18ifQ__",
+        "gcid": "6517035"
+      }
+    },
+    {
+      "username": "PureMomentum",
+      "credentials": null
+    },
+    {
+      "username": "PureGrowth",
+      "credentials": null
+    },
+    {
+      "username": "Momentum-LS",
+      "credentials": null
+    },
+    {
+      "username": "MarketPicks",
+      "credentials": null
+    },
+    {
+      "username": "BalancedPicks",
+      "credentials": null
+    },
+    {
+      "username": "OutSmartNSDQ",
+      "credentials": null
+    },
+    {
+      "username": "ProPicks",
+      "credentials": null
+    },
+    {
+      "username": "GainersQtr",
+      "credentials": null
+    },
+    {
+      "username": "ActiveTraders",
+      "credentials": null
+    },
+    {
+      "username": "SharpTraders",
+      "credentials": null
+    },
+    {
+      "username": "SectorNeutral",
+      "credentials": null
+    },
+    {
+      "username": "Pure-Value",
+      "credentials": null
+    },
+    {
+      "username": "SectorGurus",
+      "credentials": null
+    },
+    {
+      "username": "NasdaqAI-Inverse",
+      "credentials": null
+    }
+  ],
+  "updatedAt": "2026-02-26T16:31:36.114Z"
+}

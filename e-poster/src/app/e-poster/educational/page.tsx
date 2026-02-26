@@ -28,6 +28,7 @@ export default function EducationalPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [additionalContext, setAdditionalContext] = useState('');
+  const [postLength, setPostLength] = useState<'short' | 'medium' | 'long'>('medium');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -81,10 +82,13 @@ export default function EducationalPage() {
       return;
     }
     sessionStorage.setItem(
-      'eduSelectedPortfolios',
-      JSON.stringify(Array.from(selected)),
+      'eduData',
+      JSON.stringify({
+        portfolioUsernames: Array.from(selected),
+        additionalContext,
+        postLength,
+      }),
     );
-    sessionStorage.setItem('eduAdditionalContext', additionalContext);
     router.push('/e-poster/educational/review');
   };
 
@@ -163,6 +167,57 @@ export default function EducationalPage() {
               <p className="text-xs text-muted-foreground mt-2">
                 {selected.size} of {portfolios.length} selected
               </p>
+            </CardContent>
+          </Card>
+
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-base">Post Length</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-3">
+                <button
+                  onClick={() => setPostLength('short')}
+                  className={`rounded-lg border p-4 text-left transition-colors ${
+                    postLength === 'short'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted/50'
+                  }`}
+                >
+                  <p className="font-medium text-sm mb-1">Short</p>
+                  <p className="text-xs text-muted-foreground">
+                    ~150 words. Brief educational overview.
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => setPostLength('medium')}
+                  className={`rounded-lg border p-4 text-left transition-colors ${
+                    postLength === 'medium'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted/50'
+                  }`}
+                >
+                  <p className="font-medium text-sm mb-1">Medium</p>
+                  <p className="text-xs text-muted-foreground">
+                    ~250 words. Balanced strategy explanation.
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => setPostLength('long')}
+                  className={`rounded-lg border p-4 text-left transition-colors ${
+                    postLength === 'long'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted/50'
+                  }`}
+                >
+                  <p className="font-medium text-sm mb-1">Long</p>
+                  <p className="text-xs text-muted-foreground">
+                    ~350+ words. In-depth educational content.
+                  </p>
+                </button>
+              </div>
             </CardContent>
           </Card>
 

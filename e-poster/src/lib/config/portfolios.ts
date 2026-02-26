@@ -1,9 +1,13 @@
 /**
- * Master list of all Alpha portfolio usernames on eToro.
+ * Portfolio list — reads dynamically from data/portfolio-config.json.
+ * Falls back to the hardcoded default list when the config file doesn't exist yet.
+ *
  * Short-Tech is the test account whose API key is used for all GET requests.
  */
 
-export const ALPHA_PORTFOLIOS = [
+import { getPortfolioUsernames } from '../services/portfolio-config-service';
+
+export const ALPHA_PORTFOLIOS_DEFAULT = [
   'Short-Tech',
   'PureMomentum',
   'PureGrowth',
@@ -21,4 +25,15 @@ export const ALPHA_PORTFOLIOS = [
   'NasdaqAI-Inverse',
 ] as const;
 
-export type AlphaPortfolioUsername = (typeof ALPHA_PORTFOLIOS)[number];
+export type AlphaPortfolioUsername = (typeof ALPHA_PORTFOLIOS_DEFAULT)[number];
+
+/**
+ * Dynamic list of all portfolio usernames.
+ * Read from portfolio-config.json, falling back to ALPHA_PORTFOLIOS_DEFAULT.
+ */
+export function getAlphaPortfolios(): string[] {
+  return getPortfolioUsernames();
+}
+
+/** @deprecated Use getAlphaPortfolios() instead for dynamic list */
+export const ALPHA_PORTFOLIOS = ALPHA_PORTFOLIOS_DEFAULT;

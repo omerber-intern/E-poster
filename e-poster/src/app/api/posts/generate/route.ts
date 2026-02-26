@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   generatePostContent,
   type NewsEvaluationResult,
+  type PostLength,
 } from '@/lib/services/ai-service';
 import {
   getPortfolioByUsername,
@@ -11,7 +12,7 @@ import {
 /**
  * POST /api/posts/generate
  *
- * Body: { headline, body, url?, portfolioUsername, impact, examplePosts? }
+ * Body: { headline, body, url?, portfolioUsername, impact, examplePosts?, postLength? }
  *
  * Generates a post using Claude for a specific portfolio + news combination.
  */
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
       portfolioUsername,
       impact,
       examplePosts,
+      postLength = 'medium',
     } = (await request.json()) as {
       headline: string;
       body: string;
@@ -31,7 +33,16 @@ export async function POST(request: NextRequest) {
       portfolioUsername: string;
       impact: NewsEvaluationResult;
       examplePosts?: string[];
+      postLength?: PostLength;
     };
+
+    const validLengths: PostLength[] = ['short', 'medium', 'long'];
+    if (!validLengths.includes(postLength)) {
+      return NextResponse.json(
+        { error: 'postLength must be "short", "medium", or "long"' },
+        { status: 400 },
+      );
+    }
 
     if (!headline || !body || !portfolioUsername || !impact) {
       return NextResponse.json(
@@ -56,6 +67,7 @@ export async function POST(request: NextRequest) {
       bio,
       impact,
       examplePosts,
+      postLength,
     );
 
     return NextResponse.json({
