@@ -8,12 +8,13 @@ import {
   getPostHeaders,
   getPortfolioCredentials,
 } from '../etoro-api-config';
-import type { CreatePostRequest, CreatePostResponse, PostTag } from '../models/post';
+import type { CreatePostRequest, CreatePostResponse, PostTag, PostAttachment } from '../models/post';
 
 export interface CreatePostOptions {
   portfolioUsername: string;
   message: string;
   tags?: PostTag[];
+  attachments?: PostAttachment[];
 }
 
 export async function createDiscussionPost(
@@ -40,6 +41,10 @@ export async function createDiscussionPost(
 
   if (options.tags && options.tags.length > 0) {
     payload.tags = { tags: options.tags };
+  }
+
+  if (options.attachments && options.attachments.length > 0) {
+    payload.attachments = options.attachments;
   }
 
   const url = `${ETORO_API_BASE_URL}${API_ENDPOINTS.FEEDS_POST}`;

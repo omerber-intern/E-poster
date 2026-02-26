@@ -16,10 +16,19 @@ import {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { portfolioUsername, message, tags } = (await request.json()) as {
+    const { portfolioUsername, message, tags, attachments } = (await request.json()) as {
       portfolioUsername: string;
       message: string;
       tags?: Array<{ name: string; id: string }>;
+      attachments?: Array<{
+        url?: string;
+        title?: string;
+        description?: string;
+        mediaType?: 'None' | 'Image' | 'Video';
+        media?: {
+          image?: { width?: number; height?: number; url?: string };
+        };
+      }>;
     };
 
     if (!portfolioUsername || !message) {
@@ -52,6 +61,10 @@ export async function POST(request: NextRequest) {
 
     if (tags && tags.length > 0) {
       payload.tags = { tags };
+    }
+
+    if (attachments && attachments.length > 0) {
+      payload.attachments = attachments;
     }
 
     const url = `${ETORO_API_BASE_URL}${API_ENDPOINTS.FEEDS_POST}`;
