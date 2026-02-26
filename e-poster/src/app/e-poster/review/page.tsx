@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -12,6 +12,9 @@ import {
   ChevronDown,
   ChevronUp,
   Info,
+  ImagePlus,
+  X,
+  Eye,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +24,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'react-hot-toast';
@@ -72,6 +80,12 @@ interface DraftDisclaimers {
   loaded: boolean;
 }
 
+interface ImageAttachment {
+  url: string;
+  width: number;
+  height: number;
+}
+
 interface DraftPost {
   portfolioUsername: string;
   content: string;
@@ -79,6 +93,44 @@ interface DraftPost {
   status: 'generating' | 'draft' | 'posting' | 'posted' | 'failed';
   error?: string;
   hasCredentials: boolean;
+  image?: ImageAttachment;
+  imageUploading?: boolean;
+}
+
+interface SerializedDisclaimers {
+  detected: DetectedDisclaimer[];
+  allAvailable: AvailableDisclaimer[];
+  selected: string[];
+  loading: boolean;
+  loaded: boolean;
+}
+
+function serializeDisclaimers(
+  disc: Record<string, DraftDisclaimers>,
+): Record<string, SerializedDisclaimers> {
+  const result: Record<string, SerializedDisclaimers> = {};
+  for (const [key, val] of Object.entries(disc)) {
+    result[key] = {
+      ...val,
+      selected: Array.from(val.selected),
+      loading: false,
+    };
+  }
+  return result;
+}
+
+function deserializeDisclaimers(
+  raw: Record<string, SerializedDisclaimers>,
+): Record<string, DraftDisclaimers> {
+  const result: Record<string, DraftDisclaimers> = {};
+  for (const [key, val] of Object.entries(raw)) {
+    result[key] = {
+      ...val,
+      selected: new Set(val.selected),
+      loading: false,
+    };
+  }
+  return result;
 }
 
 export default function ReviewPage() {
@@ -93,12 +145,32 @@ export default function ReviewPage() {
     Record<string, DraftDisclaimers>
   >({});
   const [expandedManual, setExpandedManual] = useState<Set<string>>(new Set());
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const initialized = useRef(false);
+
+  const saveCache = useCallback(
+    (d: DraftPost[], disc: Record<string, DraftDisclaimers>) => {
+      const cacheable = d.map(({ imageUploading, ...rest }) => rest);
+      sessionStorage.setItem('newsDraftsCache', JSON.stringify(cacheable));
+      sessionStorage.setItem(
+        'newsDisclaimersCache',
+        JSON.stringify(serializeDisclaimers(disc)),
+      );
+    },
+    [],
+  );
+
+  const clearCache = () => {
+    sessionStorage.removeItem('newsDraftsCache');
+    sessionStorage.removeItem('newsDisclaimersCache');
+  };
 
   const generateDraft = useCallback(
     async (
       portfolioUsername: string,
       newsData: { headline: string; body: string; url?: string },
       impact: NewsEvaluationResult,
+      postLength: 'short' | 'medium' | 'long' = 'medium',
     ) => {
       try {
         const res = await fetch('/api/posts/generate', {
@@ -108,14 +180,15 @@ export default function ReviewPage() {
             ...newsData,
             portfolioUsername,
             impact,
+            postLength,
           }),
         });
 
         if (!res.ok) throw new Error('Generation failed');
 
         const data = await res.json();
-        setDrafts((prev) =>
-          prev.map((d) =>
+        setDrafts((prev) => {
+          const updated = prev.map((d) =>
             d.portfolioUsername === portfolioUsername
               ? {
                   ...d,
@@ -124,8 +197,10 @@ export default function ReviewPage() {
                   status: 'draft' as const,
                 }
               : d,
-          ),
-        );
+          );
+          saveCache(updated, {});
+          return updated;
+        });
       } catch {
         setDrafts((prev) =>
           prev.map((d) =>
@@ -140,10 +215,28 @@ export default function ReviewPage() {
         );
       }
     },
-    [],
+    [saveCache],
   );
 
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
+    const cached = sessionStorage.getItem('newsDraftsCache');
+    if (cached) {
+      const cachedDrafts: DraftPost[] = JSON.parse(cached);
+      setDrafts(cachedDrafts);
+
+      const cachedDisc = sessionStorage.getItem('newsDisclaimersCache');
+      if (cachedDisc) {
+        setDisclaimers(deserializeDisclaimers(JSON.parse(cachedDisc)));
+      }
+
+      const newsData = sessionStorage.getItem('newsForReview');
+      if (newsData) setNews(JSON.parse(newsData));
+      return;
+    }
+
     const newsData = sessionStorage.getItem('newsForReview');
     const evalData = sessionStorage.getItem('evaluationData');
     const selectedData = sessionStorage.getItem('selectedPortfoliosForReview');
@@ -157,6 +250,7 @@ export default function ReviewPage() {
     const parsedNews = JSON.parse(newsData);
     const parsedEval = JSON.parse(evalData);
     const selected: string[] = JSON.parse(selectedData);
+    const postLength = (sessionStorage.getItem('newsPostLength') || 'medium') as 'short' | 'medium' | 'long';
     const withCredentials: string[] =
       parsedEval.portfoliosWithCredentials || [];
 
@@ -176,17 +270,94 @@ export default function ReviewPage() {
         (r: NewsEvaluationResult) => r.portfolioUsername === username,
       );
       if (impact) {
-        generateDraft(username, parsedNews, impact);
+        generateDraft(username, parsedNews, impact, postLength);
       }
     });
   }, [router, generateDraft]);
 
   const handleContentChange = (username: string, content: string) => {
+    setDrafts((prev) => {
+      const updated = prev.map((d) =>
+        d.portfolioUsername === username ? { ...d, content } : d,
+      );
+      saveCache(updated, disclaimers);
+      return updated;
+    });
+  };
+
+  const handleImageUpload = async (username: string, file: File) => {
     setDrafts((prev) =>
       prev.map((d) =>
-        d.portfolioUsername === username ? { ...d, content } : d,
+        d.portfolioUsername === username ? { ...d, imageUploading: true } : d,
       ),
     );
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/uploads', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Upload failed');
+      }
+      const data = await res.json();
+      setDrafts((prev) => {
+        const updated = prev.map((d) =>
+          d.portfolioUsername === username
+            ? {
+                ...d,
+                image: {
+                  url: data.url,
+                  width: data.width,
+                  height: data.height,
+                },
+                imageUploading: false,
+              }
+            : d,
+        );
+        saveCache(updated, disclaimers);
+        return updated;
+      });
+      toast.success('Image uploaded');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Upload failed';
+      toast.error(msg);
+      setDrafts((prev) =>
+        prev.map((d) =>
+          d.portfolioUsername === username
+            ? { ...d, imageUploading: false }
+            : d,
+        ),
+      );
+    }
+  };
+
+  const removeImage = (username: string) => {
+    setDrafts((prev) => {
+      const updated = prev.map((d) =>
+        d.portfolioUsername === username ? { ...d, image: undefined } : d,
+      );
+      saveCache(updated, disclaimers);
+      return updated;
+    });
+  };
+
+  const handleSeeMockup = (draft: DraftPost) => {
+    const finalContent = getPostContentWithDisclaimers(draft);
+    sessionStorage.setItem(
+      'mockupData',
+      JSON.stringify({
+        portfolioUsername: draft.portfolioUsername,
+        content: finalContent,
+        imageUrl: draft.image?.url,
+        imageWidth: draft.image?.width,
+        imageHeight: draft.image?.height,
+        hasCredentials: draft.hasCredentials,
+      }),
+    );
+    router.push('/e-poster/review/mockup');
   };
 
   const detectDisclaimers = async (username: string, content: string) => {
@@ -216,16 +387,20 @@ export default function ReviewPage() {
         data.detected.map((d: DetectedDisclaimer) => d.id),
       );
 
-      setDisclaimers((prev) => ({
-        ...prev,
-        [username]: {
-          detected: data.detected,
-          allAvailable: data.allAvailable,
-          selected: autoSelected,
-          loading: false,
-          loaded: true,
-        },
-      }));
+      setDisclaimers((prev) => {
+        const updated = {
+          ...prev,
+          [username]: {
+            detected: data.detected,
+            allAvailable: data.allAvailable,
+            selected: autoSelected,
+            loading: false,
+            loaded: true,
+          },
+        };
+        saveCache(drafts, updated);
+        return updated;
+      });
     } catch {
       toast.error(`Failed to detect disclaimers for @${username}`);
       setDisclaimers((prev) => ({
@@ -252,10 +427,12 @@ export default function ReviewPage() {
       } else {
         newSelected.add(disclaimerId);
       }
-      return {
+      const updated = {
         ...prev,
         [username]: { ...current, selected: newSelected },
       };
+      saveCache(drafts, updated);
+      return updated;
     });
   };
 
@@ -311,13 +488,30 @@ export default function ReviewPage() {
     try {
       const finalContent = getPostContentWithDisclaimers(draft);
 
+      const postBody: Record<string, unknown> = {
+        portfolioUsername: draft.portfolioUsername,
+        message: finalContent,
+      };
+      if (draft.image) {
+        postBody.attachments = [
+          {
+            url: draft.image.url,
+            mediaType: 'Image',
+            media: {
+              image: {
+                url: draft.image.url,
+                width: draft.image.width,
+                height: draft.image.height,
+              },
+            },
+          },
+        ];
+      }
+
       const res = await fetch('/api/posts/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          portfolioUsername: draft.portfolioUsername,
-          message: finalContent,
-        }),
+        body: JSON.stringify(postBody),
       });
 
       if (!res.ok) {
@@ -325,13 +519,15 @@ export default function ReviewPage() {
         throw new Error(err.error || 'Post failed');
       }
 
-      setDrafts((prev) =>
-        prev.map((d) =>
+      setDrafts((prev) => {
+        const updated = prev.map((d) =>
           d.portfolioUsername === draft.portfolioUsername
             ? { ...d, status: 'posted' as const }
             : d,
-        ),
-      );
+        );
+        saveCache(updated, disclaimers);
+        return updated;
+      });
       toast.success(`Posted to @${draft.portfolioUsername}`);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Post failed';
@@ -358,7 +554,7 @@ export default function ReviewPage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <Link href="/e-poster/evaluate">
+          <Link href="/e-poster/evaluate" onClick={clearCache}>
             <Button variant="ghost" className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Evaluation
@@ -443,6 +639,89 @@ export default function ReviewPage() {
                             </div>
                           </div>
                         )}
+
+                        {/* Image Attachment */}
+                        <div className="mb-4">
+                          <Label className="text-sm font-medium mb-2 block">
+                            Image Attachment (Optional)
+                          </Label>
+                          {draft.image ? (
+                            <div className="flex items-center gap-3">
+                              <div className="relative group">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={draft.image.url}
+                                  alt="Attached"
+                                  className="w-12 h-12 rounded border border-border object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                                  onClick={() =>
+                                    setLightboxUrl(draft.image!.url)
+                                  }
+                                />
+                                <button
+                                  onClick={() =>
+                                    removeImage(draft.portfolioUsername)
+                                  }
+                                  className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                                  disabled={draft.status === 'posted'}
+                                >
+                                  <X className="h-2.5 w-2.5" />
+                                </button>
+                              </div>
+                              <div>
+                                <p className="text-xs font-medium text-foreground">
+                                  Image attached
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {draft.image.width} x {draft.image.height}px
+                                  &middot; Click to preview
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <label
+                              className={`flex items-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                                draft.imageUploading
+                                  ? 'border-muted bg-muted/20 cursor-wait'
+                                  : 'border-border hover:border-primary hover:bg-primary/5'
+                              }`}
+                            >
+                              {draft.imageUploading ? (
+                                <>
+                                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                                  <span className="text-sm text-muted-foreground">
+                                    Uploading...
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <ImagePlus className="h-5 w-5 text-muted-foreground" />
+                                  <span className="text-sm text-muted-foreground">
+                                    Click to attach an image
+                                  </span>
+                                </>
+                              )}
+                              <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/gif,image/webp"
+                                className="hidden"
+                                disabled={
+                                  draft.imageUploading ||
+                                  draft.status === 'posted'
+                                }
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    handleImageUpload(
+                                      draft.portfolioUsername,
+                                      file,
+                                    );
+                                  }
+                                  e.target.value = '';
+                                }}
+                              />
+                            </label>
+                          )}
+                        </div>
 
                         {/* Disclaimers Section */}
                         <div className="mb-4 border rounded-lg p-4 bg-muted/30">
@@ -640,40 +919,54 @@ export default function ReviewPage() {
                             )}
                           </div>
 
-                          {draft.hasCredentials ? (
+                          <div className="flex items-center gap-2">
                             <Button
-                              onClick={() => handlePost(draft)}
+                              variant="outline"
+                              onClick={() => handleSeeMockup(draft)}
                               disabled={
                                 draft.status === 'posting' ||
-                                draft.status === 'posted' ||
-                                !draft.content.trim() ||
-                                !disc?.loaded
+                                !draft.content.trim()
                               }
                             >
-                              {draft.status === 'posting' ? (
-                                <>
-                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                  Posting...
-                                </>
-                              ) : draft.status === 'posted' ? (
-                                'Posted'
-                              ) : (
-                                <>
-                                  <Send className="h-4 w-4 mr-2" />
-                                  Post
-                                </>
-                              )}
+                              <Eye className="h-4 w-4 mr-2" />
+                              See Mockup
                             </Button>
-                          ) : (
-                            <Button
-                              variant="destructive"
-                              disabled
-                              title="No API key configured for this portfolio"
-                            >
-                              <AlertTriangle className="h-4 w-4 mr-2" />
-                              Cannot Post — No API Key
-                            </Button>
-                          )}
+
+                            {draft.hasCredentials ? (
+                              <Button
+                                onClick={() => handlePost(draft)}
+                                disabled={
+                                  draft.status === 'posting' ||
+                                  draft.status === 'posted' ||
+                                  !draft.content.trim() ||
+                                  !disc?.loaded
+                                }
+                              >
+                                {draft.status === 'posting' ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Posting...
+                                  </>
+                                ) : draft.status === 'posted' ? (
+                                  'Posted'
+                                ) : (
+                                  <>
+                                    <Send className="h-4 w-4 mr-2" />
+                                    Post
+                                  </>
+                                )}
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="destructive"
+                                disabled
+                                title="No API key configured for this portfolio"
+                              >
+                                <AlertTriangle className="h-4 w-4 mr-2" />
+                                Cannot Post — No API Key
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </>
                     )}
