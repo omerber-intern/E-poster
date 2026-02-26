@@ -84,3 +84,7 @@ export const API_ENDPOINTS = {
 export function getPortfolioInfoUrl(username: string): string {
   return `/api/v1/user-info/people/${encodeURIComponent(username)}/portfolio/live`;
 }
+
+export function getPortfolioGainUrl(username: string): string {
+  return `/api/v1/user-info/people/${encodeURIComponent(username)}/gain`;
+}

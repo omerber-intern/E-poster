@@ -2,6 +2,17 @@
  * Portfolio models for e-poster
  */
 
+export interface PortfolioGainEntry {
+  timestamp: string;
+  gain: number;
+}
+
+export interface PortfolioGainData {
+  monthly: PortfolioGainEntry[];
+  yearly: PortfolioGainEntry[];
+  fetchedAt: string;
+}
+
 export interface SmartPortfolio {
   id: string;
   username: string;
@@ -11,6 +22,7 @@ export interface SmartPortfolio {
   holdings: PortfolioHolding[];
   totalPositions: number;
   lastUpdated: string;
+  gainData?: PortfolioGainData;
 }
 
 export interface PortfolioHolding {

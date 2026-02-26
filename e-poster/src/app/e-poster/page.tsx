@@ -1,6 +1,6 @@
 'use client';
 
-import { Newspaper, GraduationCap, RefreshCw, History } from 'lucide-react';
+import { Newspaper, GraduationCap, RefreshCw, History, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -100,6 +100,24 @@ export default function DashboardPage() {
                   <p className="text-sm text-muted-foreground">
                     Generate educational posts about portfolio strategies,
                     factor investing, and diversification benefits.
+                  </p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/e-poster/monthly-update"
+              className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-start gap-4">
+                <div className="rounded-lg bg-primary/10 p-3">
+                  <TrendingUp className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-1">Monthly Update</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Publish monthly performance updates with revenue data and
+                    portfolio strategy summaries.
                   </p>
                 </div>
               </div>

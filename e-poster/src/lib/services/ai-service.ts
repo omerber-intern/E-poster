@@ -1,15 +1,20 @@
 /**
  * AI Service - Powered by Anthropic Claude
  *
- * Three core functions:
+ * Four core functions:
  *   1. analyzeNewsImpact  — per-portfolio impact analysis of a news article
  *   2. generatePostContent — LLM-authored post for a portfolio + news combo
  *   3. generateEducationalContent — educational post about a portfolio's strategy
+ *   4. generateMonthlyUpdateContent — monthly performance update post
  */
 
 import Anthropic from '@anthropic-ai/sdk';
 import type { SmartPortfolio, PortfolioBio, PortfolioHolding } from '../models/portfolio';
 import { NEWS_EXAMPLE_POSTS } from '../config/example-posts';
+import {
+  MONTHLY_UPDATE_TEMPLATE_A_EXAMPLES,
+  MONTHLY_UPDATE_TEMPLATE_B_EXAMPLES,
+} from '../config/monthly-update-examples';
 
 const MODEL = 'claude-sonnet-4-6';
 
@@ -328,6 +333,137 @@ Write the educational content now:`;
 
   return {
     content: content.trim(),
+    topTickers,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 4. Generate Monthly Update Content
+// ---------------------------------------------------------------------------
+
+export type MonthlyUpdateTemplateStyle = 'stats-bottom' | 'revenue-opening';
+
+export interface MonthlyUpdateRevenueData {
+  monthlyGain: number;
+  ytdGain?: number;
+}
+
+export interface MonthlyUpdateResult {
+  content: string;
+  topTickers: string[];
+}
+
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+export async function generateMonthlyUpdateContent(
+  portfolio: SmartPortfolio,
+  bio: PortfolioBio | null,
+  revenueData: MonthlyUpdateRevenueData,
+  templateStyle: MonthlyUpdateTemplateStyle,
+  month: number,
+  year: number,
+): Promise<MonthlyUpdateResult> {
+  const client = getClient();
+
+  const topTickers = portfolio.holdings
+    .sort((a, b) => b.allocation - a.allocation)
+    .slice(0, 8)
+    .map((h) => h.symbol)
+    .filter(Boolean);
+
+  const topHoldingsText = portfolio.holdings
+    .sort((a, b) => b.allocation - a.allocation)
+    .slice(0, 8)
+    .map((h) => `$${h.symbol} (${h.instrumentName})`)
+    .join(' , ');
+
+  const monthName = MONTH_NAMES[month] ?? MONTH_NAMES[0];
+  const isJanuary = month === 0;
+
+  const monthlyGainStr = `${revenueData.monthlyGain >= 0 ? '+' : ''}${revenueData.monthlyGain.toFixed(2)}%`;
+  const ytdGainStr =
+    revenueData.ytdGain !== undefined
+      ? `${revenueData.ytdGain >= 0 ? '+' : ''}${revenueData.ytdGain.toFixed(2)}%`
+      : null;
+
+  const performanceLines =
+    templateStyle === 'stats-bottom'
+      ? `Performance Stats: @${portfolio.username} -> ${monthName}: ${monthlyGainStr}${ytdGainStr ? ` , YTD: ${ytdGainStr}` : ''}`
+      : `${monthName} ${year}: ${monthlyGainStr}`;
+
+  const examples =
+    templateStyle === 'stats-bottom'
+      ? MONTHLY_UPDATE_TEMPLATE_A_EXAMPLES
+      : MONTHLY_UPDATE_TEMPLATE_B_EXAMPLES;
+
+  const systemPrompt = templateStyle === 'stats-bottom'
+    ? `You are a professional financial content writer for the eToro social trading platform.
+Write a monthly portfolio performance update post.
+
+Rules:
+- Open with "Dear Investors," followed by a greeting line: "Here is your monthly update for ${monthName} ${year} ✨"
+- Write 2–3 paragraphs of AI-generated market commentary relevant to the portfolio's sector and strategy
+- End with a performance stats block using EXACTLY this format:
+  Performance Stats: @${portfolio.username} -> ${monthName}: ${monthlyGainStr}${ytdGainStr ? ` , YTD: ${ytdGainStr}` : ''}
+- After the stats block, list some top holdings using $TICKER (Name) format
+- Use emojis sparingly (1–2 per post)
+- Maximum 350 words
+- Do NOT include any disclaimers (they will be added separately)
+- Do NOT use hashtags
+${isJanuary ? '- This is January — do NOT include any YTD figure' : ''}`
+    : `You are a professional financial content writer for the eToro social trading platform.
+Write a monthly portfolio performance update post.
+
+Rules:
+- Open with "Dear Investors 🤝,"
+- Second line: "Here is your monthly update for ${monthName} ${year}"
+- Third line: an emoji + "@${portfolio.username} — ${monthName} ${year} Pulse" or similar heading
+- Fourth line: the revenue prominently: "${monthName} ${year}: ${monthlyGainStr}" with a rocket or chart emoji${ytdGainStr ? `\n- If you reference YTD, use: YTD: ${ytdGainStr}` : ''}
+- Write 2 paragraphs of narrative market commentary tailored to the portfolio's strategy and sectors
+- End by listing @${portfolio.username} and top holdings in $TICKER (Name) format
+- Use emojis frequently to match the energetic style of the examples
+- Maximum 350 words
+- Do NOT include any disclaimers (they will be added separately)
+- Do NOT use hashtags
+${isJanuary ? '- This is January — do NOT include any YTD figure' : ''}`;
+
+  const userPrompt = `PORTFOLIO: @${portfolio.username}
+BIO/STRATEGY:
+${bio?.bio || 'No bio available.'}
+
+CURRENT HOLDINGS (top by allocation):
+${holdingsCompactSummary(portfolio.holdings)}
+
+PERFORMANCE DATA:
+${monthName} ${year}: ${monthlyGainStr}${ytdGainStr ? `\nYTD: ${ytdGainStr}` : ''}
+
+EXAMPLE POSTS (match this style, tone, and structure closely):
+${examples.join('\n---\n')}
+
+The performance stats line to include verbatim:
+${performanceLines}
+
+Top holdings to mention at the end:
+${topHoldingsText}
+
+Write the monthly update post now:`;
+
+  const response = await client.messages.create({
+    model: MODEL,
+    max_tokens: 1200,
+    temperature: 0.7,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userPrompt }],
+  });
+
+  const eduContent =
+    response.content[0].type === 'text' ? response.content[0].text : '';
+
+  return {
+    content: eduContent.trim(),
     topTickers,
   };
 }

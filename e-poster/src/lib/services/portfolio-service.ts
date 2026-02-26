@@ -15,6 +15,7 @@ import {
   getBaseHeaders,
   getPortfolioCredentials,
   getPortfolioInfoUrl,
+  getPortfolioGainUrl,
 } from '../etoro-api-config';
 import { ALPHA_PORTFOLIOS } from '../config/portfolios';
 import { getInstrumentsByIds, getIndustryNames } from '../utils/instrument-helper';
@@ -22,6 +23,7 @@ import type {
   SmartPortfolio,
   PortfolioBio,
   PortfolioHolding,
+  PortfolioGainData,
   CachedPortfolioData,
   CachedBioData,
 } from '../models/portfolio';
@@ -71,6 +73,30 @@ export function getPortfoliosWithCredentials(): string[] {
   return ALPHA_PORTFOLIOS.filter(
     (u) => getPortfolioCredentials(u) !== null,
   ) as string[];
+}
+
+// ---------------------------------------------------------------------------
+// Fetching gain (revenue) data from eToro
+// ---------------------------------------------------------------------------
+
+async function syncGainData(username: string): Promise<PortfolioGainData | undefined> {
+  try {
+    const url = `${ETORO_API_BASE_URL}${getPortfolioGainUrl(username)}`;
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: requestHeaders(),
+      signal: AbortSignal.timeout(30000),
+    });
+    if (!res.ok) return undefined;
+    const data = await res.json();
+    return {
+      monthly: Array.isArray(data.monthly) ? data.monthly : [],
+      yearly: Array.isArray(data.yearly) ? data.yearly : [],
+      fetchedAt: new Date().toISOString(),
+    };
+  } catch {
+    return undefined;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -179,6 +205,8 @@ export async function syncPortfolioData(): Promise<{
       allocation: Math.round(h.allocation * 1000) / 1000,
     }));
 
+    const gainData = await syncGainData(username);
+
     portfolios.push({
       id: username,
       username,
@@ -187,6 +215,7 @@ export async function syncPortfolioData(): Promise<{
       holdings,
       totalPositions: holdings.length,
       lastUpdated: new Date().toISOString(),
+      gainData,
     });
   }
 
