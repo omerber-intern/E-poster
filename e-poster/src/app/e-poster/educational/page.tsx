@@ -200,7 +200,7 @@ export default function EducationalPage() {
                 >
                   <p className="font-medium text-sm mb-1">Medium</p>
                   <p className="text-xs text-muted-foreground">
-                    ~250 words. Balanced strategy explanation.
+                    ~200 words. Balanced strategy explanation.
                   </p>
                 </button>
 
@@ -214,7 +214,7 @@ export default function EducationalPage() {
                 >
                   <p className="font-medium text-sm mb-1">Long</p>
                   <p className="text-xs text-muted-foreground">
-                    ~350+ words. In-depth educational content.
+                    ~250 words. In-depth educational content.
                   </p>
                 </button>
               </div>

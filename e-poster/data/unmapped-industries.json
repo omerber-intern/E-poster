@@ -1716,5 +1716,27 @@
       "majorCategory": "Health & Life Sciences",
       "weight": 100
     }
+  ],
+  "AHRT": [
+    {
+      "topic": "Real Estate Investment Trust",
+      "subcategory": "Commercial & Residential Real Estate",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "SDLF.L": [
+    {
+      "topic": "Life Insurance",
+      "subcategory": "Insurance & Risk Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 50
+    },
+    {
+      "topic": "Asset Management",
+      "subcategory": "Investment Management & Wealth Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 50
+    }
   ]
 }

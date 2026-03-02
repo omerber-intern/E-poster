@@ -38,8 +38,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const MONTH_NAMES = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+
     const now = new Date();
-    const isJanuary = now.getMonth() === 0;
+    const currentMonth = now.getMonth();
+    const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const prevMonthYear = currentMonth === 0 ? now.getFullYear() - 1 : now.getFullYear();
+    const isJanuary = currentMonth === 0;
 
     const results: Array<{
       portfolioUsername: string;
@@ -47,6 +55,7 @@ export async function POST(request: NextRequest) {
       topTickers: string[];
       monthlyGain: number | null;
       ytdGain: number | null;
+      gainMonthName: string;
     }> = [];
     const errors: string[] = [];
 
@@ -68,9 +77,39 @@ export async function POST(request: NextRequest) {
             );
           }
 
-          const latestMonthly = gainData.monthly.reduce((latest, entry) =>
-            new Date(entry.timestamp) > new Date(latest.timestamp) ? entry : latest,
-          );
+          // Get both previous month and current month gains
+          const prevMonthEntry = gainData.monthly.find((e) => {
+            const d = new Date(e.timestamp);
+            return d.getUTCMonth() === prevMonth && d.getUTCFullYear() === prevMonthYear;
+          });
+
+          const currentMonthEntry = gainData.monthly.find((e) => {
+            const d = new Date(e.timestamp);
+            return d.getUTCMonth() === currentMonth && d.getUTCFullYear() === now.getFullYear();
+          });
+
+          // Pick the more impressive month (higher gain)
+          let chosenEntry = prevMonthEntry ?? currentMonthEntry;
+          let chosenMonthName = MONTH_NAMES[prevMonth];
+
+          if (prevMonthEntry && currentMonthEntry) {
+            if (currentMonthEntry.gain > prevMonthEntry.gain) {
+              chosenEntry = currentMonthEntry;
+              chosenMonthName = MONTH_NAMES[currentMonth];
+            }
+          } else if (!prevMonthEntry && currentMonthEntry) {
+            chosenEntry = currentMonthEntry;
+            chosenMonthName = MONTH_NAMES[currentMonth];
+          }
+
+          if (!chosenEntry) {
+            // Fallback: use the latest entry
+            chosenEntry = gainData.monthly.reduce((latest, entry) =>
+              new Date(entry.timestamp) > new Date(latest.timestamp) ? entry : latest,
+            );
+            const d = new Date(chosenEntry.timestamp);
+            chosenMonthName = MONTH_NAMES[d.getUTCMonth()];
+          }
 
           const latestYearly =
             !isJanuary && gainData.yearly.length > 0
@@ -80,8 +119,9 @@ export async function POST(request: NextRequest) {
               : null;
 
           const revenueData = {
-            monthlyGain: latestMonthly.gain,
+            monthlyGain: chosenEntry.gain,
             ytdGain: latestYearly?.gain,
+            gainMonthName: chosenMonthName,
           };
 
           const result = await generatePerformanceHighlightContent(
@@ -95,8 +135,9 @@ export async function POST(request: NextRequest) {
             portfolioUsername: username,
             content: result.content,
             topTickers: result.topTickers,
-            monthlyGain: latestMonthly.gain,
+            monthlyGain: chosenEntry.gain,
             ytdGain: latestYearly?.gain ?? null,
+            gainMonthName: chosenMonthName,
           };
         }),
       );

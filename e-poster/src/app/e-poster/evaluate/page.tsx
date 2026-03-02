@@ -386,7 +386,7 @@ export default function EvaluatePage() {
                     >
                       <p className="font-medium text-sm mb-1">Medium</p>
                       <p className="text-xs text-muted-foreground">
-                        ~250 words. Balanced news analysis.
+                        ~200 words. Balanced news analysis.
                       </p>
                     </button>
 
@@ -400,7 +400,7 @@ export default function EvaluatePage() {
                     >
                       <p className="font-medium text-sm mb-1">Long</p>
                       <p className="text-xs text-muted-foreground">
-                        ~350+ words. Detailed news commentary.
+                        ~250 words. Detailed news commentary.
                       </p>
                     </button>
                   </div>

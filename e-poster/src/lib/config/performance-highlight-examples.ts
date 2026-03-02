@@ -1,13 +1,72 @@
 /**
  * Few-shot example posts for performance highlight generation.
  *
- * These are promotional/advertising posts that compliment a portfolio's
- * strong performance. Disclaimers are stripped — they are handled
- * separately by auto-detection.
+ * Promotional/advertising posts that compliment a portfolio's strong
+ * performance.
+ *
+ * Three length tiers — short (~150 words), medium (~200 words), long (~250 words).
+ * Every example opens with a concise bottom-line sentence so the model
+ * learns to do the same.
+ *
+ * Disclaimers are stripped — they are handled separately by auto-detection.
  */
 
-export const PERFORMANCE_HIGHLIGHT_EXAMPLES: string[] = [
+// ---------------------------------------------------------------------------
+// SHORT (~150 words)
+// ---------------------------------------------------------------------------
+
+export const PERFORMANCE_HIGHLIGHT_EXAMPLES_SHORT: string[] = [
   `@PureMomentum
+
+PureMomentum is delivering strong returns by systematically riding the market's top-performing stocks across materials, tech, and industrials.
+
+📈 Momentum Is Having Its Moment
+
+❓ What happens when you let data pick the market's strongest performers?
+
+👉 @PureMomentum is up **+7.09% this month** and **+18.97% year to date** — driven by disciplined, rules-based momentum investing.
+
+👉 The strategy screens U.S. equities monthly, selecting top-ranked names using eToro's proprietary momentum score. Up to 49 stocks are held in equal weight.
+
+👉 Top movers include $EQX, $AU, $AG, and $GFI — riding tailwinds across precious metals, tech, and industrials.
+
+✨ @PureMomentum is a systematic U.S.-equity Smart Portfolio built for investors who want structured exposure to market leadership. Minimum investment: **$2,000**.`,
+];
+
+// ---------------------------------------------------------------------------
+// MEDIUM (~200 words)
+// ---------------------------------------------------------------------------
+
+export const PERFORMANCE_HIGHLIGHT_EXAMPLES_MEDIUM: string[] = [
+  `@PureMomentum
+
+PureMomentum is delivering strong returns by systematically riding the market's top-performing stocks, proving that disciplined momentum investing works when conditions align.
+
+📈 Momentum Is Having Its Moment — And This Portfolio Is Delivering
+
+❓ What happens when you systematically chase the market's strongest performers and let the data do the work?
+
+👉 The momentum factor — the tendency for stocks already rising to keep rising — is back in the spotlight. As markets reward clear sector leadership, momentum strategies are capturing real, measurable gains.
+
+👉 @PureMomentum is up **+7.09% this month** and **+18.97% year to date** — a strong reflection of disciplined, rules-based momentum investing.
+
+👉 The strategy screens the entire U.S. equity universe on eToro monthly, filters for large- and mid-cap stocks with market caps above $2.5B and strong liquidity, then selects top-ranked names using eToro's proprietary momentum score. Up to 49 stocks are held in equal weight, keeping concentration risk low.
+
+👉 Top movers include $EQX, $AU, $AG, and $GFI — riding strong tailwinds across precious metals, technology, and industrials.
+
+👉 With over 34% in Basic Materials, the portfolio is positioned to benefit from commodity cycles and resource demand.
+
+✨ @PureMomentum is a systematic Smart Portfolio for investors who want structured exposure to market leadership — without leverage or short selling. It rebalances monthly, keeping the portfolio aligned with where strength actually lives. Minimum investment: **$2,000**.`,
+];
+
+// ---------------------------------------------------------------------------
+// LONG (~250 words)
+// ---------------------------------------------------------------------------
+
+export const PERFORMANCE_HIGHLIGHT_EXAMPLES_LONG: string[] = [
+  `@PureMomentum
+
+PureMomentum is delivering strong returns by systematically riding the market's top-performing stocks, proving that disciplined momentum investing works when market conditions align.
 
 📈 Momentum Is Having Its Moment — And This Portfolio Is Delivering
 
@@ -29,3 +88,15 @@ This strategy could suit growth-oriented investors looking to complement value o
 
 Current top holdings include $AG, $CIEN, $AU, $EQX, $TER and $AEM.`,
 ];
+
+/** Backward-compatible default export (long examples). */
+export const PERFORMANCE_HIGHLIGHT_EXAMPLES = PERFORMANCE_HIGHLIGHT_EXAMPLES_LONG;
+
+/** Returns the example set matching the requested length. */
+export function getPerformanceHighlightExamples(length: 'short' | 'medium' | 'long'): string[] {
+  switch (length) {
+    case 'short': return PERFORMANCE_HIGHLIGHT_EXAMPLES_SHORT;
+    case 'medium': return PERFORMANCE_HIGHLIGHT_EXAMPLES_MEDIUM;
+    case 'long': return PERFORMANCE_HIGHLIGHT_EXAMPLES_LONG;
+  }
+}

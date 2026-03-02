@@ -48,8 +48,9 @@ export async function POST(request: NextRequest) {
     }
 
     const now = new Date();
-    const month = now.getMonth();
-    const year = now.getFullYear();
+    const currentMonth = now.getMonth();
+    const month = currentMonth === 0 ? 11 : currentMonth - 1;
+    const year = currentMonth === 0 ? now.getFullYear() - 1 : now.getFullYear();
     const isJanuary = month === 0;
 
     const results: Array<{
@@ -79,20 +80,37 @@ export async function POST(request: NextRequest) {
             );
           }
 
-          const latestMonthly = gainData.monthly.reduce((latest, entry) =>
-            new Date(entry.timestamp) > new Date(latest.timestamp) ? entry : latest,
-          );
+          // Find the gain entry that matches the report month (previous month)
+          let monthlyEntry = gainData.monthly.find((entry) => {
+            const d = new Date(entry.timestamp);
+            return d.getUTCMonth() === month && d.getUTCFullYear() === year;
+          });
 
-          const latestYearly =
+          if (!monthlyEntry) {
+            // Fallback: use the second-to-last entry (skip the current partial month)
+            const sorted = [...gainData.monthly].sort(
+              (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+            );
+            monthlyEntry = sorted.length >= 2 ? sorted[1] : sorted[0];
+          }
+
+          if (!monthlyEntry) {
+            throw new Error(
+              `No gain data for the report month for ${username}. Please refresh portfolio data.`,
+            );
+          }
+
+          // For YTD, find the latest yearly entry up to the report month
+          const yearlyEntry =
             !isJanuary && gainData.yearly.length > 0
-              ? gainData.yearly.reduce((latest, entry) =>
-                  new Date(entry.timestamp) > new Date(latest.timestamp) ? entry : latest,
-                )
+              ? gainData.yearly
+                  .filter((e) => new Date(e.timestamp) <= new Date(year, month + 1, 0))
+                  .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0] ?? null
               : null;
 
           const revenueData = {
-            monthlyGain: latestMonthly.gain,
-            ytdGain: latestYearly?.gain,
+            monthlyGain: monthlyEntry.gain,
+            ytdGain: yearlyEntry?.gain,
           };
 
           const result = await generateMonthlyUpdateContent(
@@ -109,8 +127,8 @@ export async function POST(request: NextRequest) {
             portfolioUsername: username,
             content: result.content,
             topTickers: result.topTickers,
-            monthlyGain: latestMonthly.gain,
-            ytdGain: latestYearly?.gain ?? null,
+            monthlyGain: monthlyEntry.gain,
+            ytdGain: yearlyEntry?.gain ?? null,
           };
         }),
       );

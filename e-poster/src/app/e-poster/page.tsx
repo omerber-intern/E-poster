@@ -92,10 +92,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-lg mb-1">
-                    Post History{' '}
-                    <span className="text-xs font-normal text-muted-foreground">
-                      (beta)
-                    </span>
+                    Post History
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     View previously published posts.

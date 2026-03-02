@@ -29,6 +29,7 @@ interface PortfolioInfo {
   username: string;
   hasCredentials: boolean;
   monthlyGain: number | null;
+  prevMonthGain: number | null;
   ytdGain: number | null;
 }
 
@@ -57,6 +58,19 @@ function GainBadge({ value }: { value: number | null }) {
   );
 }
 
+function getGainByMonth(
+  entries: { timestamp: string; gain: number }[],
+  month: number,
+  year: number,
+): number | null {
+  if (!entries || entries.length === 0) return null;
+  const match = entries.find((e) => {
+    const d = new Date(e.timestamp);
+    return d.getUTCMonth() === month && d.getUTCFullYear() === year;
+  });
+  return match?.gain ?? null;
+}
+
 function getLatestGain(entries: { timestamp: string; gain: number }[]): number | null {
   if (!entries || entries.length === 0) return null;
   const latest = entries.reduce((prev, curr) =>
@@ -72,6 +86,13 @@ export default function PerformanceHighlightPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [postLength, setPostLength] = useState<PostLength>('medium');
   const [isLoading, setIsLoading] = useState(true);
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const prevMonthYear = currentMonth === 0 ? now.getFullYear() - 1 : now.getFullYear();
+  const prevMonthName = new Date(prevMonthYear, prevMonth).toLocaleString('en-US', { month: 'short' });
+  const currentMonthName = now.toLocaleString('en-US', { month: 'short' });
 
   useEffect(() => {
     async function load() {
@@ -98,7 +119,8 @@ export default function PerformanceHighlightPage() {
             return {
               username: u,
               hasCredentials: withCreds.includes(u),
-              monthlyGain: gainData ? getLatestGain(gainData.monthly) : null,
+              monthlyGain: gainData ? getGainByMonth(gainData.monthly, currentMonth, now.getFullYear()) : null,
+              prevMonthGain: gainData ? getGainByMonth(gainData.monthly, prevMonth, prevMonthYear) : null,
               ytdGain: gainData ? getLatestGain(gainData.yearly) : null,
             };
           }),
@@ -132,12 +154,14 @@ export default function PerformanceHighlightPage() {
 
   const missingGainData = [...selected].filter((u) => {
     const p = portfolios.find((x) => x.username === u);
-    return p && p.monthlyGain === null;
+    return p && p.monthlyGain === null && p.prevMonthGain === null;
   });
 
   const negativePerformance = [...selected].filter((u) => {
     const p = portfolios.find((x) => x.username === u);
-    return p && p.monthlyGain !== null && p.monthlyGain < 0;
+    if (!p) return false;
+    const bestGain = Math.max(p.prevMonthGain ?? -Infinity, p.monthlyGain ?? -Infinity);
+    return bestGain < 0;
   });
 
   const handleGenerate = () => {
@@ -218,7 +242,7 @@ export default function PerformanceHighlightPage() {
                   >
                     <p className="font-medium text-sm mb-1">Medium</p>
                     <p className="text-xs text-muted-foreground">
-                      ~250 words. Balanced coverage of strategy and performance.
+                      ~200 words. Balanced coverage of strategy and performance.
                     </p>
                   </button>
 
@@ -232,7 +256,7 @@ export default function PerformanceHighlightPage() {
                   >
                     <p className="font-medium text-sm mb-1">Long</p>
                     <p className="text-xs text-muted-foreground">
-                      ~350+ words. Full promotional post with detailed
+                      ~250 words. Full promotional post with detailed
                       breakdown.
                     </p>
                   </button>
@@ -261,7 +285,8 @@ export default function PerformanceHighlightPage() {
               {/* Portfolio list */}
               <div className="border rounded-lg divide-y max-h-[480px] overflow-y-auto">
                 {filteredPortfolios.map((p) => {
-                  const isNegative = p.monthlyGain !== null && p.monthlyGain < 0;
+                  const bestGain = Math.max(p.prevMonthGain ?? -Infinity, p.monthlyGain ?? -Infinity);
+                  const isNegative = bestGain < 0;
                   return (
                     <label
                       key={p.username}
@@ -279,7 +304,11 @@ export default function PerformanceHighlightPage() {
 
                       <div className="flex items-center gap-3 text-xs">
                         <div className="text-right">
-                          <p className="text-muted-foreground">Monthly</p>
+                          <p className="text-muted-foreground">{prevMonthName}</p>
+                          <GainBadge value={p.prevMonthGain} />
+                        </div>
+                        <div className="text-right">
+                          <p className="text-muted-foreground">{currentMonthName}</p>
                           <GainBadge value={p.monthlyGain} />
                         </div>
                         <div className="text-right">

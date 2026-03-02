@@ -14,12 +14,10 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { SmartPortfolio, PortfolioBio, PortfolioHolding, IndustryWeight } from '../models/portfolio';
 import type { DisclaimerRule } from '../config/disclaimers';
-import { NEWS_EXAMPLE_POSTS } from '../config/example-posts';
-import {
-  MONTHLY_UPDATE_TEMPLATE_A_EXAMPLES,
-  MONTHLY_UPDATE_TEMPLATE_B_EXAMPLES,
-} from '../config/monthly-update-examples';
-import { PERFORMANCE_HIGHLIGHT_EXAMPLES } from '../config/performance-highlight-examples';
+import { getNewsExamples } from '../config/example-posts';
+import { getEducationalExamples } from '../config/educational-examples';
+import { getMonthlyUpdateExamples } from '../config/monthly-update-examples';
+import { getPerformanceHighlightExamples } from '../config/performance-highlight-examples';
 
 const MODEL = 'claude-sonnet-4-6';
 const HAIKU_MODEL = 'claude-haiku-4-5';
@@ -29,21 +27,21 @@ const TOPIC_MIN_WEIGHT = 0.5;
 export type PostLength = 'short' | 'medium' | 'long';
 
 const NEWS_LENGTH_CONFIG: Record<PostLength, { words: number; maxTokens: number }> = {
-  short: { words: 150, maxTokens: 600 },
-  medium: { words: 250, maxTokens: 900 },
-  long: { words: 350, maxTokens: 1400 },
+  short: { words: 150, maxTokens: 400 },
+  medium: { words: 200, maxTokens: 520 },
+  long: { words: 250, maxTokens: 650 },
 };
 
 const EDU_LENGTH_CONFIG: Record<PostLength, { words: number; maxTokens: number }> = {
-  short: { words: 150, maxTokens: 600 },
-  medium: { words: 250, maxTokens: 900 },
-  long: { words: 350, maxTokens: 1400 },
+  short: { words: 150, maxTokens: 400 },
+  medium: { words: 200, maxTokens: 520 },
+  long: { words: 250, maxTokens: 650 },
 };
 
 const MONTHLY_LENGTH_CONFIG: Record<PostLength, { words: number; maxTokens: number }> = {
-  short: { words: 150, maxTokens: 600 },
-  medium: { words: 250, maxTokens: 900 },
-  long: { words: 350, maxTokens: 1400 },
+  short: { words: 150, maxTokens: 400 },
+  medium: { words: 200, maxTokens: 520 },
+  long: { words: 250, maxTokens: 650 },
 };
 
 function getClient(): Anthropic {
@@ -370,10 +368,12 @@ Create a short, engaging post about a news event and how it relates to a portfol
 
 Rules:
 - Start the post with @${portfolio.username}
+- Immediately after @${portfolio.username}, open with a "bottom line" of 1–3 sentences that tells the reader what this post is about: summarize the news event AND its impact on the portfolio. No small details — just enough so the reader instantly understands what they are reading and why it matters for the portfolio.
 - Include the top affected tickers in $TICKER format (e.g., $NVDA, $AAPL)
 - Reference the portfolio strategy/bio when relevant
 - Keep the tone professional but accessible
-- Target approximately ${words} words
+- Keep paragraphs short and scannable — break the text into multiple small paragraphs rather than a few long ones
+- IMPORTANT — LENGTH: You MUST write approximately ${words} words (excluding the @username line). Do NOT exceed ${words + 30} words and do NOT write fewer than ${Math.max(words - 30, 50)} words. This is a strict requirement — count carefully.
 - Do NOT include disclaimers (they will be added separately)
 - Do NOT use hashtags
 - Include the news URL if provided`;
@@ -398,8 +398,8 @@ Key affected holdings:
 ${impact.affectedHoldings.map((a) => `- $${a.symbol}: ${a.impactLevel} impact, ${a.direction} — ${a.reasoning}`).join('\n')}
 
 ${(() => {
-  const examples = examplePosts?.length ? examplePosts : NEWS_EXAMPLE_POSTS;
-  return `EXAMPLE POSTS FOR REFERENCE (match this style, structure, and tone):\n${examples.join('\n---\n')}`;
+  const examples = examplePosts?.length ? examplePosts : getNewsExamples(postLength);
+  return `EXAMPLE POSTS FOR REFERENCE (match this style, structure, tone, and especially length — aim for ~${words} words):\n${examples.join('\n---\n')}`;
 })()}
 
 Write the post now:`;
@@ -451,12 +451,14 @@ Create educational content about an investment portfolio and its strategy.
 
 Rules:
 - Start the post with @${portfolio.username}
+- Immediately after @${portfolio.username}, open with a "bottom line" of 1–3 sentences that tells the reader what this post is about: what they will learn about this portfolio and its strategy. No small details — just enough so the reader instantly understands the content of the post.
 - Include the top holdings in $TICKER format
 - Explain the investment strategy/logic in accessible terms
 - Mention what type of investor could benefit from this portfolio
 - Explain how it could add diversification to existing holdings
 - Keep the tone educational, professional, and engaging
-- Target approximately ${words} words
+- Keep paragraphs short and scannable — break the text into multiple small paragraphs rather than a few long ones
+- IMPORTANT — LENGTH: You MUST write approximately ${words} words (excluding the @username line). Do NOT exceed ${words + 30} words and do NOT write fewer than ${Math.max(words - 30, 50)} words. This is a strict requirement — count carefully.
 - Do NOT include disclaimers (they will be added separately)
 - Do NOT use hashtags`;
 
@@ -470,6 +472,9 @@ CURRENT HOLDINGS:
 ${holdingsCompactSummary(portfolio.holdings)}
 
 ${additionalContext ? `ADDITIONAL CONTEXT FROM USER:\n${additionalContext}` : ''}
+
+EXAMPLE POSTS (match this style, structure, tone, and especially length — aim for ~${words} words):
+${getEducationalExamples(postLength).join('\n---\n')}
 
 Write the educational content now:`;
 
@@ -550,10 +555,7 @@ export async function generateMonthlyUpdateContent(
       ? `Performance Stats: @${portfolio.username} -> ${monthName}: ${monthlyGainStr}${ytdGainStr ? ` , YTD: ${ytdGainStr}` : ''}`
       : `Monthly: ${monthlyGainStr}${ytdGainStr ? `\nYTD: ${ytdGainStr}` : ''}`;
 
-  const examples =
-    templateStyle === 'stats-bottom'
-      ? MONTHLY_UPDATE_TEMPLATE_A_EXAMPLES
-      : MONTHLY_UPDATE_TEMPLATE_B_EXAMPLES;
+  const examples = getMonthlyUpdateExamples(templateStyle, postLength);
 
   const systemPrompt = templateStyle === 'stats-bottom'
     ? `You are a professional financial content writer for the eToro social trading platform.
@@ -561,12 +563,14 @@ Write a monthly portfolio performance update post.
 
 Rules:
 - Open with "Dear Investors," followed by a greeting line: "Here is your monthly update for ${monthName} ${year} ✨"
+- Right after the greeting, open with a "bottom line" of 1–3 sentences that tells the reader what this update is about: the key market themes and how the portfolio performed this month. No small details — just enough so the reader instantly understands the content of the post.
 - Write 2–3 paragraphs of AI-generated market commentary relevant to the portfolio's sector and strategy
 - End with a performance stats block using EXACTLY this format:
   Performance Stats: @${portfolio.username} -> ${monthName}: ${monthlyGainStr}${ytdGainStr ? ` , YTD: ${ytdGainStr}` : ''}
 - After the stats block, list some top holdings using $TICKER (Name) format
 - Use emojis sparingly (1–2 per post)
-- Target approximately ${words} words
+- Keep paragraphs short and scannable — break the text into multiple small paragraphs rather than a few long ones
+- IMPORTANT — LENGTH: You MUST write approximately ${words} words. Do NOT exceed ${words + 30} words and do NOT write fewer than ${Math.max(words - 30, 50)} words. This is a strict requirement — count carefully.
 - Do NOT include any disclaimers (they will be added separately)
 - Do NOT use hashtags
 ${isJanuary ? '- This is January — do NOT include any YTD figure' : ''}`
@@ -580,11 +584,13 @@ Rules:
 - Fourth and fifth lines: the performance figures stacked EXACTLY like this (no other placement):
   Monthly: ${monthlyGainStr}${ytdGainStr ? `\n  YTD: ${ytdGainStr}` : ''}
 - Add an emoji (🚀 or 📈) on the same line as Monthly
+- Right after the performance figures, open with a "bottom line" of 1–3 sentences that tells the reader what this update is about: the key market themes and how the portfolio performed this month. No small details — just enough so the reader instantly understands the content of the post.
 - Write 2 paragraphs of narrative market commentary tailored to the portfolio's strategy and sectors
 - Do NOT mention the revenue figures again anywhere else in the post
 - End by listing @${portfolio.username} and top holdings in $TICKER (Name) format
 - Use emojis frequently to match the energetic style of the examples
-- Target approximately ${words} words
+- Keep paragraphs short and scannable — break the text into multiple small paragraphs rather than a few long ones
+- IMPORTANT — LENGTH: You MUST write approximately ${words} words. Do NOT exceed ${words + 30} words and do NOT write fewer than ${Math.max(words - 30, 50)} words. This is a strict requirement — count carefully.
 - Do NOT include any disclaimers (they will be added separately)
 - Do NOT use hashtags
 ${isJanuary ? '- This is January — do NOT include any YTD figure' : ''}`;
@@ -599,7 +605,7 @@ ${holdingsCompactSummary(portfolio.holdings)}
 PERFORMANCE DATA:
 ${monthName} ${year}: ${monthlyGainStr}${ytdGainStr ? `\nYTD: ${ytdGainStr}` : ''}
 
-EXAMPLE POSTS (match this style, tone, and structure closely):
+EXAMPLE POSTS (match this style, tone, structure, and especially length — aim for ~${words} words):
 ${examples.join('\n---\n')}
 
 The performance figures to include verbatim (stacked, one per line, right after the heading):
@@ -636,6 +642,8 @@ export type PerformanceHighlightLength = PostLength;
 export interface PerformanceHighlightRevenueData {
   monthlyGain: number;
   ytdGain?: number;
+  /** Which month the monthlyGain refers to (e.g. "February"). Defaults to "this month". */
+  gainMonthName?: string;
 }
 
 export interface PerformanceHighlightResult {
@@ -644,9 +652,9 @@ export interface PerformanceHighlightResult {
 }
 
 const LENGTH_CONFIG: Record<PerformanceHighlightLength, { words: number; maxTokens: number }> = {
-  short: { words: 150, maxTokens: 600 },
-  medium: { words: 250, maxTokens: 900 },
-  long: { words: 350, maxTokens: 1400 },
+  short: { words: 150, maxTokens: 400 },
+  medium: { words: 200, maxTokens: 520 },
+  long: { words: 250, maxTokens: 650 },
 };
 
 export async function generatePerformanceHighlightContent(
@@ -676,16 +684,18 @@ Write a promotional post that highlights and compliments a portfolio's strong pe
 
 Rules:
 - Start the post with @${portfolio.username}
+- Immediately after @${portfolio.username}, open with a "bottom line" of 1–3 sentences that tells the reader what this post is about: why this portfolio stands out and what performance it has achieved. No small details — just enough so the reader instantly understands the content of the post.
 - Open with an engaging headline using an emoji (📈, 🚀, etc.)
 - Include a compelling question hook
 - Highlight the portfolio's strategy based on its bio/description
-- Include the exact performance numbers: **${monthlyGainStr} this month**${ytdGainStr ? ` and **${ytdGainStr} year to date**` : ''}
+- Include the exact performance numbers: **${monthlyGainStr} ${revenueData.gainMonthName ? `in ${revenueData.gainMonthName}` : 'this month'}**${ytdGainStr ? ` and **${ytdGainStr} year to date**` : ''}
 - Reference top holdings using ONLY $TICKER format (e.g. $AAPL, $NVDA) — do NOT include full company names next to tickers
 - Highlight sector allocation strengths and what they mean for the investor
 - If the bio mentions minimum investment, investor suitability, or other relevant details, include them naturally
 - Use emojis throughout to match an energetic, promotional tone
 - Use 👉 bullets for key points
-- Target approximately ${words} words (excluding disclaimers)
+- Keep paragraphs short and scannable — break the text into multiple small paragraphs rather than a few long ones
+- IMPORTANT — LENGTH: You MUST write approximately ${words} words (excluding disclaimers and the @username line). Do NOT exceed ${words + 30} words and do NOT write fewer than ${Math.max(words - 30, 50)} words. This is a strict requirement — count carefully.
 - Do NOT include disclaimers (they will be added separately)
 - Do NOT use hashtags
 - Use **bold** for key figures`;
@@ -700,10 +710,10 @@ CURRENT HOLDINGS:
 ${holdingsCompactSummary(portfolio.holdings)}
 
 PERFORMANCE DATA:
-Monthly gain: ${monthlyGainStr}${ytdGainStr ? `\nYTD gain: ${ytdGainStr}` : ''}
+${revenueData.gainMonthName ? `${revenueData.gainMonthName} gain` : 'Monthly gain'}: ${monthlyGainStr}${ytdGainStr ? `\nYTD gain: ${ytdGainStr}` : ''}
 
-EXAMPLE POSTS (match this promotional style and structure, adapting length to ~${words} words):
-${PERFORMANCE_HIGHLIGHT_EXAMPLES.join('\n---\n')}
+EXAMPLE POSTS (match this promotional style, structure, and especially length — aim for ~${words} words):
+${getPerformanceHighlightExamples(postLength).join('\n---\n')}
 
 Write the performance highlight post now:`;
 

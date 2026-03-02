@@ -62,7 +62,10 @@ export async function getApplicableDisclaimers(
   if (contentRules.length > 0 && postContent.trim()) {
     const ruleMap = new Map(contentRules.map((r) => [r.id, r]));
     const aiMatches = await classifyContentDisclaimers(postContent, contentRules);
+    const seenRuleIds = new Set<string>();
     for (const match of aiMatches) {
+      if (seenRuleIds.has(match.ruleId)) continue;
+      seenRuleIds.add(match.ruleId);
       const rule = ruleMap.get(match.ruleId);
       if (rule) {
         results.push({
@@ -74,7 +77,7 @@ export async function getApplicableDisclaimers(
     }
   }
 
-  return results;
+  return deduplicateDisclaimers(results);
 }
 
 /**
@@ -154,5 +157,44 @@ function detectFromHoldings(
     default:
       return null;
   }
+}
+
+/**
+ * Remove disclaimers whose text is already covered by another disclaimer.
+ * Handles exact duplicates, substring containment, and near-duplicates
+ * (e.g. "Past performance is not an indication…" vs
+ *       "Past performance is not a reliable indicator…").
+ */
+function deduplicateDisclaimers(results: SelectedDisclaimer[]): SelectedDisclaimer[] {
+  const deduped: SelectedDisclaimer[] = [];
+
+  for (const d of results) {
+    const alreadyCovered = deduped.some((existing) =>
+      existing.rule.text.includes(d.rule.text) ||
+      d.rule.text.includes(existing.rule.text) ||
+      sentencesOverlap(existing.rule.text, d.rule.text),
+    );
+    if (!alreadyCovered) {
+      deduped.push(d);
+    }
+  }
+
+  return deduped;
+}
+
+const OVERLAP_PREFIX_LEN = 20;
+
+function sentencesOverlap(textA: string, textB: string): boolean {
+  const prefixesA = sentencePrefixes(textA);
+  const prefixesB = sentencePrefixes(textB);
+  return prefixesA.some((pa) => prefixesB.some((pb) => pa === pb));
+}
+
+function sentencePrefixes(text: string): string[] {
+  return text
+    .split(/[.\n]/)
+    .map((s) => s.trim().toLowerCase())
+    .filter((s) => s.length >= OVERLAP_PREFIX_LEN)
+    .map((s) => s.substring(0, OVERLAP_PREFIX_LEN));
 }
 

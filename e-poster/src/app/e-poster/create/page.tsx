@@ -52,10 +52,7 @@ export default function CreatePostPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-lg mb-1">
-                    Educational Content{' '}
-                    <span className="text-xs font-normal text-muted-foreground">
-                      (beta)
-                    </span>
+                    Educational Content
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     Generate educational posts about portfolio strategies,

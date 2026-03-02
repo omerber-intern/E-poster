@@ -49,6 +49,19 @@ function GainBadge({ value }: { value: number | null }) {
   );
 }
 
+function getGainByMonth(
+  entries: { timestamp: string; gain: number }[],
+  month: number,
+  year: number,
+): number | null {
+  if (!entries || entries.length === 0) return null;
+  const match = entries.find((e) => {
+    const d = new Date(e.timestamp);
+    return d.getUTCMonth() === month && d.getUTCFullYear() === year;
+  });
+  return match?.gain ?? null;
+}
+
 function getLatestGain(entries: { timestamp: string; gain: number }[]): number | null {
   if (!entries || entries.length === 0) return null;
   const latest = entries.reduce((prev, curr) =>
@@ -67,9 +80,12 @@ export default function MonthlyUpdatePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const now = new Date();
-  const isJanuary = now.getMonth() === 0;
-  const monthName = now.toLocaleString('en-US', { month: 'long' });
-  const year = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const reportMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const reportYear = currentMonth === 0 ? now.getFullYear() - 1 : now.getFullYear();
+  const isJanuary = reportMonth === 0;
+  const monthName = new Date(reportYear, reportMonth).toLocaleString('en-US', { month: 'long' });
+  const year = reportYear;
 
   useEffect(() => {
     async function load() {
@@ -96,7 +112,9 @@ export default function MonthlyUpdatePage() {
             return {
               username: u,
               hasCredentials: withCreds.includes(u),
-              monthlyGain: gainData ? getLatestGain(gainData.monthly) : null,
+              monthlyGain: gainData
+                ? (getGainByMonth(gainData.monthly, reportMonth, reportYear) ?? getLatestGain(gainData.monthly))
+                : null,
               ytdGain: gainData ? getLatestGain(gainData.yearly) : null,
             };
           }),
@@ -260,7 +278,7 @@ export default function MonthlyUpdatePage() {
                   >
                     <p className="font-medium text-sm mb-1">Medium</p>
                     <p className="text-xs text-muted-foreground">
-                      ~250 words. Balanced commentary and performance.
+                      ~200 words. Balanced commentary and performance.
                     </p>
                   </button>
 
@@ -274,7 +292,7 @@ export default function MonthlyUpdatePage() {
                   >
                     <p className="font-medium text-sm mb-1">Long</p>
                     <p className="text-xs text-muted-foreground">
-                      ~350+ words. Detailed market commentary and breakdown.
+                      ~250 words. Detailed market commentary and breakdown.
                     </p>
                   </button>
                 </div>
