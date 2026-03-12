@@ -27,7 +27,7 @@ export const NEWS_EXAMPLE_POSTS_SHORT: string[] = [
 
   `Dassault Aviation sets the rollout date for the Falcon 10X, its largest and most advanced business jet ever built.
 
-✈️ $AM.PA (Dassault Aviation SA) will formally unveil the Falcon 10X on March 10, 2026 — a major milestone for the company and the business aviation industry.
+✈️ $AM.PA will formally unveil the Falcon 10X on March 10, 2026 — a major milestone for the company and the business aviation industry.
 
 👉 The Falcon 10X offers 7,500 nautical miles of range, top speeds of Mach 0.925, and a spacious cabin designed for maximum comfort.
 
@@ -45,7 +45,7 @@ export const NEWS_EXAMPLE_POSTS_SHORT: string[] = [
 export const NEWS_EXAMPLE_POSTS_MEDIUM: string[] = [
   `Meta's expanded Nvidia deal marks a pivotal moment in the AI infrastructure race, with $135B committed for 2026 and up to $600B planned by 2028.
 
-🚀 $META (Meta Platforms Inc) will deploy "millions" of $NVDA (NVIDIA Corporation) chips across its U.S. AI data centers in a sweeping multiyear expansion — including next-gen Vera Rubin GPUs, Grace standalone CPUs, and Nvidia's high-performance networking systems.
+🚀 $META will deploy "millions" of $NVDA chips across its U.S. AI data centers in a sweeping multiyear expansion — including next-gen Vera Rubin GPUs, Grace standalone CPUs, and Nvidia's high-performance networking systems.
 
 ❓ Is this the clearest sign yet that the AI infrastructure race is accelerating?
 
@@ -63,7 +63,7 @@ export const NEWS_EXAMPLE_POSTS_MEDIUM: string[] = [
 
   `Indra Sistemas secures a $1.1B London Transport contract, solidifying its growing presence in international technology markets.
 
-📈 $IDR.MC (Indra Sistemas SA) has won a significant contract with London Transport valued at $1.1 billion. This deal further solidifies Indra's position as a leading provider of technology and defense solutions.
+📈 $IDR.MC has won a significant contract with London Transport valued at $1.1 billion. This deal further solidifies Indra's position as a leading provider of technology and defense solutions.
 
 👉 The contract involves implementing advanced transport management systems across London, enhancing the city's public transportation infrastructure. This strategic win underscores Indra's expertise in integrating cutting-edge technology with public sector needs.
 
@@ -73,7 +73,7 @@ export const NEWS_EXAMPLE_POSTS_MEDIUM: string[] = [
 
 🔗 Read more: www.reuters.com/world/uk/indra-signs-11-billion-deal-manage-london-transport-ticketing-control-systems-2026-01-16/
 
-✨ $IDR.MC is part of eToro's @EuropeDefense Smart Portfolio, offering diversified exposure to companies across the European defense and aerospace supply chain. Minimum investment: $500. Holdings include $HAG.DE (HENSOLDT AG), $KOG.OL (Kongsberg Gruppen ASA), $RR.L (Rolls-Royce), and $SAF.PA (SAFRAN).`,
+✨ $IDR.MC is part of eToro's @EuropeDefense Smart Portfolio, offering diversified exposure to companies across the European defense and aerospace supply chain. Minimum investment: $500. Holdings include $HAG.DE, $KOG.OL, $RR.L, and $SAF.PA.`,
 ];
 
 // ---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ export const NEWS_EXAMPLE_POSTS_LONG: string[] = [
 
 ❓ Is this the clearest sign yet that the AI infrastructure race is accelerating?
 
-👉 $META (Meta Platforms Inc) will deploy "millions" of $NVDA (NVIDIA Corporation) chips across its U.S. AI data centers in a sweeping multiyear expansion — including next-gen Vera Rubin GPUs, Grace standalone CPUs, and Nvidia's high-performance networking systems.
+👉 $META will deploy "millions" of $NVDA chips across its U.S. AI data centers in a sweeping multiyear expansion — including next-gen Vera Rubin GPUs, Grace standalone CPUs, and Nvidia's high-performance networking systems.
 
 👉 The standout detail: Meta becomes the first company to deploy Nvidia's Grace CPUs at scale as standalone processors, reinforcing Nvidia's push to control both the CPU + GPU AI stack — not just accelerators.
 
@@ -95,13 +95,13 @@ export const NEWS_EXAMPLE_POSTS_LONG: string[] = [
 
 👉 Nvidia's Blackwell chips remain supply-constrained, and Rubin has just entered production. With this deal, Meta appears to be locking in long-term AI compute capacity.
 
-👉 Shares of $META and $NVDA moved higher, while $AMD (Advanced Micro Devices Inc) slipped, reflecting how dominant Nvidia's ecosystem remains — even as Meta explores in-house silicon and alternative suppliers.
+👉 Shares of $META and $NVDA moved higher, while $AMD slipped, reflecting how dominant Nvidia's ecosystem remains — even as Meta explores in-house silicon and alternative suppliers.
 
 🔗Read more: www.cnbc.com/2026/02/17/meta-nvidia-deal-ai-data-center-chips.html
 
 ✨ $META and $NVDA are part of eToro's @AI-Revolution Smart Portfolio, a fully allocated thematic strategy that invests in companies developing cutting-edge technologies forming the infrastructure of AI applications, as well as leading businesses that utilize AI as part of their strategy.
 
-The minimum investment for the @AI-Revolution Smart Portfolio is $500. Some of the portfolio's holdings include $AVGO (Broadcom Inc), $MU (Micron Technology, Inc.), $BABA (Alibaba-ADR), $AMZN (Amazon.com Inc), $GOOGL (Alphabet Inc Class A), $MSFT (Microsoft), $TSM (Taiwan Semiconductor Manufacturing Co Ltd - ADR), and $PLTR (Palantir Technologies Inc.) .
+The minimum investment for the @AI-Revolution Smart Portfolio is $500. Some of the portfolio's holdings include $AVGO, $MU, $BABA, $AMZN, $GOOGL, $MSFT, $TSM, and $PLTR.
 
 Your capital is at risk. Past performance is not an indication of future results`,
 
@@ -109,7 +109,7 @@ Your capital is at risk. Past performance is not an indication of future results
 
 ✈️ Dassault Aviation Announces Falcon 10X Rollout Date
 
-👉 $AM.PA (Dassault Aviation SA) has announced the formal unveiling date for its new Falcon 10X business jet. The official rollout will take place on March 10, 2026, marking a major milestone for the company and the business aviation industry.
+👉 $AM.PA has announced the formal unveiling date for its new Falcon 10X business jet. The official rollout will take place on March 10, 2026, marking a major milestone for the company and the business aviation industry.
 
 👉 The Falcon 10X is set to be the largest and most advanced business jet ever produced by Dassault Aviation. With a range of 7,500 nautical miles, a spacious cabin designed for comfort, and top speeds reaching Mach 0.925, the Falcon 10X promises unparalleled performance and technological innovation.
 
@@ -119,13 +119,13 @@ Your capital is at risk. Past performance is not an indication of future results
 
 ✨ $AM.PA is part eToro's @EuropeDefense Smart Portfolio, offering diversified exposure to companies across the European defense and aerospace supply and value chain. From firms specialising in aircraft and naval systems to those developing surveillance technologies and tactical equipment, the portfolio is exposed to companies that benefit from increased regional defense investment and reduced reliance on external suppliers.
 
-The minimum investment amount for the @EuropeDefense Smart Portfolio is $500. Some of the companies invested in this portfolio are $HAG.DE (HENSOLDT AG), $KOG.OL (Kongsberg Gruppen ASA), $RR.L (Rolls-Royce), $SAF.PA (SAFRAN), $SNR.L (Senior PLC), and $HO.PA (Thales Group) .`,
+The minimum investment amount for the @EuropeDefense Smart Portfolio is $500. Some of the companies invested in this portfolio are $HAG.DE, $KOG.OL, $RR.L, $SAF.PA, $SNR.L, and $HO.PA.`,
 
   `Indra Sistemas strengthens its global footprint with a $1.1 billion London Transport deal, adding to a string of major international contract wins.
 
 📈 Indra Sistema Wins Major London Transport Deal Worth $1.1 Billion
 
-👉 $IDR.MC (Indra Sistemas SA) has secured a significant contract with London Transport valued at $1.1 billion. This deal further solidifies Indra's position as a leading provider of technology and defense solutions.
+👉 $IDR.MC has secured a significant contract with London Transport valued at $1.1 billion. This deal further solidifies Indra's position as a leading provider of technology and defense solutions.
 
 👉 The contract involves the implementation of advanced transport management systems across London, enhancing the city's public transportation infrastructure. This strategic win underscores Indra's expertise in integrating cutting-edge technology with public sector needs.
 
@@ -137,7 +137,7 @@ The minimum investment amount for the @EuropeDefense Smart Portfolio is $500. So
 
 ✨ $IDR.MC is part eToro's @EuropeDefense Smart Portfolio, offering diversified exposure to companies across the European defense and aerospace supply and value chain. From firms specialising in aircraft and naval systems to those developing surveillance technologies and tactical equipment, the portfolio is exposed to companies that benefit from increased regional defense investment and reduced reliance on external suppliers.
 
-The minimum investment amount for the @EuropeDefense Smart Portfolio is $500. Some of the companies invested in this portfolio are $HAG.DE (HENSOLDT AG), $KOG.OL (Kongsberg Gruppen ASA), $RR.L (Rolls-Royce), $SAF.PA (SAFRAN), $SNR.L (Senior PLC), and $HO.PA.
+The minimum investment amount for the @EuropeDefense Smart Portfolio is $500. Some of the companies invested in this portfolio are $HAG.DE, $KOG.OL, $RR.L, $SAF.PA, $SNR.L, and $HO.PA.
 
 Past performance is not an indication of future results.`,
 
@@ -145,7 +145,7 @@ Past performance is not an indication of future results.`,
 
 Duke Energy raises five-year capital expenditure plan to $103 billion as more US data centers sign on
 
-👉 $DUK (Duke Energy Corp) raised its five-year spending plan on power infrastructure to $103 billion, an 18 percent jump from the last iteration of what has become the largest capital expenditure plan for any U.S. regulated electric utility, the company said.
+👉 $DUK raised its five-year spending plan on power infrastructure to $103 billion, an 18 percent jump from the last iteration of what has become the largest capital expenditure plan for any U.S. regulated electric utility, the company said.
 
 👉 U.S. power companies are beefing up spending plans to record levels as the country's power demand forecasts rise after decades of stagnation, with growth driven by the proliferation of the technology industry's energy-intensive data centers. U.S. power demand is expected to hit record highs in 2026, the U.S. Energy Information Administration said.
 
@@ -171,7 +171,7 @@ Read more ❓ www.reuters.com/business/energy/duke-energy-forecasts-higher-2026-
 
 ✨ $DUK is part of eToro's @Utilities Smart Portfolio. This portfolio is composed of companies in the public service sector, specifically, Electricity, Gas, Water, and Waste Management stocks that are staples for daily living.
 
-Some of the companies invested in @Utilities are $DTE (DTE Energy Co) , $AWK (American Water Works Co Inc) , $AEP (American Electric Power Inc) , $ES (Eversource Energy) , $PCG (PG&E Corp) , $NEE (NextEra Energy Inc) , and $XEL (Xcel Energy Inc) .
+Some of the companies invested in @Utilities are $DTE , $AWK , $AEP , $ES , $PCG , $NEE , and $XEL .
 
 Your capital is at risk. Past performance is not an indication of future results.`,
 ];

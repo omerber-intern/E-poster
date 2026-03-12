@@ -2,19 +2,24 @@
  * Post models for e-poster
  */
 
+export type PostType = 'news' | 'educational' | 'monthly-update' | 'performance-highlight';
+
 export interface PostDraft {
   id: string;
   newsId: string;
   portfolioId: string;
   portfolioName: string;
+  postType: PostType;
   templateId?: string;
   content: string;
   tags: PostTag[];
   mentions?: PostMention[];
   attachments?: PostAttachment[];
   status: 'draft' | 'pending' | 'posted' | 'failed';
-  createdAt: Date;
-  postedAt?: Date;
+  isDeleted: boolean;
+  etoroPostId?: string;
+  createdAt: string;
+  postedAt?: string;
   error?: string;
 }
 

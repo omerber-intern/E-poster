@@ -459,6 +459,7 @@ export default function EducationalReviewPage() {
       const postBody: Record<string, unknown> = {
         portfolioUsername: draft.portfolioUsername,
         message: finalContent,
+        postType: 'educational',
       };
 
       if (draft.image) {

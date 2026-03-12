@@ -1,6 +1,6 @@
 'use client';
 
-import { PenSquare, RefreshCw, History, Settings } from 'lucide-react';
+import { PenSquare, RefreshCw, History, Settings, CalendarClock } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -132,6 +132,26 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
+
+            <Link
+              href="/e-poster/schedule"
+              className="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-start gap-4">
+                <div className="rounded-lg bg-primary/10 p-3">
+                  <CalendarClock className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-1">
+                    Scheduled Posts
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Set up recurring posts, view the calendar, and manage
+                    pending approvals.
+                  </p>
+                </div>
+              </div>
+            </Link>
 
             <Link
               href="/e-poster/manage-portfolios"

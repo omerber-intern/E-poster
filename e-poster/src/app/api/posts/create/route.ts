@@ -5,20 +5,23 @@ import {
   getPostHeaders,
   getPortfolioCredentials,
 } from '@/lib/etoro-api-config';
+import { addToHistory } from '@/lib/services/post-history-service';
+import type { PostType, PostAttachment } from '@/lib/models/post';
 
 /**
  * POST /api/posts/create
  *
- * Body: { portfolioUsername, message, tags? }
+ * Body: { portfolioUsername, message, postType?, tags?, attachments? }
  *
  * Publishes a post on behalf of the specified portfolio account using
  * its per-portfolio credentials from PORTFOLIO_CREDENTIALS env var.
  */
 export async function POST(request: NextRequest) {
   try {
-    const { portfolioUsername, message, tags, attachments } = (await request.json()) as {
+    const { portfolioUsername, message, postType, tags, attachments } = (await request.json()) as {
       portfolioUsername: string;
       message: string;
+      postType?: PostType;
       tags?: Array<{ name: string; id: string }>;
       attachments?: Array<{
         url?: string;
@@ -90,6 +93,19 @@ export async function POST(request: NextRequest) {
     }
 
     const data = JSON.parse(responseText);
+
+    try {
+      addToHistory({
+        portfolioUsername,
+        postType: postType || 'news',
+        content: message,
+        etoroPostId: data.id,
+        tags,
+        attachments: attachments as PostAttachment[] | undefined,
+      });
+    } catch (historyError) {
+      console.error('Failed to save post to history (post was still published):', historyError);
+    }
 
     return NextResponse.json({
       success: true,

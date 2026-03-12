@@ -37,6 +37,7 @@
     "exceljs": "^4.4.0",
     "lucide-react": "^0.484.0",
     "next": "15.2.4",
+    "node-cron": "^4.2.1",
     "papaparse": "^5.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -49,6 +50,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/node-cron": "^3.0.11",
     "@types/papaparse": "^5.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",

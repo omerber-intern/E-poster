@@ -483,6 +483,7 @@ export default function MonthlyUpdateReviewPage() {
         body: JSON.stringify({
           portfolioUsername: draft.portfolioUsername,
           message: finalContent,
+          postType: 'monthly-update',
         }),
       });
 

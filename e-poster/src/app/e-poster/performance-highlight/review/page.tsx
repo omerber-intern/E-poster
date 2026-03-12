@@ -468,6 +468,7 @@ export default function PerformanceHighlightReviewPage() {
       const postBody: Record<string, unknown> = {
         portfolioUsername: draft.portfolioUsername,
         message: finalContent,
+        postType: 'performance-highlight',
       };
 
       if (draft.image) {

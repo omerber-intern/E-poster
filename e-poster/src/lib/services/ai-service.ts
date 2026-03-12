@@ -256,7 +256,7 @@ export async function analyzeHoldingImpact(
   const holdingLines = topHoldings
     .map(
       (h) =>
-        `$${h.symbol} (${h.instrumentName}) — ${h.allocation}% allocation` +
+        `$${h.symbol} — ${h.allocation}% allocation` +
         (h.industries?.length
           ? `, industries: ${h.industries.slice(0, 3).map((i) => i.topic).join(', ')}`
           : ''),
@@ -538,7 +538,7 @@ export async function generateMonthlyUpdateContent(
   const topHoldingsText = portfolio.holdings
     .sort((a, b) => b.allocation - a.allocation)
     .slice(0, 8)
-    .map((h) => `$${h.symbol} (${h.instrumentName})`)
+    .map((h) => `$${h.symbol}`)
     .join(' , ');
 
   const monthName = MONTH_NAMES[month] ?? MONTH_NAMES[0];
@@ -567,7 +567,7 @@ Rules:
 - Write 2–3 paragraphs of AI-generated market commentary relevant to the portfolio's sector and strategy
 - End with a performance stats block using EXACTLY this format:
   Performance Stats: @${portfolio.username} -> ${monthName}: ${monthlyGainStr}${ytdGainStr ? ` , YTD: ${ytdGainStr}` : ''}
-- After the stats block, list some top holdings using $TICKER (Name) format
+- After the stats block, list some top holdings using $TICKER format (e.g. $AAPL, $NVDA)
 - Use emojis sparingly (1–2 per post)
 - Keep paragraphs short and scannable — break the text into multiple small paragraphs rather than a few long ones
 - IMPORTANT — LENGTH: You MUST write approximately ${words} words. Do NOT exceed ${words + 30} words and do NOT write fewer than ${Math.max(words - 30, 50)} words. This is a strict requirement — count carefully.
@@ -587,7 +587,7 @@ Rules:
 - Right after the performance figures, open with a "bottom line" of 1–3 sentences that tells the reader what this update is about: the key market themes and how the portfolio performed this month. No small details — just enough so the reader instantly understands the content of the post.
 - Write 2 paragraphs of narrative market commentary tailored to the portfolio's strategy and sectors
 - Do NOT mention the revenue figures again anywhere else in the post
-- End by listing @${portfolio.username} and top holdings in $TICKER (Name) format
+- End by listing @${portfolio.username} and top holdings in $TICKER format (e.g. $AAPL, $NVDA)
 - Use emojis frequently to match the energetic style of the examples
 - Keep paragraphs short and scannable — break the text into multiple small paragraphs rather than a few long ones
 - IMPORTANT — LENGTH: You MUST write approximately ${words} words. Do NOT exceed ${words + 30} words and do NOT write fewer than ${Math.max(words - 30, 50)} words. This is a strict requirement — count carefully.

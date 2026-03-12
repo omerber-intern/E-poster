@@ -48,6 +48,7 @@ export default function NewsPostMockupPage() {
       const postBody: Record<string, unknown> = {
         portfolioUsername: data.portfolioUsername,
         message: data.content,
+        postType: 'news',
       };
       if (data.imageUrl) {
         postBody.attachments = [

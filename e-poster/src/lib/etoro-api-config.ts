@@ -81,6 +81,7 @@ export function getPostHeaders(
 export const API_ENDPOINTS = {
   USER_INFO: '/api/v1/user-info/people',
   FEEDS_POST: '/api/v1/feeds/post',
+  FEEDS_USER: '/api/v1/feeds/user/', // GET {userId} - user's feed posts
   INSTRUMENTS: '/api/v1/market-data/instruments',
   STOCKS_INDUSTRIES: '/api/v1/market-data/stocks-industries',
 };

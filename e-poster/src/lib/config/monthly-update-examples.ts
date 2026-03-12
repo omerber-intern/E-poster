@@ -27,7 +27,7 @@ Semiconductor stocks surged on strong AI-driven demand, while software struggled
 Performance Stats: @AI-Revolution -> January: 2.72%
 Benchmark (IAIQ) -> January: 2.47%
 
-Some of the assets inside the @AI-Revolution Smart Portfolio are: $BABA (Alibaba-ADR) , $AMD (Advanced Micro Devices Inc) , $PLTR (Palantir Technologies Inc.) , $LRCX (Lam Research Corp) , $AMAT (Applied Materials Inc)`,
+Some of the assets inside the @AI-Revolution Smart Portfolio are: $BABA , $AMD , $PLTR , $LRCX , $AMAT`,
 ];
 
 export const MONTHLY_UPDATE_TEMPLATE_A_MEDIUM: string[] = [
@@ -45,10 +45,10 @@ Corporate earnings were mixed: semiconductor stocks surged on strong AI-driven d
 
 Performance Stats: @AI-Revolution -> January: 2.72%
 Benchmark (IAIQ - Indxx Artificial Intelligence and Big Data Index) -> January: 2.47%
-Best Performer: $MU (Micron Technology, Inc.) 45.36%
-Worst Performer: $TEAM (Atlassian Corp PLC A) -27.11%
+Best Performer: $MU 45.36%
+Worst Performer: $TEAM -27.11%
 
-Some of the assets inside the @AI-Revolution Smart Portfolio are: $BABA (Alibaba-ADR) , $AMD (Advanced Micro Devices Inc) , $PLTR (Palantir Technologies Inc.) , $LRCX (Lam Research Corp) , $AMAT (Applied Materials Inc) , $INTC (Intel)`,
+Some of the assets inside the @AI-Revolution Smart Portfolio are: $BABA , $AMD , $PLTR , $LRCX , $AMAT , $INTC`,
 ];
 
 export const MONTHLY_UPDATE_TEMPLATE_A_EXAMPLES: string[] = [
@@ -68,10 +68,10 @@ Outside equities, the US dollar weakened on rate-cut expectations and Fed leader
 
 Performance Stats: @AI-Revolution -> January: 2.72%
 Benchmark (IAIQ - Indxx Artificial Intelligence and Big Data Index) -> January: 2.47%
-Best Performer: $MU (Micron Technology, Inc.) 45.36%
-Worst Performer: $TEAM (Atlassian Corp PLC A) -27.11%
+Best Performer: $MU 45.36%
+Worst Performer: $TEAM -27.11%
 
-Some of the assets inside the @AI-Revolution Smart Portfolio are: $BABA (Alibaba-ADR) , $AMD (Advanced Micro Devices Inc) , $PLTR (Palantir Technologies Inc.) , $LRCX (Lam Research Corp) , $AMAT (Applied Materials Inc) , $INTC (Intel) , $TXN (Texas Instruments Inc) , $CRM (Salesforce Inc) , $PANW (Palo Alto Networks) , $NOW (ServiceNow Inc)`,
+Some of the assets inside the @AI-Revolution Smart Portfolio are: $BABA , $AMD , $PLTR , $LRCX , $AMAT , $INTC , $TXN , $CRM , $PANW , $NOW`,
 ];
 
 // ===========================================================================
@@ -90,7 +90,7 @@ Momentum-LS had a standout start to 2026, benefiting from cyclical strength and 
 The strategy's long/short discipline kept drawdowns modest even as headline indices traded near record highs 💪. Diversified momentum exposures contributed to strong near-term performance 🎯.
 
 @Momentum-LS
-$IAG.US (Iamgold Corp) , $KGC (Kinross Gold Corp) , $GFI.US (Gold Fields Ltd-ADR), $MU (Micron Technology, Inc.)`,
+$IAG.US , $KGC , $GFI.US, $MU`,
 
   `Dear Investors 🤝,
 
@@ -102,7 +102,7 @@ PureMomentum continued to outperform in early 2026 🚀, with strong participati
 
 The systematic selection process captured upside 📈 in sectors with intact price momentum, keeping the strategy ahead of fading names 🏆.
 
-@PureMomentum, $TEVA (Teva Pharmaceutical Industries ADR) $HSBC (HSBC-ADR) $GOOG (Alphabet)`,
+@PureMomentum, $TEVA $HSBC $GOOG`,
 ];
 
 export const MONTHLY_UPDATE_TEMPLATE_B_MEDIUM: string[] = [
@@ -119,7 +119,7 @@ With markets digesting mixed employment and growth signals, cyclical components 
 Tech remains a leadership theme overall, but diversified momentum exposures are contributing to solid near-term performance. As markets brace for further guidance from upcoming Fed commentary 🏛️ and earnings, Momentum-LS remains positioned to capture both trend continuation and rotational gains 🎯.
 
 @Momentum-LS
-$IAG.US (Iamgold Corp) , $KGC (Kinross Gold Corp) , $GFI.US (Gold Fields Ltd-ADR), $MU (Micron Technology, Inc.) , $WDC (Western Digital Corporation)`,
+$IAG.US , $KGC , $GFI.US, $MU , $WDC`,
 
   `Dear Investors 🤝,
 
@@ -133,7 +133,7 @@ The systematic selection process captured upside 📈 in sectors where price mom
 
 For investors seeking straightforward exposure to trending stocks without short positions or leverage, this remains a compelling momentum play 🔥.
 
-@PureMomentum, $TEVA (Teva Pharmaceutical Industries ADR) $HSBC (HSBC-ADR) $GOOG (Alphabet), $STX.US (Seagate Technology PLC), $CIEN (Ciena Corp)`,
+@PureMomentum, $TEVA $HSBC $GOOG, $STX.US, $CIEN`,
 ];
 
 export const MONTHLY_UPDATE_TEMPLATE_B_EXAMPLES: string[] = [
@@ -151,7 +151,7 @@ The strategy's long/short discipline has helped keep drawdowns modest even as he
 The strong January result underscores the value of combining momentum signals with tactical short positioning, particularly in a market where rotational dynamics continue to create alpha opportunities across sectors and asset classes.
 
 @Momentum-LS
-$IAG.US (Iamgold Corp) , $KGC (Kinross Gold Corp) , $GFI.US (Gold Fields Ltd-ADR), $MU (Micron Technology, Inc.) , $WDC (Western Digital Corporation) , $KTOS (Kratos Defense & Security Solutions Inc), $AU (AngloGold Ashanti Ltd-ADR)`,
+$IAG.US , $KGC , $GFI.US, $MU , $WDC , $KTOS, $AU`,
 
   `Dear Investors 🤝,
 
@@ -166,7 +166,7 @@ Markets have been digesting macro crosscurrents 🌊 — soft inflation reads, s
 
 The disciplined monthly rebalance continues to refresh exposure toward sectors with the strongest price action, making PureMomentum an attractive option for growth-oriented investors looking to complement more defensive or value-tilted holdings.
 
-@PureMomentum, $TEVA (Teva Pharmaceutical Industries ADR) $HSBC (HSBC-ADR) $GOOG (Alphabet), $STX.US (Seagate Technology PLC), $CIEN (Ciena Corp)`,
+@PureMomentum, $TEVA $HSBC $GOOG, $STX.US, $CIEN`,
 ];
 
 // ---------------------------------------------------------------------------

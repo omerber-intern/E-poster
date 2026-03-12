@@ -43,7 +43,7 @@ export default function PerformanceHighlightMockupPage() {
     if (!data || !data.hasCredentials) return;
     setPostStatus('posting');
     try {
-      const postBody: Record<string, unknown> = { portfolioUsername: data.portfolioUsername, message: data.content };
+      const postBody: Record<string, unknown> = { portfolioUsername: data.portfolioUsername, message: data.content, postType: 'performance-highlight' };
       if (data.imageUrl) {
         postBody.attachments = [{ url: data.imageUrl, mediaType: 'Image', media: { image: { url: data.imageUrl, width: data.imageWidth, height: data.imageHeight } } }];
       }

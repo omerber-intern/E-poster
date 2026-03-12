@@ -491,6 +491,7 @@ export default function ReviewPage() {
       const postBody: Record<string, unknown> = {
         portfolioUsername: draft.portfolioUsername,
         message: finalContent,
+        postType: 'news',
       };
       if (draft.image) {
         postBody.attachments = [

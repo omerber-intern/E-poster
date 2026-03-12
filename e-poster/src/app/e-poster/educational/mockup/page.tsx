@@ -50,6 +50,7 @@ export default function EducationalMockupPage() {
       const postBody: Record<string, unknown> = {
         portfolioUsername: data.portfolioUsername,
         message: data.content,
+        postType: 'educational',
       };
 
       if (data.imageUrl) {

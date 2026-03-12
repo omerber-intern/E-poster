@@ -38,7 +38,7 @@ This portfolio invests in essential utility companies — electricity, gas, wate
 
 Utility stocks are considered defensive holdings that tend to provide steady income and lower volatility compared to growth sectors. They benefit from consistent demand regardless of economic cycles.
 
-👉 Top holdings include $NEE (NextEra Energy), $DUK (Duke Energy), $AEP (American Electric Power), and $AWK (American Water Works).
+👉 Top holdings include $NEE, $DUK, $AEP, and $AWK.
 
 👉 With data center power demand surging, utilities are seeing renewed growth tailwinds on top of their traditional stability.
 
@@ -78,7 +78,7 @@ This portfolio offers diversified exposure to European defense and aerospace com
 
 With defense spending rising across Europe and a strategic push to reduce reliance on external suppliers, European defense companies are seeing sustained tailwinds that could last for years.
 
-👉 The portfolio holds companies across the defense value chain: $SAF.PA (Safran) for aircraft engines, $RR.L (Rolls-Royce) for power systems, $HAG.DE (Hensoldt) for sensor technology, and $HO.PA (Thales) for electronics and cybersecurity.
+👉 The portfolio holds companies across the defense value chain: $SAF.PA for aircraft engines, $RR.L for power systems, $HAG.DE for sensor technology, and $HO.PA for electronics and cybersecurity.
 
 👉 This isn't a bet on a single contractor — it's a broad allocation across the European defense supply chain, capturing growth from increased military budgets, NATO commitments, and domestic production initiatives.
 
@@ -102,11 +102,11 @@ This portfolio gives you exposure to the full AI value chain — from chip maker
 
 AI-Revolution is a Smart Portfolio built around one thesis: artificial intelligence is reshaping every industry, and the companies building that infrastructure are positioned to benefit for years to come.
 
-👉 The portfolio invests across the entire AI stack. At the hardware layer, semiconductor giants like $NVDA (NVIDIA), $AVGO (Broadcom), and $TSM (TSMC) are designing and fabricating the chips that power AI workloads.
+👉 The portfolio invests across the entire AI stack. At the hardware layer, semiconductor giants like $NVDA, $AVGO, and $TSM are designing and fabricating the chips that power AI workloads.
 
-👉 At the cloud layer, hyperscalers like $AMZN (Amazon), $GOOGL (Alphabet), and $MSFT (Microsoft) are building the data center infrastructure that makes AI accessible at scale.
+👉 At the cloud layer, hyperscalers like $AMZN, $GOOGL, and $MSFT are building the data center infrastructure that makes AI accessible at scale.
 
-👉 At the application layer, companies like $PLTR (Palantir), $CRM (Salesforce), and $NOW (ServiceNow) are turning AI capabilities into enterprise products that drive real business outcomes.
+👉 At the application layer, companies like $PLTR, $CRM, and $NOW are turning AI capabilities into enterprise products that drive real business outcomes.
 
 👉 By holding positions across all three layers, the portfolio reduces single-company risk while capturing the full breadth of AI-driven growth — whether the value accrues to chipmakers, platforms, or software.
 
@@ -124,9 +124,9 @@ This portfolio offers diversified exposure to companies across the European defe
 
 Europe is in the middle of a generational shift in defense spending. NATO commitments, geopolitical tensions, and a strategic push to build domestic manufacturing capacity are driving sustained investment in defense and aerospace across the continent.
 
-👉 The portfolio captures this trend across the full value chain. $SAF.PA (Safran) and $RR.L (Rolls-Royce) provide exposure to aerospace engines and power systems. $HAG.DE (Hensoldt) and $HO.PA (Thales) cover sensors, electronics, and cybersecurity.
+👉 The portfolio captures this trend across the full value chain. $SAF.PA and $RR.L provide exposure to aerospace engines and power systems. $HAG.DE and $HO.PA cover sensors, electronics, and cybersecurity.
 
-👉 Tactical equipment and shipbuilding are represented through companies like $KOG.OL (Kongsberg Gruppen) and $SNR.L (Senior PLC), which supply components and systems used across multiple platforms.
+👉 Tactical equipment and shipbuilding are represented through companies like $KOG.OL and $SNR.L, which supply components and systems used across multiple platforms.
 
 👉 This breadth means the portfolio isn't dependent on a single government contract or weapons system — it benefits from the broader trend of increased European defense investment regardless of which specific programs receive funding.
 
