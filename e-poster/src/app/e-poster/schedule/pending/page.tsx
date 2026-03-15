@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -11,6 +11,7 @@ import {
   Eye,
   Clock,
   AlertCircle,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -53,6 +54,7 @@ const STATUS_CONFIG: Record<
   PendingPostStatus,
   { label: string; color: string; icon: typeof Clock }
 > = {
+  generating: { label: 'Generating', color: 'bg-blue-100 text-blue-800', icon: Sparkles },
   pending_approval: { label: 'Pending', color: 'bg-yellow-100 text-yellow-800', icon: Clock },
   approved: { label: 'Approved', color: 'bg-green-100 text-green-800', icon: Check },
   rejected: { label: 'Rejected', color: 'bg-red-100 text-red-800', icon: X },
@@ -79,31 +81,64 @@ export default function PendingPostsPage() {
   const [previewPost, setPreviewPost] = useState<PendingPost | null>(null);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
 
-  const loadPosts = useCallback(async () => {
-    setIsLoading(true);
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const loadPosts = useCallback(async (silent = false) => {
+    if (!silent) setIsLoading(true);
     try {
       const params = new URLSearchParams();
-      if (statusFilter !== 'all') params.set('status', statusFilter);
+      // When filtering pending_approval, also fetch generating posts (shown at top)
+      if (statusFilter !== 'all' && statusFilter !== 'pending_approval') {
+        params.set('status', statusFilter);
+      }
       if (portfolioFilter) params.set('portfolio', portfolioFilter);
 
       const res = await fetch(`/api/pending-posts?${params.toString()}`);
       const data = await res.json();
-      setPosts(data.posts || []);
+      const all: PendingPost[] = data.posts || [];
+
+      // When in pending_approval view, show generating + pending_approval
+      const visible =
+        statusFilter === 'pending_approval'
+          ? all.filter((p) => p.status === 'generating' || p.status === 'pending_approval')
+          : all;
+
+      // Sort: generating first, then by date desc
+      visible.sort((a, b) => {
+        if (a.status === 'generating' && b.status !== 'generating') return -1;
+        if (b.status === 'generating' && a.status !== 'generating') return 1;
+        return new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime();
+      });
+
+      setPosts(visible);
 
       const names = new Set<string>();
-      for (const p of data.posts || []) {
-        names.add(p.portfolioName);
-      }
+      for (const p of all) names.add(p.portfolioName);
       setPortfolioNames(Array.from(names).sort());
+
+      // Start/stop polling based on whether any posts are generating
+      const hasGenerating = visible.some((p) => p.status === 'generating');
+      if (hasGenerating && !pollingRef.current) {
+        pollingRef.current = setInterval(() => loadPosts(true), 5000);
+      } else if (!hasGenerating && pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
     } catch {
-      toast.error('Failed to load pending posts');
+      if (!silent) toast.error('Failed to load pending posts');
     } finally {
-      setIsLoading(false);
+      if (!silent) setIsLoading(false);
     }
-  }, [statusFilter, portfolioFilter]);
+  }, [statusFilter, portfolioFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     loadPosts();
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
   }, [loadPosts]);
 
   const handleAction = async (
@@ -230,6 +265,7 @@ export default function PendingPostsPage() {
                   >
                     <option value="all">All Statuses</option>
                     <option value="pending_approval">Pending Approval</option>
+                    <option value="generating">Generating</option>
                     <option value="approved">Approved</option>
                     <option value="posted">Posted</option>
                     <option value="rejected">Rejected</option>
@@ -274,15 +310,17 @@ export default function PendingPostsPage() {
                 const statusInfo = STATUS_CONFIG[post.status];
                 const isProcessing = processingIds.has(post.id);
                 const isPending = post.status === 'pending_approval';
+                const isGenerating = post.status === 'generating';
 
                 return (
-                  <Card key={post.id}>
+                  <Card
+                    key={post.id}
+                    className={isGenerating ? 'opacity-75 border-blue-200' : ''}
+                  >
                     <CardContent className="p-5">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold">
-                            {post.portfolioName}
-                          </span>
+                          <span className="font-semibold">{post.portfolioName}</span>
                           <span className="text-sm text-muted-foreground">
                             @{post.portfolioUsername}
                           </span>
@@ -294,8 +332,11 @@ export default function PendingPostsPage() {
                             {POST_TYPE_LABELS[post.postType]}
                           </span>
                           <span
-                            className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusInfo.color}`}
+                            className={`text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${statusInfo.color}`}
                           >
+                            {isGenerating && (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            )}
                             {statusInfo.label}
                           </span>
                         </div>
@@ -308,73 +349,87 @@ export default function PendingPostsPage() {
                         Schedule: {post.scheduleName}
                       </div>
 
-                      <p className="text-sm whitespace-pre-wrap line-clamp-6 mb-4 bg-muted/30 rounded-lg p-3">
-                        {post.content}
-                      </p>
-
-                      {post.error && (
-                        <div className="text-sm text-red-600 mb-3 flex items-start gap-2">
-                          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                          {post.error}
+                      {isGenerating ? (
+                        <div className="flex items-center gap-3 bg-blue-50 rounded-lg p-4 mb-4 text-blue-700">
+                          <Loader2 className="h-5 w-5 animate-spin shrink-0" />
+                          <div>
+                            <p className="text-sm font-medium">Generating post content…</p>
+                            <p className="text-xs text-blue-500 mt-0.5">
+                              This usually takes 15–30 seconds. The page will update automatically.
+                            </p>
+                          </div>
                         </div>
-                      )}
+                      ) : (
+                        <>
+                          <p className="text-sm whitespace-pre-wrap line-clamp-6 mb-4 bg-muted/30 rounded-lg p-3">
+                            {post.content}
+                          </p>
 
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setPreviewPost(post);
-                            setPreviewDialogOpen(true);
-                          }}
-                        >
-                          <Eye className="h-4 w-4 mr-1" />
-                          Preview
-                        </Button>
-                        {isPending && (
-                          <>
+                          {post.error && (
+                            <div className="text-sm text-red-600 mb-3 flex items-start gap-2">
+                              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                              {post.error}
+                            </div>
+                          )}
+
+                          <div className="flex items-center gap-2">
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleEdit(post)}
-                              disabled={isProcessing}
+                              onClick={() => {
+                                setPreviewPost(post);
+                                setPreviewDialogOpen(true);
+                              }}
                             >
-                              <Edit3 className="h-4 w-4 mr-1" />
-                              Edit
+                              <Eye className="h-4 w-4 mr-1" />
+                              Preview
                             </Button>
-                            <div className="flex-1" />
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleAction(post.id, 'reject')}
-                              disabled={isProcessing}
-                            >
-                              {isProcessing ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <>
-                                  <X className="h-4 w-4 mr-1" />
-                                  Reject
-                                </>
-                              )}
-                            </Button>
-                            <Button
-                              size="sm"
-                              onClick={() => handleAction(post.id, 'approve')}
-                              disabled={isProcessing}
-                            >
-                              {isProcessing ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <>
-                                  <Check className="h-4 w-4 mr-1" />
-                                  Approve & Post
-                                </>
-                              )}
-                            </Button>
-                          </>
-                        )}
-                      </div>
+                            {isPending && (
+                              <>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleEdit(post)}
+                                  disabled={isProcessing}
+                                >
+                                  <Edit3 className="h-4 w-4 mr-1" />
+                                  Edit
+                                </Button>
+                                <div className="flex-1" />
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleAction(post.id, 'reject')}
+                                  disabled={isProcessing}
+                                >
+                                  {isProcessing ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <>
+                                      <X className="h-4 w-4 mr-1" />
+                                      Reject
+                                    </>
+                                  )}
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleAction(post.id, 'approve')}
+                                  disabled={isProcessing}
+                                >
+                                  {isProcessing ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <>
+                                      <Check className="h-4 w-4 mr-1" />
+                                      Approve & Post
+                                    </>
+                                  )}
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 );

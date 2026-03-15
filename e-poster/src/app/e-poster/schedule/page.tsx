@@ -2,18 +2,19 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   ChevronLeft,
   ChevronRight,
   Plus,
-  Layers,
   Clock,
   Pause,
   Play,
   Trash2,
   Bell,
-  Zap as ZapIcon,
+  Pencil,
+  AlertTriangle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -86,6 +87,7 @@ interface ScheduleRun {
 }
 
 export default function SchedulePage() {
+  const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'month' | 'week'>('month');
   const [runs, setRuns] = useState<ScheduleRun[]>([]);
@@ -262,18 +264,12 @@ export default function SchedulePage() {
               <Link href="/e-poster/schedule/pending">
                 <Button variant="outline" className="relative">
                   <Bell className="h-4 w-4 mr-2" />
-                  Pending
+                  Posts waiting for manual approval
                   {pendingCount > 0 && (
                     <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
                       {pendingCount}
                     </span>
                   )}
-                </Button>
-              </Link>
-              <Link href="/e-poster/schedule/create?batch=true">
-                <Button variant="outline">
-                  <Layers className="h-4 w-4 mr-2" />
-                  Batch Schedule
                 </Button>
               </Link>
               <Link href="/e-poster/schedule/create">
@@ -496,6 +492,15 @@ export default function SchedulePage() {
                                 variant="ghost"
                                 size="sm"
                                 className="h-6 w-6 p-0"
+                                onClick={() => router.push(`/e-poster/schedule/edit/${schedule.id}`)}
+                                title="Edit"
+                              >
+                                <Pencil className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0"
                                 onClick={() =>
                                   handleToggleSchedule(schedule.id, schedule.isActive)
                                 }
@@ -528,28 +533,25 @@ export default function SchedulePage() {
                               >
                                 {POST_TYPE_LABELS[schedule.postType]}
                               </span>
-                              {schedule.postType === 'news' ? (
-                                <span className="flex items-center gap-0.5">
-                                  <ZapIcon className="h-3 w-3 inline" />
-                                  Event-triggered
+                                {schedule.frequency && (
+                                <span>{FREQUENCY_LABELS[schedule.frequency]}</span>
+                              )}
+                              {schedule.timeOfDay && (
+                                <span>
+                                  <Clock className="h-3 w-3 inline mr-0.5" />
+                                  {schedule.timeOfDay}
                                 </span>
-                              ) : (
-                                <>
-                                  {schedule.frequency && (
-                                    <span>{FREQUENCY_LABELS[schedule.frequency]}</span>
-                                  )}
-                                  {schedule.timeOfDay && (
-                                    <span>
-                                      <Clock className="h-3 w-3 inline mr-0.5" />
-                                      {schedule.timeOfDay}
-                                    </span>
-                                  )}
-                                </>
                               )}
                             </div>
                             <div>
                               {schedule.flowType === 'automatic' ? 'Auto-post' : 'Needs approval'}
                             </div>
+                            {schedule.lastRunError && (
+                              <div className="flex items-start gap-1.5 mt-1 p-1.5 rounded bg-red-50 border border-red-200 text-red-700">
+                                <AlertTriangle className="h-3 w-3 shrink-0 mt-0.5" />
+                                <span className="break-words">{schedule.lastRunError}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}

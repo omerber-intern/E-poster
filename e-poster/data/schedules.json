@@ -1,4 +1,49 @@
 {
-  "schedules": [],
-  "updatedAt": ""
+  "schedules": [
+    {
+      "id": "590b39d6-6e47-4153-89f9-30a2769ee1b1",
+      "name": "test function",
+      "portfolioUsername": "Short-Tech",
+      "portfolioName": "Short-Tech",
+      "postType": "news",
+      "flowType": "approval",
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-12T11:19:08.859Z",
+      "updatedAt": "2026-03-12T15:52:03.493Z",
+      "lastRunAt": "2026-03-12T15:52:03.493Z",
+      "newsConfig": {
+        "minimumRelevancePercent": 23,
+        "lengthMapping": [
+          {
+            "label": "short",
+            "min": 23,
+            "max": 25
+          },
+          {
+            "label": "medium",
+            "min": 26,
+            "max": 33
+          },
+          {
+            "label": "long",
+            "min": 34,
+            "max": 100
+          }
+        ],
+        "scraping": {
+          "feedUrl": "https://finance.yahoo.com/",
+          "maxArticles": 5
+        }
+      },
+      "frequency": "weekly",
+      "timeOfDay": "17:52",
+      "dayOfWeek": 4,
+      "nextRunAt": "2026-03-19T15:52:00.000Z"
+    }
+  ],
+  "updatedAt": "2026-03-12T15:52:03.493Z"
 }

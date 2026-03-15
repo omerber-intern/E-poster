@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -26,28 +26,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'react-hot-toast';
 import type { PostType } from '@/lib/models/post';
 
-interface LengthRange {
-  label: 'short' | 'medium' | 'long';
-  min: number;
-  max: number;
-}
-
-const DEFAULT_NEWS_LENGTH_MAPPING: LengthRange[] = [
-  { label: 'short', min: 15, max: 30 },
-  { label: 'medium', min: 30, max: 60 },
-  { label: 'long', min: 60, max: 100 },
-];
-
 const POST_TYPES: Array<{
   value: PostType;
   label: string;
   description: string;
 }> = [
-  {
-    value: 'news',
-    label: 'News',
-    description: 'Event-triggered news posts based on portfolio relevance thresholds.',
-  },
   {
     value: 'educational',
     label: 'Educational',
@@ -82,8 +65,6 @@ interface PortfolioInfo {
 
 function CreateScheduleForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const isBatch = searchParams.get('batch') === 'true';
 
   const [step, setStep] = useState(1);
   const [portfolios, setPortfolios] = useState<PortfolioInfo[]>([]);
@@ -102,12 +83,6 @@ function CreateScheduleForm() {
   const [postLength, setPostLength] = useState<'short' | 'medium' | 'long'>('medium');
   const [additionalContext, setAdditionalContext] = useState('');
   const [templateStyle, setTemplateStyle] = useState<'stats-bottom' | 'revenue-opening'>('stats-bottom');
-
-  // News-specific state
-  const [newsThreshold, setNewsThreshold] = useState(15);
-  const [newsLengthMapping, setNewsLengthMapping] = useState<LengthRange[]>([...DEFAULT_NEWS_LENGTH_MAPPING]);
-
-  const isNews = postType === 'news';
 
   useEffect(() => {
     async function loadPortfolios() {
@@ -157,7 +132,7 @@ function CreateScheduleForm() {
     setIsSubmitting(true);
     try {
       const generationConfig: Record<string, string | undefined> = {
-        postLength: isNews ? undefined : postLength,
+        postLength,
       };
       if (postType === 'educational' && additionalContext) {
         generationConfig.additionalContext = additionalContext;
@@ -166,11 +141,7 @@ function CreateScheduleForm() {
         generationConfig.templateStyle = templateStyle;
       }
 
-      const newsConfig = isNews
-        ? { minimumRelevancePercent: newsThreshold, lengthMapping: newsLengthMapping }
-        : undefined;
-
-      if (isBatch || selectedPortfolios.size > 1) {
+      if (selectedPortfolios.size > 1) {
         const portfolioList = Array.from(selectedPortfolios).map((u) => ({
           username: u,
           name: u,
@@ -182,13 +153,12 @@ function CreateScheduleForm() {
           body: JSON.stringify({
             portfolios: portfolioList,
             postType,
-            frequency: isNews ? undefined : frequency,
+            frequency,
             flowType,
-            timeOfDay: isNews ? undefined : timeOfDay,
-            dayOfWeek: !isNews && frequency === 'weekly' ? dayOfWeek : undefined,
-            dayOfMonth: !isNews && frequency === 'monthly' ? dayOfMonth : undefined,
+            timeOfDay,
+            dayOfWeek: frequency === 'weekly' ? dayOfWeek : undefined,
+            dayOfMonth: frequency === 'monthly' ? dayOfMonth : undefined,
             generationConfig,
-            newsConfig,
             namePrefix: name || undefined,
           }),
         });
@@ -211,13 +181,12 @@ function CreateScheduleForm() {
             portfolioUsername,
             portfolioName: portfolioUsername,
             postType,
-            frequency: isNews ? undefined : frequency,
+            frequency,
             flowType,
-            timeOfDay: isNews ? undefined : timeOfDay,
-            dayOfWeek: !isNews && frequency === 'weekly' ? dayOfWeek : undefined,
-            dayOfMonth: !isNews && frequency === 'monthly' ? dayOfMonth : undefined,
+            timeOfDay,
+            dayOfWeek: frequency === 'weekly' ? dayOfWeek : undefined,
+            dayOfMonth: frequency === 'monthly' ? dayOfMonth : undefined,
             generationConfig,
-            newsConfig,
           }),
         });
 
@@ -252,24 +221,13 @@ function CreateScheduleForm() {
   const postTypeLabel = POST_TYPES.find((t) => t.value === postType)?.label ?? postType;
 
   const frequencyDetail = (() => {
-    if (isNews) return 'Event-triggered (when news is submitted)';
     if (frequency === 'daily') return `Daily at ${timeOfDay}`;
     if (frequency === 'weekly')
       return `Weekly on ${DAY_OPTIONS.find((d) => d.value === dayOfWeek)?.label} at ${timeOfDay}`;
     return `Monthly on day ${dayOfMonth} at ${timeOfDay}`;
   })();
 
-  const updateNewsLengthRange = (index: number, field: 'min' | 'max', value: number) => {
-    setNewsLengthMapping((prev) => {
-      const next = [...prev];
-      next[index] = { ...next[index], [field]: value };
-      return next;
-    });
-  };
-
-  const stepLabels = isNews
-    ? ['Basics', 'News Config', 'Summary']
-    : ['Basics', 'Schedule & Content', 'Summary'];
+  const stepLabels = ['Basics', 'Schedule & Content', 'Summary'];
 
   return (
     <div className="min-h-screen bg-background">
@@ -282,13 +240,9 @@ function CreateScheduleForm() {
             </Button>
           </Link>
 
-          <h1 className="text-3xl font-bold mb-2">
-            {isBatch ? 'Batch Schedule' : 'New Schedule'}
-          </h1>
+          <h1 className="text-3xl font-bold mb-2">New Schedule</h1>
           <p className="text-muted-foreground mb-6">
-            {isBatch
-              ? 'Create recurring post schedules for multiple portfolios at once.'
-              : 'Set up a recurring post schedule for a portfolio.'}
+            Set up a recurring post schedule for one or more portfolios.
           </p>
 
           {/* Step Indicator */}
@@ -332,7 +286,7 @@ function CreateScheduleForm() {
             })}
           </div>
 
-          {/* ── Step 1: Basics ── */}
+          {/* Step 1: Basics */}
           {step === 1 && (
             <>
               <Card className="mb-6">
@@ -341,18 +295,12 @@ function CreateScheduleForm() {
                 </CardHeader>
                 <CardContent>
                   <div>
-                    <Label htmlFor="name">
-                      {isBatch ? 'Name Prefix (optional)' : 'Schedule Name'}
-                    </Label>
+                    <Label htmlFor="name">Schedule Name</Label>
                     <Input
                       id="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder={
-                        isBatch
-                          ? 'e.g., Weekly Educational'
-                          : 'e.g., Weekly Educational - MyPortfolio'
-                      }
+                      placeholder="e.g., Weekly Educational"
                       className="mt-1.5"
                     />
                   </div>
@@ -361,13 +309,9 @@ function CreateScheduleForm() {
 
               <Card className="mb-6">
                 <CardHeader>
-                  <CardTitle className="text-lg">
-                    {isBatch ? 'Select Portfolios' : 'Select Portfolio'}
-                  </CardTitle>
+                  <CardTitle className="text-lg">Select Portfolio(s)</CardTitle>
                   <CardDescription>
-                    {isBatch
-                      ? 'A separate schedule will be created for each selected portfolio.'
-                      : 'Choose which portfolio this schedule applies to.'}
+                    Select one or more portfolios. A separate schedule is created for each.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -480,7 +424,7 @@ function CreateScheduleForm() {
             </>
           )}
 
-          {/* ── Step 2: Schedule & Content / News Config ── */}
+          {/* Step 2: Schedule & Content */}
           {step === 2 && (
             <>
               <Card className="mb-6">
@@ -503,20 +447,11 @@ function CreateScheduleForm() {
                           name="postType"
                           value={type.value}
                           checked={postType === type.value}
-                          onChange={(e) =>
-                            setPostType(e.target.value as PostType)
-                          }
+                          onChange={(e) => setPostType(e.target.value as PostType)}
                           className="mt-1"
                         />
                         <div>
-                          <div className="font-medium">
-                            {type.label}
-                            {type.value === 'news' && (
-                              <span className="ml-2 text-xs font-normal text-muted-foreground">
-                                Event-triggered
-                              </span>
-                            )}
-                          </div>
+                          <div className="font-medium">{type.label}</div>
                           <div className="text-sm text-muted-foreground">
                             {type.description}
                           </div>
@@ -527,287 +462,180 @@ function CreateScheduleForm() {
                 </CardContent>
               </Card>
 
-              {/* News-specific: Relevance Threshold & Length Mapping */}
-              {isNews && (
-                <>
-                  <Card className="mb-6">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Relevance Threshold</CardTitle>
-                      <CardDescription>
-                        Portfolios scoring below this relevance percentage will be skipped when news is submitted.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="range"
-                          min={0}
-                          max={50}
-                          step={1}
-                          value={newsThreshold}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value, 10);
-                            setNewsThreshold(val);
-                            setNewsLengthMapping((prev) => {
-                              const next = [...prev];
-                              if (next[0] && next[0].min !== val) {
-                                next[0] = { ...next[0], min: val };
-                              }
-                              return next;
-                            });
-                          }}
-                          className="flex-1 accent-primary"
+              {/* Frequency & Timing */}
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">Frequency & Timing</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label>Frequency</Label>
+                    <div className="grid grid-cols-3 gap-2 mt-1.5">
+                      {(['daily', 'weekly', 'monthly'] as const).map((freq) => (
+                        <button
+                          key={freq}
+                          type="button"
+                          className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                            frequency === freq
+                              ? 'border-primary bg-primary text-primary-foreground'
+                              : 'hover:bg-accent'
+                          }`}
+                          onClick={() => setFrequency(freq)}
+                        >
+                          {freq.charAt(0).toUpperCase() + freq.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="timeOfDay">Time of Day</Label>
+                      <Input
+                        id="timeOfDay"
+                        type="time"
+                        value={timeOfDay}
+                        onChange={(e) => setTimeOfDay(e.target.value)}
+                        className="mt-1.5"
+                      />
+                    </div>
+
+                    {frequency === 'weekly' && (
+                      <div>
+                        <Label htmlFor="dayOfWeek">Day of Week</Label>
+                        <select
+                          id="dayOfWeek"
+                          value={dayOfWeek}
+                          onChange={(e) => setDayOfWeek(Number(e.target.value))}
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 mt-1.5"
+                        >
+                          {DAY_OPTIONS.map((d) => (
+                            <option key={d.value} value={d.value}>
+                              {d.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {frequency === 'monthly' && (
+                      <div>
+                        <Label htmlFor="dayOfMonth">Day of Month</Label>
+                        <Input
+                          id="dayOfMonth"
+                          type="number"
+                          min={1}
+                          max={28}
+                          value={dayOfMonth}
+                          onChange={(e) => setDayOfMonth(Number(e.target.value))}
+                          className="mt-1.5"
                         />
-                        <span className="text-sm font-mono w-12 text-right font-medium">
-                          {newsThreshold}%
-                        </span>
+                        <p className="text-xs text-muted-foreground mt-1">1-28 recommended</p>
                       </div>
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span>Low (&lt;15%): gray</span>
-                        <span>Medium (15-29%): blue</span>
-                        <span>High (30%+): purple</span>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
 
-                  <Card className="mb-6">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Relevance → Post Length</CardTitle>
-                      <CardDescription>
-                        Map relevance percentage ranges to post lengths. Higher relevance = more detailed posts.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {/* Visual bar */}
-                      <div className="space-y-1">
-                        <div className="flex h-8 rounded-md overflow-hidden border">
-                          {[
-                            { min: 0, max: newsThreshold, label: 'Skipped', bg: 'bg-gray-200', text: 'text-gray-500' },
-                            ...newsLengthMapping.map((r) => {
-                              const colors: Record<string, { bg: string; text: string }> = {
-                                short: { bg: 'bg-blue-200', text: 'text-blue-800' },
-                                medium: { bg: 'bg-purple-200', text: 'text-purple-800' },
-                                long: { bg: 'bg-purple-400', text: 'text-white' },
-                              };
-                              const c = colors[r.label] ?? { bg: 'bg-gray-200', text: 'text-gray-700' };
-                              return { min: r.min, max: r.max, label: r.label, bg: c.bg, text: c.text };
-                            }),
-                          ].map((seg) => {
-                            const width = seg.max - seg.min;
-                            if (width <= 0) return null;
-                            return (
-                              <div
-                                key={`${seg.label}-${seg.min}`}
-                                className={`${seg.bg} ${seg.text} flex items-center justify-center text-xs font-medium`}
-                                style={{ width: `${width}%` }}
-                                title={`${seg.label}: ${seg.min}% – ${seg.max}%`}
-                              >
-                                {width >= 12 && (
-                                  <span className="truncate px-1 capitalize">{seg.label}</span>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
-                          <span>0%</span>
-                          <span>25%</span>
-                          <span>50%</span>
-                          <span>75%</span>
-                          <span>100%</span>
-                        </div>
-                      </div>
-
-                      {/* Editable ranges */}
-                      <div className="space-y-3">
-                        {newsLengthMapping.map((range, idx) => (
-                          <div key={range.label} className="flex items-center gap-3">
-                            <span className="text-sm font-medium capitalize w-16">{range.label}</span>
-                            <div className="flex items-center gap-1.5 flex-1">
-                              <Input
-                                type="number"
-                                min={0}
-                                max={100}
-                                value={range.min}
-                                onChange={(e) =>
-                                  updateNewsLengthRange(idx, 'min', parseInt(e.target.value, 10) || 0)
-                                }
-                                className="w-20 h-8 text-sm"
-                              />
-                              <span className="text-xs text-muted-foreground">% to</span>
-                              <Input
-                                type="number"
-                                min={0}
-                                max={100}
-                                value={range.max}
-                                onChange={(e) =>
-                                  updateNewsLengthRange(idx, 'max', parseInt(e.target.value, 10) || 0)
-                                }
-                                className="w-20 h-8 text-sm"
-                              />
-                              <span className="text-xs text-muted-foreground">%</span>
-                            </div>
+              {/* Content Settings */}
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">Content Settings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Post Length with descriptions */}
+                  <div>
+                    <Label className="mb-2 block">Post Length</Label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(
+                        [
+                          { value: 'short', label: 'Short', description: '~100-150 words. Concise with key points.' },
+                          { value: 'medium', label: 'Medium', description: '~200 words. Balanced detail and readability.' },
+                          { value: 'long', label: 'Long', description: '~300+ words. Comprehensive with full detail.' },
+                        ] as const
+                      ).map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => setPostLength(opt.value)}
+                          className={`p-3 rounded-lg border text-left transition-colors ${
+                            postLength === opt.value
+                              ? 'border-primary bg-primary/5'
+                              : 'hover:bg-accent/50'
+                          }`}
+                        >
+                          <div className={`text-sm font-medium mb-1 ${postLength === opt.value ? 'text-primary' : ''}`}>
+                            {opt.label}
                           </div>
+                          <div className="text-xs text-muted-foreground">{opt.description}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {postType === 'educational' && (
+                    <div>
+                      <Label htmlFor="context">Additional Context (optional)</Label>
+                      <Textarea
+                        id="context"
+                        value={additionalContext}
+                        onChange={(e) => setAdditionalContext(e.target.value)}
+                        placeholder="e.g., Focus on factor investing benefits..."
+                        className="mt-1.5"
+                        rows={3}
+                      />
+                    </div>
+                  )}
+
+                  {/* Template Style with descriptions */}
+                  {postType === 'monthly-update' && (
+                    <div>
+                      <Label className="mb-2 block">Template Style</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {(
+                          [
+                            {
+                              value: 'revenue-opening',
+                              label: 'Revenue in Opening',
+                              description: 'Revenue figure prominently in the first lines. Narrative, energetic style.',
+                              preview: '"February 2026: +10.03% 🚀"',
+                            },
+                            {
+                              value: 'stats-bottom',
+                              label: 'Stats at Bottom',
+                              description: 'Market commentary first, structured stats block at the end. Professional tone.',
+                              preview: '"Performance Stats: @Portfolio → February: +2.72%"',
+                            },
+                          ] as const
+                        ).map((opt) => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => setTemplateStyle(opt.value)}
+                            className={`p-3 rounded-lg border text-left transition-colors ${
+                              templateStyle === opt.value
+                                ? 'border-primary bg-primary/5'
+                                : 'hover:bg-accent/50'
+                            }`}
+                          >
+                            <div className={`text-sm font-medium mb-1 ${templateStyle === opt.value ? 'text-primary' : ''}`}>
+                              {opt.label}
+                            </div>
+                            <div className="text-xs text-muted-foreground mb-2">{opt.description}</div>
+                            <code className="text-[11px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                              {opt.preview}
+                            </code>
+                          </button>
                         ))}
                       </div>
-                    </CardContent>
-                  </Card>
-                </>
-              )}
-
-              {/* Non-news: Frequency & Timing */}
-              {!isNews && (
-                <>
-                  <Card className="mb-6">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Frequency & Timing</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <Label>Frequency</Label>
-                        <div className="grid grid-cols-3 gap-2 mt-1.5">
-                          {(['daily', 'weekly', 'monthly'] as const).map((freq) => (
-                            <button
-                              key={freq}
-                              type="button"
-                              className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                                frequency === freq
-                                  ? 'border-primary bg-primary text-primary-foreground'
-                                  : 'hover:bg-accent'
-                              }`}
-                              onClick={() => setFrequency(freq)}
-                            >
-                              {freq.charAt(0).toUpperCase() + freq.slice(1)}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="timeOfDay">Time of Day</Label>
-                          <Input
-                            id="timeOfDay"
-                            type="time"
-                            value={timeOfDay}
-                            onChange={(e) => setTimeOfDay(e.target.value)}
-                            className="mt-1.5"
-                          />
-                        </div>
-
-                        {frequency === 'weekly' && (
-                          <div>
-                            <Label htmlFor="dayOfWeek">Day of Week</Label>
-                            <select
-                              id="dayOfWeek"
-                              value={dayOfWeek}
-                              onChange={(e) => setDayOfWeek(Number(e.target.value))}
-                              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 mt-1.5"
-                            >
-                              {DAY_OPTIONS.map((d) => (
-                                <option key={d.value} value={d.value}>
-                                  {d.label}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        )}
-
-                        {frequency === 'monthly' && (
-                          <div>
-                            <Label htmlFor="dayOfMonth">Day of Month</Label>
-                            <Input
-                              id="dayOfMonth"
-                              type="number"
-                              min={1}
-                              max={28}
-                              value={dayOfMonth}
-                              onChange={(e) => setDayOfMonth(Number(e.target.value))}
-                              className="mt-1.5"
-                            />
-                            <p className="text-xs text-muted-foreground mt-1">1-28 recommended</p>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="mb-6">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Content Settings</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <Label>Post Length</Label>
-                        <div className="grid grid-cols-3 gap-2 mt-1.5">
-                          {(['short', 'medium', 'long'] as const).map((len) => (
-                            <button
-                              key={len}
-                              type="button"
-                              className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                                postLength === len
-                                  ? 'border-primary bg-primary text-primary-foreground'
-                                  : 'hover:bg-accent'
-                              }`}
-                              onClick={() => setPostLength(len)}
-                            >
-                              {len.charAt(0).toUpperCase() + len.slice(1)}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {postType === 'educational' && (
-                        <div>
-                          <Label htmlFor="context">Additional Context (optional)</Label>
-                          <Textarea
-                            id="context"
-                            value={additionalContext}
-                            onChange={(e) => setAdditionalContext(e.target.value)}
-                            placeholder="e.g., Focus on factor investing benefits..."
-                            className="mt-1.5"
-                            rows={3}
-                          />
-                        </div>
-                      )}
-
-                      {postType === 'monthly-update' && (
-                        <div>
-                          <Label>Template Style</Label>
-                          <div className="grid grid-cols-2 gap-2 mt-1.5">
-                            <button
-                              type="button"
-                              className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                                templateStyle === 'stats-bottom'
-                                  ? 'border-primary bg-primary text-primary-foreground'
-                                  : 'hover:bg-accent'
-                              }`}
-                              onClick={() => setTemplateStyle('stats-bottom')}
-                            >
-                              Stats Bottom
-                            </button>
-                            <button
-                              type="button"
-                              className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                                templateStyle === 'revenue-opening'
-                                  ? 'border-primary bg-primary text-primary-foreground'
-                                  : 'hover:bg-accent'
-                              }`}
-                              onClick={() => setTemplateStyle('revenue-opening')}
-                            >
-                              Revenue Opening
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </>
-              )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </>
           )}
 
-          {/* ── Step 3: Summary ── */}
+          {/* Step 3: Summary */}
           {step === 3 && (
             <Card className="mb-6">
               <CardHeader>
@@ -821,7 +649,7 @@ function CreateScheduleForm() {
                   <div className="py-3 flex justify-between">
                     <span className="text-sm text-muted-foreground">Schedule Name</span>
                     <span className="text-sm font-medium text-right">
-                      {name || (isBatch ? '(auto-generated)' : `${postType} - ${Array.from(selectedPortfolios)[0] ?? ''}`)}
+                      {name || (selectedPortfolios.size > 1 ? '(auto-generated per portfolio)' : `${postType} - ${Array.from(selectedPortfolios)[0] ?? ''}`)}
                     </span>
                   </div>
 
@@ -860,37 +688,14 @@ function CreateScheduleForm() {
                   </div>
 
                   <div className="py-3 flex justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      {isNews ? 'Trigger' : 'Frequency'}
-                    </span>
+                    <span className="text-sm text-muted-foreground">Frequency</span>
                     <span className="text-sm font-medium">{frequencyDetail}</span>
                   </div>
 
-                  {isNews && (
-                    <>
-                      <div className="py-3 flex justify-between">
-                        <span className="text-sm text-muted-foreground">Min. Relevance</span>
-                        <span className="text-sm font-medium">{newsThreshold}%</span>
-                      </div>
-                      <div className="py-3 flex justify-between items-start">
-                        <span className="text-sm text-muted-foreground">Length Mapping</span>
-                        <div className="text-sm font-medium text-right">
-                          {newsLengthMapping.map((r) => (
-                            <div key={r.label} className="capitalize">
-                              {r.label}: {r.min}% – {r.max}%
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {!isNews && (
-                    <div className="py-3 flex justify-between">
-                      <span className="text-sm text-muted-foreground">Post Length</span>
-                      <span className="text-sm font-medium capitalize">{postLength}</span>
-                    </div>
-                  )}
+                  <div className="py-3 flex justify-between">
+                    <span className="text-sm text-muted-foreground">Post Length</span>
+                    <span className="text-sm font-medium capitalize">{postLength}</span>
+                  </div>
 
                   {postType === 'educational' && additionalContext && (
                     <div className="py-3 flex justify-between items-start">
@@ -914,7 +719,7 @@ function CreateScheduleForm() {
             </Card>
           )}
 
-          {/* ── Navigation Buttons ── */}
+          {/* Navigation Buttons */}
           <div className="flex items-center justify-between">
             <div>
               {step === 1 && (
@@ -952,8 +757,8 @@ function CreateScheduleForm() {
                   ) : (
                     <>
                       <Calendar className="h-4 w-4 mr-2" />
-                      {isBatch || selectedPortfolios.size > 1
-                        ? `Create ${selectedPortfolios.size} Schedule(s)`
+                      {selectedPortfolios.size > 1
+                        ? `Create ${selectedPortfolios.size} Schedules`
                         : 'Create Schedule'}
                     </>
                   )}

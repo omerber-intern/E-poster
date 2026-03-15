@@ -127,9 +127,9 @@ export function createSchedule(params: CreateScheduleParams): Schedule {
     portfolioUsername: params.portfolioUsername,
     portfolioName: params.portfolioName,
     postType: params.postType,
-    frequency: isNews ? undefined : params.frequency,
+    frequency: params.frequency,
     flowType: params.flowType,
-    timeOfDay: isNews ? undefined : params.timeOfDay,
+    timeOfDay: params.timeOfDay,
     dayOfWeek: params.dayOfWeek,
     dayOfMonth: params.dayOfMonth,
     generationConfig: params.generationConfig,
@@ -138,7 +138,7 @@ export function createSchedule(params: CreateScheduleParams): Schedule {
     createdAt: now,
     updatedAt: now,
     nextRunAt:
-      !isNews && params.frequency && params.timeOfDay
+      params.frequency && params.timeOfDay
         ? computeNextRun(
             params.frequency,
             params.timeOfDay,
@@ -185,6 +185,7 @@ export function updateSchedule(
     Pick<
       Schedule,
       | 'name'
+      | 'postType'
       | 'frequency'
       | 'flowType'
       | 'timeOfDay'
@@ -193,6 +194,7 @@ export function updateSchedule(
       | 'generationConfig'
       | 'newsConfig'
       | 'isActive'
+      | 'lastRunError'
     >
   >,
 ): Schedule | null {
@@ -200,17 +202,25 @@ export function updateSchedule(
   const schedule = data.schedules.find((s) => s.id === id);
   if (!schedule) return null;
 
+  const oldPostType = schedule.postType;
   Object.assign(schedule, updates);
   schedule.updatedAt = new Date().toISOString();
 
+  // Handle post type change cleanup
+  if (updates.postType !== undefined && updates.postType !== oldPostType) {
+    if (schedule.postType !== 'news') {
+      schedule.newsConfig = undefined;
+    }
+  }
+
   if (
-    schedule.postType !== 'news' &&
     schedule.frequency &&
     schedule.timeOfDay &&
     (updates.frequency !== undefined ||
       updates.timeOfDay !== undefined ||
       updates.dayOfWeek !== undefined ||
-      updates.dayOfMonth !== undefined)
+      updates.dayOfMonth !== undefined ||
+      (updates.postType !== undefined && updates.postType !== oldPostType))
   ) {
     schedule.nextRunAt = computeNextRun(
       schedule.frequency,
@@ -244,7 +254,7 @@ export function markScheduleRun(id: string): Schedule | null {
   const now = new Date();
   schedule.lastRunAt = now.toISOString();
 
-  if (schedule.postType !== 'news' && schedule.frequency && schedule.timeOfDay) {
+  if (schedule.frequency && schedule.timeOfDay) {
     schedule.nextRunAt = computeNextRun(
       schedule.frequency,
       schedule.timeOfDay,
@@ -267,7 +277,7 @@ export function getNewsSchedules(): Schedule[] {
 export function getDueSchedules(): Schedule[] {
   const now = new Date();
   return getActiveSchedules().filter(
-    (s) => s.postType !== 'news' && s.nextRunAt && new Date(s.nextRunAt) <= now,
+    (s) => s.nextRunAt && new Date(s.nextRunAt) <= now,
   );
 }
 
@@ -283,7 +293,7 @@ export function getSchedulesForDateRange(
             s.portfolioUsername.toLowerCase() === portfolioFilter.toLowerCase(),
         )
       : getActiveSchedules()
-  ).filter((s) => s.postType !== 'news' && s.frequency && s.timeOfDay);
+  ).filter((s) => s.frequency && s.timeOfDay);
 
   const results: Array<{ schedule: Schedule; runDate: string }> = [];
 

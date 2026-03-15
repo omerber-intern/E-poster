@@ -2,8 +2,9 @@ import { schedule as cronSchedule, type ScheduledTask } from 'node-cron';
 import {
   getDueSchedules,
   markScheduleRun,
+  updateSchedule,
 } from './schedule-service';
-import { createPendingPost } from './pending-post-service';
+import { createPendingPost, updatePendingPost } from './pending-post-service';
 import { addToHistory } from './post-history-service';
 import {
   getPortfolioByUsername,
@@ -23,6 +24,8 @@ import {
   API_ENDPOINTS,
 } from '../etoro-api-config';
 import { getApplicableDisclaimers } from './disclaimer-service';
+import { fetchLatestArticles } from './news-scraper-service';
+import { runNewsPipeline } from './news-pipeline-service';
 import type { Schedule } from '../models/schedule';
 
 let schedulerTask: ScheduledTask | null = null;
@@ -205,8 +208,96 @@ async function appendDisclaimers(
   }
 }
 
+async function executeNewsSchedule(schedule: Schedule): Promise<void> {
+  console.log(`[scheduler] Executing news schedule "${schedule.name}" for ${schedule.portfolioUsername}`);
+
+  const scraping = schedule.newsConfig?.scraping;
+  if (!scraping?.feedUrl) {
+    const errMsg = 'No RSS feed URL configured';
+    console.warn(`[scheduler] News schedule "${schedule.name}": ${errMsg}`);
+    updateSchedule(schedule.id, { lastRunError: errMsg });
+    markScheduleRun(schedule.id);
+    return;
+  }
+
+  const maxArticles = scraping.maxArticles ?? 5;
+
+  let articles;
+  try {
+    articles = await fetchLatestArticles(scraping.feedUrl, maxArticles);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    const errMsg = `Failed to fetch RSS feed: ${msg}`;
+    console.error(`[scheduler] ${errMsg} for "${schedule.name}"`);
+    updateSchedule(schedule.id, { lastRunError: errMsg });
+    markScheduleRun(schedule.id);
+    return;
+  }
+
+  if (articles.length === 0) {
+    const errMsg = 'No articles found in the RSS feed';
+    console.log(`[scheduler] ${errMsg} for "${schedule.name}"`);
+    updateSchedule(schedule.id, { lastRunError: errMsg });
+    markScheduleRun(schedule.id);
+    return;
+  }
+
+  console.log(`[scheduler] Processing ${articles.length} article(s) for "${schedule.name}"`);
+
+  const pipelineErrors: string[] = [];
+  for (const article of articles) {
+    if (!article.body) {
+      console.log(`[scheduler] Skipping article with no body: "${article.headline}"`);
+      continue;
+    }
+
+    try {
+      const output = await runNewsPipeline(article, [schedule]);
+      console.log(
+        `[scheduler] Article "${article.headline}": posted=${output.posted}, pending=${output.pendingApproval}, failed=${output.failed}`,
+      );
+      if (output.failed > 0) {
+        const failedResults = output.results.filter((r) => r.action === 'failed');
+        for (const r of failedResults) {
+          pipelineErrors.push(`"${article.headline}": ${r.error || 'unknown error'}`);
+        }
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`[scheduler] Pipeline error for article "${article.headline}": ${msg}`);
+      pipelineErrors.push(`"${article.headline}": ${msg}`);
+    }
+  }
+
+  if (pipelineErrors.length > 0) {
+    updateSchedule(schedule.id, { lastRunError: pipelineErrors.join('; ') });
+  } else {
+    updateSchedule(schedule.id, { lastRunError: undefined });
+  }
+
+  markScheduleRun(schedule.id);
+}
+
 async function executeSchedule(schedule: Schedule): Promise<void> {
+  if (schedule.postType === 'news') {
+    return executeNewsSchedule(schedule);
+  }
+
   console.log(`[scheduler] Executing schedule "${schedule.name}" for ${schedule.portfolioUsername}`);
+
+  // For approval flow: create a generating placeholder so the UI can show progress
+  const placeholder =
+    schedule.flowType === 'approval'
+      ? createPendingPost({
+          scheduleId: schedule.id,
+          scheduleName: schedule.name,
+          portfolioUsername: schedule.portfolioUsername,
+          portfolioName: schedule.portfolioName,
+          postType: schedule.postType,
+          content: '',
+          status: 'generating',
+        })
+      : null;
 
   try {
     const rawContent = await generateContent(schedule);
@@ -222,22 +313,20 @@ async function executeSchedule(schedule: Schedule): Promise<void> {
         etoroPostId: postId,
       });
       console.log(`[scheduler] Auto-posted for ${schedule.portfolioUsername}: ${postId}`);
-    } else {
-      createPendingPost({
-        scheduleId: schedule.id,
-        scheduleName: schedule.name,
-        portfolioUsername: schedule.portfolioUsername,
-        portfolioName: schedule.portfolioName,
-        postType: schedule.postType,
-        content,
-      });
+    } else if (placeholder) {
+      updatePendingPost(placeholder.id, { status: 'pending_approval', content });
       console.log(`[scheduler] Created pending post for approval: ${schedule.portfolioUsername}`);
     }
 
+    updateSchedule(schedule.id, { lastRunError: undefined });
     markScheduleRun(schedule.id);
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error(`[scheduler] Failed to execute schedule "${schedule.name}":`, msg);
+    if (placeholder) {
+      updatePendingPost(placeholder.id, { status: 'failed', error: msg });
+    }
+    updateSchedule(schedule.id, { lastRunError: msg });
     markScheduleRun(schedule.id);
   }
 }

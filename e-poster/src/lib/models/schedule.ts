@@ -2,7 +2,7 @@ import type { PostType } from './post';
 
 export type ScheduleFrequency = 'daily' | 'weekly' | 'monthly';
 export type ScheduleFlowType = 'automatic' | 'approval';
-export type PendingPostStatus = 'pending_approval' | 'approved' | 'rejected' | 'posted' | 'failed';
+export type PendingPostStatus = 'generating' | 'pending_approval' | 'approved' | 'rejected' | 'posted' | 'failed';
 
 export interface ScheduleGenerationConfig {
   postLength?: 'short' | 'medium' | 'long';
@@ -16,9 +16,15 @@ export interface LengthRange {
   max: number;
 }
 
+export interface NewsScrapingConfig {
+  feedUrl: string;
+  maxArticles?: number; // default 5
+}
+
 export interface NewsScheduleConfig {
   minimumRelevancePercent: number;
   lengthMapping: LengthRange[];
+  scraping?: NewsScrapingConfig;
 }
 
 export interface Schedule {
@@ -42,6 +48,7 @@ export interface Schedule {
   updatedAt: string;
   lastRunAt?: string;
   nextRunAt?: string;       // undefined for news (event-triggered)
+  lastRunError?: string;
 }
 
 export interface PendingPost {

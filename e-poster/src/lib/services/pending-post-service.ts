@@ -32,6 +32,7 @@ export interface CreatePendingPostParams {
   portfolioName: string;
   postType: PostType;
   content: string;
+  status?: PendingPostStatus;
 }
 
 export function createPendingPost(params: CreatePendingPostParams): PendingPost {
@@ -45,7 +46,7 @@ export function createPendingPost(params: CreatePendingPostParams): PendingPost 
     portfolioName: params.portfolioName,
     postType: params.postType,
     content: params.content,
-    status: 'pending_approval',
+    status: params.status ?? 'pending_approval',
     generatedAt: new Date().toISOString(),
   };
 
@@ -87,7 +88,9 @@ export function getPendingPostById(id: string): PendingPost | null {
 }
 
 export function getPendingCount(): number {
-  return readPending().posts.filter((p) => p.status === 'pending_approval').length;
+  return readPending().posts.filter(
+    (p) => p.status === 'pending_approval' || p.status === 'generating',
+  ).length;
 }
 
 export function updatePendingPost(
