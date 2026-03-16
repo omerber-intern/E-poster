@@ -9,14 +9,6 @@
       }
     },
     {
-      "username": "PureMomentum",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJnNWkuQThHcXNjT0FlSE1Qa3Z4Z1VocTZQbWl2Vk1wN3FQUXZnVjBwdnlqY05PWENySjlscGNDVkhJVXEuQm83ZEdGOWo1cWRnNmlsZkJ3d1NJUmJ5c3ZHSHVYWWdFUHlLN1JVZm85Yndza18ifQ__",
-        "gcid": "43173506"
-      }
-    },
-    {
       "username": "PureGrowth",
       "credentials": {
         "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
@@ -119,7 +111,15 @@
         "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJCWi1SbzA5VzBpMHJRb1RkRTdQWmM1MmZ1V2IwWm96UlpyZTJXczUuS0ludkgxbGJyNU5QS2NFcmhNUEd0NHA3YXUuTFZHanZEaFVIazB0YU44dzdqT0lrY0ZMV0Z3enhEb1lTQnBwampGOF8ifQ__",
         "gcid": "37154870"
       }
+    },
+    {
+      "username": "PureMomentum",
+      "credentials": {
+        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
+        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJnNWkuQThHcXNjT0FlSE1Qa3Z4Z1VocTZQbWl2Vk1wN3FQUXZnVjBwdnlqY05PWENySjlscGNDVkhJVXEuQm83ZEdGOWo1cWRnNmlsZkJ3d1NJUmJ5c3ZHSHVYWWdFUHlLN1JVZm85Yndza18ifQ__",
+        "gcid": "43173506"
+      }
     }
   ],
-  "updatedAt": "2026-03-12T17:15:00.000Z"
+  "updatedAt": "2026-03-16T09:31:09.548Z"
 }

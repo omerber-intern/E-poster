@@ -1738,5 +1738,119 @@
       "majorCategory": "Financial Services & Fintech",
       "weight": 50
     }
+  ],
+  "FISV.RTH": [
+    {
+      "topic": "Payment Processing & Solutions",
+      "subcategory": "Financial Services Technology",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 60
+    },
+    {
+      "topic": "Banking Software & Services",
+      "subcategory": "Financial Services Technology",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 40
+    }
+  ],
+  "SGO.PA": [
+    {
+      "topic": "Building Materials & Construction",
+      "subcategory": "Materials & Manufacturing",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 70
+    },
+    {
+      "topic": "High-Performance Materials",
+      "subcategory": "Materials & Manufacturing",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 30
+    }
+  ],
+  "SNR.L": [
+    {
+      "topic": "Aerospace & Defense Components",
+      "subcategory": "Industrial Manufacturing",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 70
+    },
+    {
+      "topic": "Precision Engineering",
+      "subcategory": "Industrial Manufacturing",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 30
+    }
+  ],
+  "REL.L": [
+    {
+      "topic": "Publishing & Information Services",
+      "subcategory": "Media & Information",
+      "majorCategory": "Tech & Data",
+      "weight": 50
+    },
+    {
+      "topic": "Data Analytics & Business Intelligence",
+      "subcategory": "Data Services",
+      "majorCategory": "Tech & Data",
+      "weight": 50
+    }
+  ],
+  "EOAN.DE": [
+    {
+      "topic": "Electric Utilities",
+      "subcategory": "Power Generation & Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 70
+    },
+    {
+      "topic": "Renewable Energy",
+      "subcategory": "Power Generation & Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 30
+    }
+  ],
+  "HTG.L": [
+    {
+      "topic": "Oil & Gas Equipment & Services",
+      "subcategory": "Energy Sector Services",
+      "majorCategory": "Energy & Utilities",
+      "weight": 80
+    },
+    {
+      "topic": "Industrial Equipment Manufacturing",
+      "subcategory": "Industrial Manufacturing",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 20
+    }
+  ],
+  "HLMA.L": [
+    {
+      "topic": "Safety & Environmental Equipment",
+      "subcategory": "Industrial Manufacturing",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 50
+    },
+    {
+      "topic": "Sensors & Instrumentation",
+      "subcategory": "Industrial Technology",
+      "majorCategory": "Tech & Data",
+      "weight": 50
+    }
+  ],
+  "AIXA.DE": [
+    {
+      "topic": "Semiconductor Equipment Manufacturing",
+      "subcategory": "Semiconductor & Electronics",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "MTS.MC": [
+    {
+      "topic": "Steel & Iron Production",
+      "subcategory": "Metals & Mining",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
   ]
 }
