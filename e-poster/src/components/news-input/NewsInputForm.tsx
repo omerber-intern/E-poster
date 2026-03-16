@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Zap, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import {
+  Loader2, Zap, CheckCircle2, XCircle, Clock,
+  Link2, Search, PenLine, AlertCircle, Newspaper, BookOpen,
+  ArrowRight,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -10,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'react-hot-toast';
 import type { NewsContent } from '@/lib/models/news';
+import type { DiscoveredArticle } from '@/app/api/news/discover/route';
 
 interface NewsInputFormProps {
   onNewsSubmit?: (news: NewsContent) => void;
@@ -38,31 +43,178 @@ interface AutoProcessResponse {
   processedAt: string;
 }
 
+interface PortfolioOption {
+  id: string;
+  name: string;
+}
+
+type ScrapeStatus = 'idle' | 'loading' | 'success' | 'error';
+type DiscoverStatus = 'idle' | 'loading' | 'done' | 'error';
+
+function formatRelativeTime(dateStr: string): string {
+  if (!dateStr) return '';
+  try {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  } catch {
+    return '';
+  }
+}
+
 export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
   const router = useRouter();
+
+  // Article fields
   const [headline, setHeadline] = useState('');
   const [body, setBody] = useState('');
   const [source, setSource] = useState('');
   const [url, setUrl] = useState('');
+
+  // Scrape (URL fetch) state
+  const [scrapeStatus, setScrapeStatus] = useState<ScrapeStatus>('idle');
+  const [scrapeError, setScrapeError] = useState('');
+  const [scrapedSource, setScrapedSource] = useState('');
+  const [showFields, setShowFields] = useState(false);
+
+  // Submit / auto-process state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAutoProcessing, setIsAutoProcessing] = useState(false);
   const [hasNewsSchedules, setHasNewsSchedules] = useState(false);
   const [autoProcessResults, setAutoProcessResults] = useState<AutoProcessResponse | null>(null);
 
+  // Discovery state
+  const [portfolios, setPortfolios] = useState<PortfolioOption[]>([]);
+  const [selectedPortfolioId, setSelectedPortfolioId] = useState('');
+  const [discoverStatus, setDiscoverStatus] = useState<DiscoverStatus>('idle');
+  const [discoveredArticles, setDiscoveredArticles] = useState<DiscoveredArticle[]>([]);
+  const [discoverError, setDiscoverError] = useState('');
+
   useEffect(() => {
-    async function checkNewsSchedules() {
+    async function init() {
       try {
-        const res = await fetch('/api/schedules');
-        const data = await res.json();
-        const hasActive = (data.schedules || []).some(
+        const [schedRes, portRes] = await Promise.all([
+          fetch('/api/schedules'),
+          fetch('/api/news/discover'),
+        ]);
+        const schedData = await schedRes.json();
+        const hasActive = (schedData.schedules || []).some(
           (s: { postType: string; isActive: boolean }) =>
             s.postType === 'news' && s.isActive,
         );
         setHasNewsSchedules(hasActive);
+
+        const portData = await portRes.json();
+        const list: PortfolioOption[] = portData.portfolios ?? [];
+        setPortfolios(list);
+        if (list.length > 0) setSelectedPortfolioId(list[0].id);
       } catch { /* ignore */ }
     }
-    checkNewsSchedules();
+    init();
   }, []);
+
+  const handleDiscover = async (mode: 'latest' | 'portfolio') => {
+    setDiscoverStatus('loading');
+    setDiscoveredArticles([]);
+    setDiscoverError('');
+
+    try {
+      const res = await fetch('/api/news/discover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode,
+          portfolioId: mode === 'portfolio' ? selectedPortfolioId : undefined,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setDiscoverStatus('error');
+        setDiscoverError(data.error || 'Failed to fetch news');
+        return;
+      }
+
+      const articles: DiscoveredArticle[] = data.articles ?? [];
+      setDiscoveredArticles(articles);
+      setDiscoverStatus('done');
+
+      if (articles.length === 0) {
+        setDiscoverError('No articles found. Try the other mode or paste a URL below.');
+      }
+    } catch {
+      setDiscoverStatus('error');
+      setDiscoverError('Could not reach the news service. Try again or paste a URL below.');
+    }
+  };
+
+  const handleUseArticle = (article: DiscoveredArticle) => {
+    setHeadline(article.title);
+    setBody(article.body);
+    setSource(article.source);
+    setUrl(article.url);
+    setShowFields(true);
+    setScrapeStatus('idle');
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    toast.success('Article loaded — review the details below');
+  };
+
+  const handleScrape = async () => {
+    const trimmedUrl = url.trim();
+    if (!trimmedUrl) {
+      toast.error('Please enter a URL first');
+      return;
+    }
+    try {
+      new URL(trimmedUrl);
+    } catch {
+      toast.error('Please enter a valid URL');
+      return;
+    }
+
+    setScrapeStatus('loading');
+    setScrapeError('');
+
+    try {
+      const res = await fetch('/api/news/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: trimmedUrl }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setScrapeStatus('error');
+        setScrapeError(data.error || 'Failed to scrape article');
+        setShowFields(true);
+        return;
+      }
+
+      if (data.headline) setHeadline(data.headline);
+      if (data.body) setBody(data.body);
+      if (data.source) {
+        setSource(data.source);
+        setScrapedSource(data.source);
+      }
+      setScrapeStatus('success');
+      setShowFields(true);
+    } catch {
+      setScrapeStatus('error');
+      setScrapeError('Could not reach the article. You can enter the details manually below.');
+      setShowFields(true);
+    }
+  };
+
+  const handleEnterManually = () => {
+    setShowFields(true);
+    setScrapeStatus('idle');
+  };
 
   const validateForm = () => {
     if (!headline.trim() || !body.trim()) {
@@ -151,12 +303,9 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
 
   const actionIcon = (action: string) => {
     switch (action) {
-      case 'posted':
-        return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case 'pending_approval':
-        return <Clock className="h-4 w-4 text-amber-500" />;
-      default:
-        return <XCircle className="h-4 w-4 text-red-500" />;
+      case 'posted': return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+      case 'pending_approval': return <Clock className="h-4 w-4 text-amber-500" />;
+      default: return <XCircle className="h-4 w-4 text-red-500" />;
     }
   };
 
@@ -168,106 +317,343 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
     }
   };
 
-  const isBusy = isSubmitting || isAutoProcessing;
+  const isBusy = isSubmitting || isAutoProcessing || scrapeStatus === 'loading';
+  const isDiscovering = discoverStatus === 'loading';
 
   return (
     <div className="space-y-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Enter News Content</CardTitle>
-          <CardDescription>
-            Input or paste news content to evaluate and post to relevant smart portfolios
-          </CardDescription>
+
+      {/* ── Discovery Card (NEW) ──────────────────────────────────── */}
+      <Card className="border-2">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shrink-0">
+              1
+            </div>
+            <div>
+              <CardTitle className="text-lg">Find a news article</CardTitle>
+              <CardDescription className="text-sm mt-0.5">
+                Surface relevant articles automatically, or paste a URL below
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="headline">Headline *</Label>
-              <Input
-                id="headline"
-                value={headline}
-                onChange={(e) => setHeadline(e.target.value)}
-                placeholder="Enter news headline..."
-                required
-                maxLength={500}
-              />
-            </div>
+        <CardContent className="space-y-4">
+          {/* Portfolio picker + mode buttons */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {portfolios.length > 0 && (
+              <select
+                value={selectedPortfolioId}
+                onChange={(e) => setSelectedPortfolioId(e.target.value)}
+                disabled={isDiscovering}
+                className="flex h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50 min-w-[160px]"
+              >
+                {portfolios.map((p) => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="body">Body Content *</Label>
-              <Textarea
-                id="body"
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                placeholder="Enter news body content..."
-                required
-                rows={10}
-                maxLength={5000}
-              />
-              <p className="text-xs text-muted-foreground">
-                {body.length} / 5000 characters
-              </p>
-            </div>
+            <div className="flex gap-2 flex-1">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isDiscovering || isBusy}
+                onClick={() => handleDiscover('latest')}
+                className="flex-1"
+              >
+                {isDiscovering ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Newspaper className="h-4 w-4 mr-2" />
+                )}
+                Latest News
+              </Button>
 
-            <div className="space-y-2">
-              <Label htmlFor="source">Source (Optional)</Label>
-              <Input
-                id="source"
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                placeholder="e.g., Reuters, Bloomberg"
-              />
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isDiscovering || isBusy || !selectedPortfolioId}
+                onClick={() => handleDiscover('portfolio')}
+                className="flex-1"
+              >
+                {isDiscovering ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <BookOpen className="h-4 w-4 mr-2" />
+                )}
+                From My Portfolio
+              </Button>
             </div>
+          </div>
 
+          {/* Loading state */}
+          {isDiscovering && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Finding relevant articles...
+            </div>
+          )}
+
+          {/* Error state */}
+          {discoverStatus === 'error' && (
+            <div className="flex items-start gap-2 rounded-md bg-red-50 border border-red-200 px-3 py-2.5 text-sm text-red-800">
+              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0 text-red-500" />
+              <span>{discoverError}</span>
+            </div>
+          )}
+
+          {/* Empty results */}
+          {discoverStatus === 'done' && discoveredArticles.length === 0 && (
+            <p className="text-sm text-muted-foreground">{discoverError || 'No articles found.'}</p>
+          )}
+
+          {/* Article cards */}
+          {discoveredArticles.length > 0 && (
             <div className="space-y-2">
-              <Label htmlFor="url">URL (Optional)</Label>
+              {discoveredArticles.map((article, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col gap-2 rounded-lg border p-3 hover:bg-muted/40 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm leading-snug line-clamp-2">
+                        {article.title}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        <span className="text-xs text-muted-foreground">
+                          {article.source}
+                          {article.publishedAt && (
+                            <> · {formatRelativeTime(article.publishedAt)}</>
+                          )}
+                        </span>
+                        {article.tickers.slice(0, 3).map((t) => (
+                          <span
+                            key={t}
+                            className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                        {article.tickers.length > 3 && (
+                          <span className="text-xs text-muted-foreground">
+                            +{article.tickers.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      className="shrink-0"
+                      onClick={() => handleUseArticle(article)}
+                    >
+                      Use
+                      <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                    </Button>
+                  </div>
+                  {article.body && (
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                      {article.body}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Divider */}
+          <div className="relative pt-1">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">or paste a URL</span>
+            </div>
+          </div>
+
+          {/* URL input + fetch */}
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
               <Input
-                id="url"
                 type="url"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://..."
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  if (scrapeStatus !== 'idle') {
+                    setScrapeStatus('idle');
+                    setScrapeError('');
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleScrape();
+                  }
+                }}
+                placeholder="https://reuters.com/article/..."
+                className="pl-9 h-10"
+                disabled={scrapeStatus === 'loading' || isDiscovering}
               />
             </div>
-
-            <div className="flex gap-3">
-              <Button type="submit" disabled={isBusy} className="flex-1">
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  'Continue to Evaluation'
-                )}
-              </Button>
-              {hasNewsSchedules && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={isBusy}
-                  onClick={handleAutoProcess}
-                  className="flex-1"
-                >
-                  {isAutoProcessing ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Auto-Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="h-4 w-4 mr-2" />
-                      Auto-Process with Rules
-                    </>
-                  )}
-                </Button>
+            <Button
+              type="button"
+              disabled={isBusy || !url.trim() || isDiscovering}
+              onClick={handleScrape}
+              className="shrink-0"
+            >
+              {scrapeStatus === 'loading' ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Fetching...
+                </>
+              ) : (
+                <>
+                  <Search className="h-4 w-4 mr-2" />
+                  Fetch Article
+                </>
               )}
+            </Button>
+          </div>
+
+          {/* Scrape success banner */}
+          {scrapeStatus === 'success' && (
+            <div className="flex items-start gap-2 rounded-md bg-green-50 border border-green-200 px-3 py-2.5 text-sm text-green-800">
+              <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0 text-green-600" />
+              <span>
+                Article extracted successfully
+                {scrapedSource && <> from <strong>{scrapedSource}</strong></>}.
+                Review the fields below.
+              </span>
             </div>
-          </form>
+          )}
+
+          {/* Scrape error banner */}
+          {scrapeStatus === 'error' && (
+            <div className="flex items-start gap-2 rounded-md bg-red-50 border border-red-200 px-3 py-2.5 text-sm text-red-800">
+              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0 text-red-500" />
+              <span>{scrapeError || 'Could not read this article. Please enter the details manually.'}</span>
+            </div>
+          )}
+
+          {/* Manual entry fallback */}
+          {!showFields && scrapeStatus !== 'success' && (
+            <button
+              type="button"
+              onClick={handleEnterManually}
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline"
+            >
+              <PenLine className="h-3.5 w-3.5" />
+              Or enter the news manually
+            </button>
+          )}
         </CardContent>
       </Card>
 
-      {/* Auto-Process Results */}
+      {/* ── Step 2: Article Fields ────────────────────────────────── */}
+      <div
+        className={`space-y-4 transition-all duration-300 ${
+          showFields
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-2 pointer-events-none h-0 overflow-hidden'
+        }`}
+      >
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shrink-0">
+                2
+              </div>
+              <div>
+                <CardTitle className="text-lg">Review article details</CardTitle>
+                <CardDescription className="text-sm mt-0.5">
+                  Edit the content if needed, then submit
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="headline">Headline *</Label>
+                <Input
+                  id="headline"
+                  value={headline}
+                  onChange={(e) => setHeadline(e.target.value)}
+                  placeholder="Enter news headline..."
+                  required
+                  maxLength={500}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="body">Body Content *</Label>
+                <Textarea
+                  id="body"
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  placeholder="Enter news body content..."
+                  required
+                  rows={10}
+                  maxLength={5000}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {body.length} / 5000 characters
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="source">Source</Label>
+                <Input
+                  id="source"
+                  value={source}
+                  onChange={(e) => setSource(e.target.value)}
+                  placeholder="e.g., Reuters, Bloomberg"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <Button type="submit" disabled={isBusy} className="flex-1">
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    'Continue to Evaluation'
+                  )}
+                </Button>
+                {hasNewsSchedules && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isBusy}
+                    onClick={handleAutoProcess}
+                    className="flex-1"
+                  >
+                    {isAutoProcessing ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Auto-Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="h-4 w-4 mr-2" />
+                        Auto-Process with Rules
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ── Auto-Process Results ─────────────────────────────────── */}
       {autoProcessResults && (
         <Card>
           <CardHeader>
@@ -345,4 +731,3 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
     </div>
   );
 }
-

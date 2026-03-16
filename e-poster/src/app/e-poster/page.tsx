@@ -1,6 +1,6 @@
 'use client';
 
-import { PenSquare, RefreshCw, History, Settings, CalendarClock } from 'lucide-react';
+import { PenSquare, RefreshCw, History, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,11 @@ export default function DashboardPage() {
       })
       .catch(() => {});
   }, []);
+
+  const isStale =
+    lastSyncedAt
+      ? Date.now() - new Date(lastSyncedAt).getTime() > 24 * 60 * 60 * 1000
+      : false;
 
   const handleSync = async () => {
     setIsSyncing(true);
@@ -101,11 +106,11 @@ export default function DashboardPage() {
               </div>
             </Link>
 
-            <div className="rounded-lg border bg-card p-6">
+            <div className={`rounded-lg border bg-card p-6 ${isStale ? 'border-destructive/50' : ''}`}>
               <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-muted p-3">
+                <div className={`rounded-lg p-3 ${isStale ? 'bg-destructive/10' : 'bg-muted'}`}>
                   <RefreshCw
-                    className={`h-6 w-6 text-muted-foreground ${isSyncing ? 'animate-spin' : ''}`}
+                    className={`h-6 w-6 ${isStale ? 'text-destructive' : 'text-muted-foreground'} ${isSyncing ? 'animate-spin' : ''}`}
                   />
                 </div>
                 <div className="flex-1">
@@ -114,7 +119,7 @@ export default function DashboardPage() {
                   </h3>
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant={isStale ? 'destructive' : 'outline'}
                     onClick={handleSync}
                     disabled={isSyncing}
                     className="mb-3"
@@ -124,7 +129,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
                     <span>The portfolio&apos;s data is saved in the code base</span>
                     {lastSyncedAt && (
-                      <span className="whitespace-nowrap">
+                      <span className={`whitespace-nowrap ${isStale ? 'text-destructive font-medium' : ''}`}>
                         Last refresh: {formatSyncDate(lastSyncedAt)}
                       </span>
                     )}
@@ -132,26 +137,6 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-
-            <Link
-              href="/e-poster/schedule"
-              className="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary/10 p-3">
-                  <CalendarClock className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">
-                    Scheduled Posts
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Set up recurring posts, view the calendar, and manage
-                    pending approvals.
-                  </p>
-                </div>
-              </div>
-            </Link>
 
             <Link
               href="/e-poster/manage-portfolios"
