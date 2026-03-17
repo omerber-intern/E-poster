@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPortfoliosFromCache, getPortfolioByUsername } from '@/lib/services/portfolio-service';
+import { getPortfoliosFromCache } from '@/lib/services/portfolio-service';
 import type { PortfolioHolding } from '@/lib/models/portfolio';
 
 export interface DiscoveredArticle {
@@ -11,132 +11,157 @@ export interface DiscoveredArticle {
   publishedAt: string;
 }
 
-interface TiingoArticle {
-  id: number;
+interface AlphaVantageArticle {
   title: string;
-  description: string;
   url: string;
+  time_published: string; // e.g. "20260316T131026"
+  authors: string[];
+  summary: string;
   source: string;
-  tickers: string[];
-  tags: string[];
-  publishedDate: string;
-  crawlDate: string;
+  overall_sentiment_score: number;
+  overall_sentiment_label: string;
+  ticker_sentiment: Array<{
+    ticker: string;
+    relevance_score: string;
+    ticker_sentiment_score: string;
+    ticker_sentiment_label: string;
+  }>;
+  topics: Array<{ topic: string; relevance_score: string }>;
 }
 
-/** Maps eToro majorCategory labels → Tiingo tag names */
-const MAJOR_CATEGORY_TO_TIINGO_TAG: Record<string, string> = {
-  'Tech & Data': 'Technology',
-  'Crypto & Digital Assets': 'Cryptocurrency',
-  'Financial Services': 'Financial Services',
-  'Healthcare & Life Sciences': 'Healthcare',
-  'Energy & Utilities': 'Energy',
-  'Consumer & Retail': 'Consumer Goods',
-  'Industrials & Materials': 'Industrials',
-  'Real Estate': 'Real Estate',
-  'Media & Telecom': 'Telecommunications',
-  'Commodities': 'Commodities',
-};
+interface AlphaVantageResponse {
+  items: string;
+  sentiment_score_definition: string;
+  relevance_score_definition: string;
+  feed: AlphaVantageArticle[];
+  Information?: string;
+  Note?: string;
+}
+
+/** Parses Alpha Vantage time_published (20260316T131026) → ISO string */
+function parsePublishedDate(raw: string): string {
+  if (!raw || raw.length < 15) return '';
+  try {
+    // Format: YYYYMMDDTHHMMSS
+    const year = raw.slice(0, 4);
+    const month = raw.slice(4, 6);
+    const day = raw.slice(6, 8);
+    const hour = raw.slice(9, 11);
+    const min = raw.slice(11, 13);
+    const sec = raw.slice(13, 15);
+    return `${year}-${month}-${day}T${hour}:${min}:${sec}Z`;
+  } catch {
+    return '';
+  }
+}
 
 /**
- * Computes top N majorCategory values for a portfolio's holdings,
- * weighted by holding allocation percentage.
+ * Extracts top N stock tickers from merged portfolio holdings,
+ * sorted by allocation weight descending.
  */
-function getTopSectorTags(holdings: PortfolioHolding[], topN = 3): string[] {
-  const categoryWeights = new Map<string, number>();
+function getTopTickers(holdings: PortfolioHolding[], topN = 10): string[] {
+  const tickerWeights = new Map<string, number>();
 
   for (const holding of holdings) {
-    if (!holding.industries || holding.industries.length === 0) continue;
-    for (const industry of holding.industries) {
-      const contribution = (holding.allocation * industry.weight) / 100;
-      const existing = categoryWeights.get(industry.majorCategory) ?? 0;
-      categoryWeights.set(industry.majorCategory, existing + contribution);
-    }
+    if (!holding.symbol) continue;
+    const existing = tickerWeights.get(holding.symbol) ?? 0;
+    tickerWeights.set(holding.symbol, existing + (holding.allocation ?? 0));
   }
 
-  const sorted = [...categoryWeights.entries()]
+  return [...tickerWeights.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, topN)
-    .map(([category]) => MAJOR_CATEGORY_TO_TIINGO_TAG[category] ?? category);
-
-  return sorted.filter(Boolean);
+    .map(([symbol]) => symbol);
 }
 
-async function fetchTiingoNews(params: Record<string, string>): Promise<TiingoArticle[]> {
-  const apiKey = process.env.TIINGO_API_KEY;
-  if (!apiKey) throw new Error('TIINGO_API_KEY is not configured');
+async function fetchAlphaVantageNews(
+  params: Record<string, string>,
+): Promise<AlphaVantageArticle[]> {
+  const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
+  if (!apiKey) throw new Error('ALPHA_VANTAGE_API_KEY is not configured');
 
-  const query = new URLSearchParams({ ...params, token: apiKey });
-  const res = await fetch(`https://api.tiingo.com/tiingo/news?${query.toString()}`, {
+  const query = new URLSearchParams({ function: 'NEWS_SENTIMENT', ...params, apikey: apiKey });
+  const res = await fetch(`https://www.alphavantage.co/query?${query.toString()}`, {
     headers: { 'Content-Type': 'application/json' },
   });
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Tiingo API error ${res.status}: ${text}`);
+    throw new Error(`Alpha Vantage API error ${res.status}: ${text}`);
   }
 
-  return res.json() as Promise<TiingoArticle[]>;
+  const data: AlphaVantageResponse = await res.json();
+
+  if (data.Information) {
+    throw new Error(`Alpha Vantage rate limit: ${data.Information}`);
+  }
+  if (data.Note) {
+    throw new Error(`Alpha Vantage note: ${data.Note}`);
+  }
+
+  return data.feed ?? [];
 }
 
-function mapArticle(article: TiingoArticle): DiscoveredArticle {
+function mapArticle(article: AlphaVantageArticle): DiscoveredArticle {
   return {
     title: article.title?.trim() ?? '',
-    body: article.description?.trim() ?? '',
+    body: article.summary?.trim() ?? '',
     source: article.source ?? '',
     url: article.url ?? '',
-    tickers: article.tickers ?? [],
-    publishedAt: article.publishedDate ?? article.crawlDate ?? '',
+    tickers: (article.ticker_sentiment ?? []).map((t) => t.ticker),
+    publishedAt: parsePublishedDate(article.time_published),
   };
 }
 
 /**
  * POST /api/news/discover
  *
- * Body: { mode: 'latest' | 'portfolio', portfolioId?: string }
+ * Body: { mode: 'latest' | 'portfolio', portfolioIds?: string[] }
  * Returns: { articles: DiscoveredArticle[] }
  */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { mode, portfolioId } = body as { mode: 'latest' | 'portfolio'; portfolioId?: string };
+    const { mode, portfolioIds } = body as {
+      mode: 'latest' | 'portfolio';
+      portfolioIds?: string[];
+    };
 
     if (mode !== 'latest' && mode !== 'portfolio') {
-      return NextResponse.json({ error: 'mode must be "latest" or "portfolio"' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'mode must be "latest" or "portfolio"' },
+        { status: 400 },
+      );
     }
 
-    let articles: TiingoArticle[] = [];
+    let articles: AlphaVantageArticle[] = [];
 
     if (mode === 'latest') {
-      articles = await fetchTiingoNews({ limit: '6', sortBy: 'crawlDate' });
+      articles = await fetchAlphaVantageNews({ sort: 'LATEST' });
     } else {
       // portfolio mode
-      if (!portfolioId) {
-        return NextResponse.json({ error: 'portfolioId is required for portfolio mode' }, { status: 400 });
-      }
+      const { portfolios } = getPortfoliosFromCache();
 
-      const portfolio = getPortfolioByUsername(portfolioId);
-      if (!portfolio) {
-        // Fall back to all portfolios if specific one not found
-        const { portfolios } = getPortfoliosFromCache();
-        const allHoldings = portfolios.flatMap((p) => p.holdings);
-        const tags = getTopSectorTags(allHoldings);
+      const selectedIds = portfolioIds && portfolioIds.length > 0 ? portfolioIds : null;
+      const matched = selectedIds
+        ? portfolios.filter((p) => selectedIds.includes(p.username))
+        : portfolios;
 
-        if (tags.length === 0) {
-          articles = await fetchTiingoNews({ limit: '6', sortBy: 'crawlDate' });
-        } else {
-          articles = await fetchTiingoNews({ tags: tags.join(','), limit: '6', sortBy: 'crawlDate' });
-        }
+      const allHoldings = matched.flatMap((p) => p.holdings);
+      const tickers = getTopTickers(allHoldings, 10);
+
+      if (tickers.length === 0) {
+        // No tickers found — fall back to latest
+        articles = await fetchAlphaVantageNews({ sort: 'LATEST' });
       } else {
-        const tags = getTopSectorTags(portfolio.holdings);
-
-        if (tags.length === 0) {
-          articles = await fetchTiingoNews({ limit: '6', sortBy: 'crawlDate' });
-        } else {
-          articles = await fetchTiingoNews({ tags: tags.join(','), limit: '6', sortBy: 'crawlDate' });
-        }
+        articles = await fetchAlphaVantageNews({
+          tickers: tickers.join(','),
+          sort: 'LATEST',
+        });
       }
     }
 
+    // Alpha Vantage free tier always returns up to 50; take the first 6
     const mapped = articles.slice(0, 6).map(mapArticle);
 
     return NextResponse.json({ articles: mapped });
@@ -150,14 +175,16 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * GET /api/news/discover/portfolios
- * Returns list of portfolio ids for the portfolio picker.
- * We handle this as a query param on the same route.
+ * GET /api/news/discover
+ * Returns list of portfolios for the picker UI.
  */
 export async function GET() {
   try {
     const { portfolios } = getPortfoliosFromCache();
-    const list = portfolios.map((p) => ({ id: p.username, name: p.displayName ?? p.username }));
+    const list = portfolios.map((p) => ({
+      id: p.username,
+      name: p.displayName ?? p.username,
+    }));
     return NextResponse.json({ portfolios: list });
   } catch (error) {
     console.error('Portfolio list error:', error);

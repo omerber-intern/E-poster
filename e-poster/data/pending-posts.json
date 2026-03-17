@@ -1,6 +1,17 @@
 {
   "posts": [
     {
+      "id": "22209c28-a2cd-4dd8-ae47-e6a61b8f57ed",
+      "scheduleId": "77c88f05-a97f-4829-a600-ee63018043b0",
+      "scheduleName": "test function",
+      "portfolioUsername": "Short-Tech",
+      "portfolioName": "Short-Tech",
+      "postType": "educational",
+      "content": "@Short-Tech\n\nThis portfolio is designed to hedge against a declining tech sector — using short positions on major technology companies to profit when tech falls, not when it rises.\n\n📉 What Is Short-Tech?\n\nShort-Tech is a Smart Portfolio built around one thesis: if the technology sector is headed for a downturn, your broader portfolio doesn't have to suffer alongside it.\n\n👉 Rather than going long on growth, this portfolio takes short positions on major tech names — meaning it's structured to generate returns when those companies lose value.\n\n👉 Alongside its core short strategy, the portfolio holds assets like $BTC, $NVDA, $AAPL, and $COIN, as well as commodity-linked instruments like $WGLD.L and $WSLV.L, giving it a more balanced risk profile.\n\n👉 The portfolio is actively managed and periodically rebalanced by eToro's investment committee to reflect current market conditions.\n\n❓ Who is this for?\n\nInvestors who are bearish on tech, or those who already hold significant technology exposure and want a counterbalancing position to reduce overall portfolio risk.\n\nIf your current holdings are heavy in growth or tech stocks, Short-Tech can act as a natural hedge — limiting downside during sector-wide selloffs without requiring you to exit your existing positions.\n\n✨ @Short-Tech is available on eToro's Smart Portfolio platform.\n\nCopy Trading does not amount to investment advice. The value of your investments may go up or down. Your capital is at risk.\nPast performance is not an indication of future results.\nDon't invest unless you're prepared to lose all the money you invest. This is a high-risk investment and you should not expect to be protected if something goes wrong.",
+      "status": "pending_approval",
+      "generatedAt": "2026-03-16T09:56:00.028Z"
+    },
+    {
       "id": "4b8190f4-caef-4505-97c4-b5b7d5b14b94",
       "scheduleId": "590b39d6-6e47-4153-89f9-30a2769ee1b1",
       "scheduleName": "test function",
@@ -13,5 +24,5 @@
       "postedAt": "2026-03-12T11:23:27.535Z"
     }
   ],
-  "updatedAt": "2026-03-12T11:23:27.535Z"
+  "updatedAt": "2026-03-16T09:56:14.339Z"
 }

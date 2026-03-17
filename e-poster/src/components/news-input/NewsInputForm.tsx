@@ -89,7 +89,8 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
 
   // Discovery state
   const [portfolios, setPortfolios] = useState<PortfolioOption[]>([]);
-  const [selectedPortfolioId, setSelectedPortfolioId] = useState('');
+  const [selectedPortfolioIds, setSelectedPortfolioIds] = useState<Set<string>>(new Set());
+  const [portfolioSearch, setPortfolioSearch] = useState('');
   const [discoverStatus, setDiscoverStatus] = useState<DiscoverStatus>('idle');
   const [discoveredArticles, setDiscoveredArticles] = useState<DiscoveredArticle[]>([]);
   const [discoverError, setDiscoverError] = useState('');
@@ -111,7 +112,8 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
         const portData = await portRes.json();
         const list: PortfolioOption[] = portData.portfolios ?? [];
         setPortfolios(list);
-        if (list.length > 0) setSelectedPortfolioId(list[0].id);
+        // Select all by default
+        setSelectedPortfolioIds(new Set(list.map((p) => p.id)));
       } catch { /* ignore */ }
     }
     init();
@@ -128,7 +130,7 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           mode,
-          portfolioId: mode === 'portfolio' ? selectedPortfolioId : undefined,
+          portfolioIds: mode === 'portfolio' ? Array.from(selectedPortfolioIds) : undefined,
         }),
       });
 
@@ -339,52 +341,110 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Portfolio picker + mode buttons */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            {portfolios.length > 0 && (
-              <select
-                value={selectedPortfolioId}
-                onChange={(e) => setSelectedPortfolioId(e.target.value)}
-                disabled={isDiscovering}
-                className="flex h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50 min-w-[160px]"
-              >
-                {portfolios.map((p) => (
-                  <option key={p.id} value={p.id}>{p.name}</option>
-                ))}
-              </select>
-            )}
+          {/* Portfolio multi-select + mode buttons */}
+          {portfolios.length > 0 && (
+            <div className="space-y-2">
+              {/* Search + bulk actions */}
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+                  <Input
+                    placeholder="Search portfolios..."
+                    value={portfolioSearch}
+                    onChange={(e) => setPortfolioSearch(e.target.value)}
+                    className="pl-8 h-8 text-xs"
+                    disabled={isDiscovering}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs px-2"
+                  disabled={isDiscovering}
+                  onClick={() => setSelectedPortfolioIds(new Set(portfolios.map((p) => p.id)))}
+                >
+                  All
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs px-2"
+                  disabled={isDiscovering}
+                  onClick={() => setSelectedPortfolioIds(new Set())}
+                >
+                  None
+                </Button>
+              </div>
 
-            <div className="flex gap-2 flex-1">
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isDiscovering || isBusy}
-                onClick={() => handleDiscover('latest')}
-                className="flex-1"
-              >
-                {isDiscovering ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <Newspaper className="h-4 w-4 mr-2" />
-                )}
-                Latest News
-              </Button>
+              {/* Scrollable checkbox list */}
+              <div className="border rounded-md divide-y max-h-[180px] overflow-y-auto">
+                {portfolios
+                  .filter((p) =>
+                    (p.name ?? p.id).toLowerCase().includes(portfolioSearch.toLowerCase()),
+                  )
+                  .map((p) => (
+                    <label
+                      key={p.id}
+                      className="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-muted/50 transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedPortfolioIds.has(p.id)}
+                        disabled={isDiscovering}
+                        onChange={() => {
+                          setSelectedPortfolioIds((prev) => {
+                            const next = new Set(prev);
+                            if (next.has(p.id)) next.delete(p.id);
+                            else next.add(p.id);
+                            return next;
+                          });
+                        }}
+                        className="rounded"
+                      />
+                      <span className="text-sm">@{p.name ?? p.id}</span>
+                    </label>
+                  ))}
+              </div>
 
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isDiscovering || isBusy || !selectedPortfolioId}
-                onClick={() => handleDiscover('portfolio')}
-                className="flex-1"
-              >
-                {isDiscovering ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <BookOpen className="h-4 w-4 mr-2" />
-                )}
-                From My Portfolio
-              </Button>
+              <p className="text-xs text-muted-foreground">
+                {selectedPortfolioIds.size} of {portfolios.length} selected
+              </p>
             </div>
+          )}
+
+          {/* Mode buttons */}
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isDiscovering || isBusy}
+              onClick={() => handleDiscover('latest')}
+              className="flex-1"
+            >
+              {isDiscovering ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Newspaper className="h-4 w-4 mr-2" />
+              )}
+              Latest News
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isDiscovering || isBusy || selectedPortfolioIds.size === 0}
+              onClick={() => handleDiscover('portfolio')}
+              className="flex-1"
+            >
+              {isDiscovering ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <BookOpen className="h-4 w-4 mr-2" />
+              )}
+              From My Portfolio
+            </Button>
           </div>
 
           {/* Loading state */}
