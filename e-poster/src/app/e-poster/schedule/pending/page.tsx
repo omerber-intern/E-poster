@@ -33,6 +33,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'react-hot-toast';
 import { format } from 'date-fns';
+import { EtoroPostMockup } from '@/components/post-mockup/EtoroPostMockup';
 import type { PostType } from '@/lib/models/post';
 import type { PendingPost, PendingPostStatus } from '@/lib/models/schedule';
 
@@ -473,8 +474,11 @@ export default function PendingPostsPage() {
                   {previewPost?.portfolioName} (@{previewPost?.portfolioUsername})
                 </DialogDescription>
               </DialogHeader>
-              <div className="bg-muted/30 rounded-lg p-4 max-h-[500px] overflow-y-auto">
-                <p className="text-sm whitespace-pre-wrap">{previewPost?.content}</p>
+              <div className="bg-gray-50 rounded-xl p-6 max-h-[600px] overflow-y-auto">
+                <EtoroPostMockup
+                  username={previewPost?.portfolioUsername ?? ''}
+                  content={previewPost?.content ?? ''}
+                />
               </div>
               {previewPost?.status === 'pending_approval' && (
                 <DialogFooter>

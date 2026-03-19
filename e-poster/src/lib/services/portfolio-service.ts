@@ -129,7 +129,6 @@ export async function syncPortfolioData(): Promise<{
   // Step 1: Fetch raw positions for every portfolio
   const rawByUsername: Record<string, { positions: any[] }> = {};
   const portfolioList = getAlphaPortfolios();
-
   for (const username of portfolioList) {
     try {
       const url = `${ETORO_API_BASE_URL}${getPortfolioInfoUrl(username)}`;

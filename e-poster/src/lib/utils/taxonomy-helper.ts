@@ -205,7 +205,11 @@ export async function classifyUnmappedAssets(
   if (assets.length === 0) return new Map();
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is not set');
+  if (!apiKey) {
+    console.warn('[taxonomy-helper] ANTHROPIC_API_KEY is not set — skipping LLM classification for', assets.length, 'symbols');
+    return new Map();
+  }
+
   const client = new Anthropic({ apiKey });
 
   // Split into batches to avoid token truncation, fire all in parallel
@@ -214,18 +218,23 @@ export async function classifyUnmappedAssets(
     batches.push(assets.slice(i, i + CLASSIFY_BATCH_SIZE));
   }
 
-  const batchResults = await Promise.all(
-    batches.map((batch) => classifyBatch(client, batch)),
-  );
+  try {
+    const batchResults = await Promise.all(
+      batches.map((batch) => classifyBatch(client, batch)),
+    );
 
-  const result = new Map<string, IndustryBreakdown[]>();
-  for (const batchMap of batchResults) {
-    for (const [symbol, breakdown] of batchMap) {
-      result.set(symbol, breakdown);
+    const result = new Map<string, IndustryBreakdown[]>();
+    for (const batchMap of batchResults) {
+      for (const [symbol, breakdown] of batchMap) {
+        result.set(symbol, breakdown);
+      }
     }
-  }
 
-  return result;
+    return result;
+  } catch (err) {
+    console.warn('[taxonomy-helper] Anthropic classification failed — skipping for', assets.length, 'symbols. Error:', err instanceof Error ? err.message : String(err));
+    return new Map();
+  }
 }
 
 // ---------------------------------------------------------------------------

@@ -110,14 +110,17 @@ export default function EvaluatePage() {
         body: JSON.stringify(newsContent),
       });
 
-      if (!response.ok) throw new Error('Evaluation failed');
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error((errData as { error?: string }).error || 'Evaluation failed');
+      }
 
       const data = (await response.json()) as EvaluationResponse;
       setEvaluation(data);
       sessionStorage.setItem('evaluationData', JSON.stringify(data));
       sessionStorage.setItem('newsForReview', JSON.stringify(newsContent));
-    } catch {
-      toast.error('Failed to evaluate news impact');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to evaluate news impact');
     } finally {
       setIsEvaluating(false);
     }

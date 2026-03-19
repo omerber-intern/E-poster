@@ -60,6 +60,20 @@ export async function POST(request: NextRequest) {
       })
       .filter((r) => r !== null);
 
+    if (phase1Successes.length === 0 && errors.length > 0) {
+      const sampleError = errors[0] ?? '';
+      const isAuthError = sampleError.includes('401') || sampleError.toLowerCase().includes('authentication') || sampleError.toLowerCase().includes('api key');
+      return NextResponse.json(
+        {
+          error: isAuthError
+            ? 'AI evaluation failed: invalid or missing ANTHROPIC_API_KEY. Please update your API key in .env.local.'
+            : 'AI evaluation failed for all portfolios.',
+          details: errors.slice(0, 3),
+        },
+        { status: 503 },
+      );
+    }
+
     const relevantPhase1 = phase1Successes.filter(
       (r) => r.relevancePercent >= MIN_RELEVANCE_THRESHOLD,
     );

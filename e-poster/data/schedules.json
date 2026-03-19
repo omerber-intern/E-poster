@@ -36,7 +36,292 @@
       "createdAt": "2026-03-16T14:09:01.155Z",
       "updatedAt": "2026-03-16T14:09:01.155Z",
       "nextRunAt": "2026-03-23T07:00:00.000Z"
+    },
+    {
+      "id": "6e828a38-9dd7-4748-8622-1afd4d6dc51e",
+      "name": "monthly update - Short-Tech",
+      "portfolioUsername": "Short-Tech",
+      "portfolioName": "Short-Tech",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.231Z",
+      "updatedAt": "2026-03-19T12:50:18.231Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "0585f23b-27bb-4fa7-9cd9-829ba49082c1",
+      "name": "monthly update - PureGrowth",
+      "portfolioUsername": "PureGrowth",
+      "portfolioName": "PureGrowth",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.256Z",
+      "updatedAt": "2026-03-19T12:50:18.256Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "14dcf17f-e43c-45de-ad9e-5b2c8cc8b46d",
+      "name": "monthly update - Momentum-LS",
+      "portfolioUsername": "Momentum-LS",
+      "portfolioName": "Momentum-LS",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.274Z",
+      "updatedAt": "2026-03-19T12:50:18.274Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "cfe5f38c-217d-4356-afda-ab7bb6ea4331",
+      "name": "monthly update - MarketPicks",
+      "portfolioUsername": "MarketPicks",
+      "portfolioName": "MarketPicks",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.293Z",
+      "updatedAt": "2026-03-19T12:50:18.293Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "afdd2f5f-7b1c-40c4-857e-1d4363e28375",
+      "name": "monthly update - BalancedPicks",
+      "portfolioUsername": "BalancedPicks",
+      "portfolioName": "BalancedPicks",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.312Z",
+      "updatedAt": "2026-03-19T12:50:18.312Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "a91733d4-7b7a-4e4c-bc28-182e90a5ebfd",
+      "name": "monthly update - OutSmartNSDQ",
+      "portfolioUsername": "OutSmartNSDQ",
+      "portfolioName": "OutSmartNSDQ",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.329Z",
+      "updatedAt": "2026-03-19T12:50:18.329Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "b701458b-106c-49ba-84f1-729a2fde938b",
+      "name": "monthly update - ProPicks",
+      "portfolioUsername": "ProPicks",
+      "portfolioName": "ProPicks",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.349Z",
+      "updatedAt": "2026-03-19T12:50:18.349Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "4f4cdacf-5294-4966-b8a5-e0fc304778bb",
+      "name": "monthly update - GainersQtr",
+      "portfolioUsername": "GainersQtr",
+      "portfolioName": "GainersQtr",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.368Z",
+      "updatedAt": "2026-03-19T12:50:18.368Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "da2e4895-f709-4e72-a6bb-ba52ef7b6830",
+      "name": "monthly update - ActiveTraders",
+      "portfolioUsername": "ActiveTraders",
+      "portfolioName": "ActiveTraders",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.385Z",
+      "updatedAt": "2026-03-19T12:50:18.385Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "35a139b4-59d9-4b7a-a178-c2275da15c51",
+      "name": "monthly update - SharpTraders",
+      "portfolioUsername": "SharpTraders",
+      "portfolioName": "SharpTraders",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.401Z",
+      "updatedAt": "2026-03-19T12:50:18.401Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "66dc2a46-3b2f-4ed2-81ea-3f440fdb63e8",
+      "name": "monthly update - SectorNeutral",
+      "portfolioUsername": "SectorNeutral",
+      "portfolioName": "SectorNeutral",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.416Z",
+      "updatedAt": "2026-03-19T12:50:18.416Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "260b565f-157e-44e1-afab-c09eebf55a65",
+      "name": "monthly update - Pure-Value",
+      "portfolioUsername": "Pure-Value",
+      "portfolioName": "Pure-Value",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.434Z",
+      "updatedAt": "2026-03-19T12:50:18.434Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "bfcb4ca2-7a8d-4694-bd43-cce4d2fc5b0c",
+      "name": "monthly update - SectorGurus",
+      "portfolioUsername": "SectorGurus",
+      "portfolioName": "SectorGurus",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.451Z",
+      "updatedAt": "2026-03-19T12:50:18.451Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "0fb26517-2fc7-4607-b7e4-139d686359c6",
+      "name": "monthly update - NasdaqAI-Inverse",
+      "portfolioUsername": "NasdaqAI-Inverse",
+      "portfolioName": "NasdaqAI-Inverse",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.468Z",
+      "updatedAt": "2026-03-19T12:50:18.468Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
+    },
+    {
+      "id": "53e9386b-00d0-41ea-b400-bbadea96b233",
+      "name": "monthly update - PureMomentum",
+      "portfolioUsername": "PureMomentum",
+      "portfolioName": "PureMomentum",
+      "postType": "monthly-update",
+      "frequency": "monthly",
+      "flowType": "approval",
+      "timeOfDay": "15:13",
+      "dayOfMonth": 19,
+      "generationConfig": {
+        "postLength": "medium",
+        "templateStyle": "revenue-opening"
+      },
+      "isActive": true,
+      "createdAt": "2026-03-19T12:50:18.486Z",
+      "updatedAt": "2026-03-19T12:50:18.486Z",
+      "nextRunAt": "2026-03-19T13:13:00.000Z"
     }
   ],
-  "updatedAt": "2026-03-16T14:09:01.155Z"
+  "updatedAt": "2026-03-19T12:50:18.486Z"
 }
