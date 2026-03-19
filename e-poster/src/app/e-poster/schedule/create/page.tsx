@@ -220,11 +220,21 @@ function CreateScheduleForm() {
 
   const postTypeLabel = POST_TYPES.find((t) => t.value === postType)?.label ?? postType;
 
+  const utcTimeLabel = (() => {
+    if (!timeOfDay) return '';
+    const [h, m] = timeOfDay.split(':').map(Number);
+    const d = new Date();
+    d.setHours(h, m, 0, 0);
+    const utcH = d.getUTCHours().toString().padStart(2, '0');
+    const utcM = d.getUTCMinutes().toString().padStart(2, '0');
+    return `${timeOfDay} (${utcH}:${utcM} UTC)`;
+  })();
+
   const frequencyDetail = (() => {
-    if (frequency === 'daily') return `Daily at ${timeOfDay}`;
+    if (frequency === 'daily') return `Daily at ${utcTimeLabel}`;
     if (frequency === 'weekly')
-      return `Weekly on ${DAY_OPTIONS.find((d) => d.value === dayOfWeek)?.label} at ${timeOfDay}`;
-    return `Monthly on day ${dayOfMonth} at ${timeOfDay}`;
+      return `Weekly on ${DAY_OPTIONS.find((d) => d.value === dayOfWeek)?.label} at ${utcTimeLabel}`;
+    return `Monthly on day ${dayOfMonth} at ${utcTimeLabel}`;
   })();
 
   const stepLabels = ['Basics', 'Schedule & Content', 'Summary'];
@@ -498,6 +508,23 @@ function CreateScheduleForm() {
                         onChange={(e) => setTimeOfDay(e.target.value)}
                         className="mt-1.5"
                       />
+                      {timeOfDay && (
+                        <p className="text-xs text-muted-foreground mt-1.5">
+                          {(() => {
+                            const [h, m] = timeOfDay.split(':').map(Number);
+                            const d = new Date();
+                            d.setHours(h, m, 0, 0);
+                            const utcH = d.getUTCHours().toString().padStart(2, '0');
+                            const utcM = d.getUTCMinutes().toString().padStart(2, '0');
+                            const off = -d.getTimezoneOffset();
+                            const sign = off >= 0 ? '+' : '-';
+                            const oh = Math.floor(Math.abs(off) / 60);
+                            const om = Math.abs(off) % 60;
+                            const tz = `UTC${sign}${oh}${om ? `:${om.toString().padStart(2, '0')}` : ''}`;
+                            return `${utcH}:${utcM} UTC (your browser: ${tz})`;
+                          })()}
+                        </p>
+                      )}
                     </div>
 
                     {frequency === 'weekly' && (
@@ -549,9 +576,9 @@ function CreateScheduleForm() {
                     <div className="grid grid-cols-3 gap-2">
                       {(
                         [
-                          { value: 'short', label: 'Short', description: '~100-150 words. Concise with key points.' },
+                          { value: 'short', label: 'Short', description: '~150 words. Concise with key points.' },
                           { value: 'medium', label: 'Medium', description: '~200 words. Balanced detail and readability.' },
-                          { value: 'long', label: 'Long', description: '~300+ words. Comprehensive with full detail.' },
+                          { value: 'long', label: 'Long', description: '~250 words. In-depth and comprehensive.' },
                         ] as const
                       ).map((opt) => (
                         <button

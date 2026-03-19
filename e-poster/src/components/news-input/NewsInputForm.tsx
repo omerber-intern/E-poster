@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Zap, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { Loader2, Zap, CheckCircle2, XCircle, Clock, Link2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -40,28 +40,27 @@ interface AutoProcessResponse {
 
 export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
   const router = useRouter();
+
   const [headline, setHeadline] = useState('');
   const [body, setBody] = useState('');
-  const [source, setSource] = useState('');
+  const [provider, setProvider] = useState('');
   const [url, setUrl] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAutoProcessing, setIsAutoProcessing] = useState(false);
   const [hasNewsSchedules, setHasNewsSchedules] = useState(false);
   const [autoProcessResults, setAutoProcessResults] = useState<AutoProcessResponse | null>(null);
 
   useEffect(() => {
-    async function checkNewsSchedules() {
-      try {
-        const res = await fetch('/api/schedules');
-        const data = await res.json();
+    fetch('/api/schedules')
+      .then((r) => r.json())
+      .then((data) => {
         const hasActive = (data.schedules || []).some(
-          (s: { postType: string; isActive: boolean }) =>
-            s.postType === 'news' && s.isActive,
+          (s: { postType: string; isActive: boolean }) => s.postType === 'news' && s.isActive,
         );
         setHasNewsSchedules(hasActive);
-      } catch { /* ignore */ }
-    }
-    checkNewsSchedules();
+      })
+      .catch(() => {});
   }, []);
 
   const validateForm = () => {
@@ -81,7 +80,7 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
       const news: NewsContent = {
         headline: headline.trim(),
         body: body.trim(),
-        source: source.trim() || undefined,
+        source: provider.trim() || undefined,
         url: url.trim() || undefined,
         createdAt: new Date(),
       };
@@ -151,12 +150,9 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
 
   const actionIcon = (action: string) => {
     switch (action) {
-      case 'posted':
-        return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case 'pending_approval':
-        return <Clock className="h-4 w-4 text-amber-500" />;
-      default:
-        return <XCircle className="h-4 w-4 text-red-500" />;
+      case 'posted': return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+      case 'pending_approval': return <Clock className="h-4 w-4 text-amber-500" />;
+      default: return <XCircle className="h-4 w-4 text-red-500" />;
     }
   };
 
@@ -172,11 +168,12 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
 
   return (
     <div className="space-y-4">
+
       <Card>
-        <CardHeader>
-          <CardTitle>Enter News Content</CardTitle>
-          <CardDescription>
-            Input or paste news content to evaluate and post to relevant smart portfolios
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg">Enter article details</CardTitle>
+          <CardDescription className="text-sm mt-0.5">
+            Fill in the news content manually, then continue to evaluation
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -190,6 +187,7 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
                 placeholder="Enter news headline..."
                 required
                 maxLength={500}
+                disabled={isBusy}
               />
             </div>
 
@@ -203,6 +201,7 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
                 required
                 rows={10}
                 maxLength={5000}
+                disabled={isBusy}
               />
               <p className="text-xs text-muted-foreground">
                 {body.length} / 5000 characters
@@ -210,27 +209,39 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="source">Source (Optional)</Label>
+              <Label htmlFor="provider">
+                Provider{' '}
+                <span className="text-muted-foreground font-normal">(optional)</span>
+              </Label>
               <Input
-                id="source"
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                placeholder="e.g., Reuters, Bloomberg"
+                id="provider"
+                value={provider}
+                onChange={(e) => setProvider(e.target.value)}
+                placeholder="e.g., Yahoo Finance, Reuters, Bloomberg"
+                disabled={isBusy}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="url">URL (Optional)</Label>
-              <Input
-                id="url"
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://..."
-              />
+              <Label htmlFor="article-url">
+                Article URL{' '}
+                <span className="text-muted-foreground font-normal">(optional)</span>
+              </Label>
+              <div className="relative">
+                <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                <Input
+                  id="article-url"
+                  type="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://..."
+                  className="pl-9"
+                  disabled={isBusy}
+                />
+              </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 pt-2">
               <Button type="submit" disabled={isBusy} className="flex-1">
                 {isSubmitting ? (
                   <>
@@ -267,7 +278,6 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
         </CardContent>
       </Card>
 
-      {/* Auto-Process Results */}
       {autoProcessResults && (
         <Card>
           <CardHeader>
@@ -345,4 +355,3 @@ export function NewsInputForm({ onNewsSubmit }: NewsInputFormProps) {
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 'use client';
 
-import { Newspaper, GraduationCap, TrendingUp, Award, ArrowLeft } from 'lucide-react';
+import { PenSquare, CalendarClock, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CreatePostPage() {
@@ -19,82 +19,42 @@ export default function CreatePostPage() {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-2">Create a Post</h1>
             <p className="text-lg text-muted-foreground">
-              Choose a post type to get started
+              Would you like to post now or schedule it for later?
             </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 mb-8">
             <Link
-              href="/e-poster/news-input"
+              href="/e-poster/create/now"
               className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start gap-4">
                 <div className="rounded-lg bg-primary/10 p-3">
-                  <Newspaper className="h-6 w-6 text-primary" />
+                  <PenSquare className="h-6 w-6 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">News Post</h3>
+                  <h3 className="font-semibold text-lg mb-1">Create a Post Now</h3>
                   <p className="text-sm text-muted-foreground">
-                    Submit a news article, analyze portfolio impact with AI, and
-                    generate tailored posts for each affected portfolio.
+                    Generate and publish a post immediately — news, educational,
+                    monthly update, or performance highlight.
                   </p>
                 </div>
               </div>
             </Link>
 
             <Link
-              href="/e-poster/educational"
+              href="/e-poster/schedule/create"
               className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start gap-4">
                 <div className="rounded-lg bg-primary/10 p-3">
-                  <GraduationCap className="h-6 w-6 text-primary" />
+                  <CalendarClock className="h-6 w-6 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">
-                    Educational Content
-                  </h3>
+                  <h3 className="font-semibold text-lg mb-1">Schedule a Post</h3>
                   <p className="text-sm text-muted-foreground">
-                    Generate educational posts about portfolio strategies,
-                    factor investing, and diversification benefits.
-                  </p>
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              href="/e-poster/monthly-update"
-              className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary/10 p-3">
-                  <TrendingUp className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">Monthly Update</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Publish monthly performance updates with revenue data and
-                    portfolio strategy summaries.
-                  </p>
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              href="/e-poster/performance-highlight"
-              className="group rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary/10 p-3">
-                  <Award className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">
-                    Performance Highlight
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Generate promotional posts that compliment strong portfolio
-                    performance with strategy highlights and key stats.
+                    Set up a recurring schedule to automatically generate and
+                    publish posts at a chosen time and frequency.
                   </p>
                 </div>
               </div>
