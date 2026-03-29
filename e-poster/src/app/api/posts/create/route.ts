@@ -81,6 +81,14 @@ export async function POST(request: NextRequest) {
 
     const responseText = await response.text();
 
+    // #region agent log
+    if (response.ok) {
+      console.log(`[POST /api/posts/create] SUCCESS portfolio="${portfolioUsername}" status=${response.status}`);
+    } else {
+      console.error(`[POST /api/posts/create] REJECTED portfolio="${portfolioUsername}" status=${response.status} body="${responseText.substring(0, 500)}"`);
+    }
+    // #endregion
+
     if (!response.ok) {
       return NextResponse.json(
         {

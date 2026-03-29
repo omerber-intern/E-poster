@@ -18,6 +18,7 @@ import { getNewsExamples } from '../config/example-posts';
 import { getEducationalExamples } from '../config/educational-examples';
 import { getMonthlyUpdateExamples } from '../config/monthly-update-examples';
 import { getPerformanceHighlightExamples } from '../config/performance-highlight-examples';
+import { UNIVERSAL_GUARDRAILS } from '../config/post-guardrails';
 
 const MODEL = 'claude-sonnet-4-6';
 const HAIKU_MODEL = 'claude-haiku-4-5';
@@ -735,7 +736,59 @@ Write the performance highlight post now:`;
 }
 
 // ---------------------------------------------------------------------------
-// 7. Classify Content-Based Disclaimers (AI-powered)
+// 7. Edit Post Content with AI
+// ---------------------------------------------------------------------------
+
+export interface EditPostResult {
+  content: string;
+}
+
+/**
+ * Uses Claude Sonnet to apply free-form editing instructions to an existing post.
+ * Preserves structure and formatting rules; returns only the edited post text.
+ */
+export async function editPostContent(
+  currentContent: string,
+  instructions: string,
+): Promise<EditPostResult> {
+  const client = getClient();
+
+  const systemPrompt = `You are a professional financial content editor for the eToro social trading platform.
+You will receive an existing post and a set of editing instructions from the user.
+Your job is to apply those instructions to the post and return the revised version.
+
+${UNIVERSAL_GUARDRAILS}
+
+Additional editing rules:
+- Apply ONLY the changes the user requests — do not rewrite sections that were not mentioned.
+- Preserve all $TICKER references, @portfolio mentions, emoji usage, and the overall post structure unless the user explicitly asks you to change them.
+- Do NOT add disclaimers or remove existing ones.
+- Do NOT add commentary, explanations, or notes — return only the edited post text.`;
+
+  const userPrompt = `CURRENT POST:
+${currentContent}
+
+EDITING INSTRUCTIONS:
+${instructions}
+
+Return the edited post now:`;
+
+  const response = await client.messages.create({
+    model: MODEL,
+    max_tokens: 1024,
+    temperature: 0.5,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userPrompt }],
+  });
+
+  const content =
+    response.content[0].type === 'text' ? response.content[0].text : '';
+
+  return { content: content.trim() };
+}
+
+// ---------------------------------------------------------------------------
+// 8. Classify Content-Based Disclaimers (AI-powered)
 // ---------------------------------------------------------------------------
 
 export interface ContentDisclaimerMatch {
