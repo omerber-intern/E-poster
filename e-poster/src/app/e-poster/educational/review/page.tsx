@@ -15,6 +15,7 @@ import {
   ImagePlus,
   X,
   Eye,
+  Wand2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -111,6 +112,13 @@ function deserializeDisclaimers(
   return result;
 }
 
+interface EditDialog {
+  open: boolean;
+  username: string;
+  instructions: string;
+  loading: boolean;
+}
+
 export default function EducationalReviewPage() {
   const router = useRouter();
   const [drafts, setDrafts] = useState<EduDraft[]>([]);
@@ -119,6 +127,13 @@ export default function EducationalReviewPage() {
   >({});
   const [expandedManual, setExpandedManual] = useState<Set<string>>(new Set());
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [globalImageUploading, setGlobalImageUploading] = useState(false);
+  const [editDialog, setEditDialog] = useState<EditDialog>({
+    open: false,
+    username: '',
+    instructions: '',
+    loading: false,
+  });
   const initialized = useRef(false);
 
   const saveCache = useCallback(
@@ -418,6 +433,83 @@ export default function EducationalReviewPage() {
     router.push('/e-poster/educational/mockup');
   };
 
+  const handleDetectAll = async () => {
+    const targets = drafts.filter(
+      (d) => d.status !== 'posted' && d.content.trim(),
+    );
+    await Promise.all(
+      targets.map((d) => detectDisclaimers(d.portfolioUsername, d.content)),
+    );
+  };
+
+  const handleGlobalImageUpload = async (file: File) => {
+    setGlobalImageUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/uploads', { method: 'POST', body: formData });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Upload failed');
+      }
+      const data = await res.json();
+      setDrafts((prev) => {
+        const updated = prev.map((d) =>
+          d.status !== 'posted'
+            ? { ...d, image: { url: data.url, width: data.width, height: data.height } }
+            : d,
+        );
+        saveCache(updated, disclaimers);
+        return updated;
+      });
+      toast.success('Image attached to all portfolios');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setGlobalImageUploading(false);
+    }
+  };
+
+  const handleEditWithAI = async () => {
+    const { username, instructions } = editDialog;
+    if (!instructions.trim()) return;
+    const draft = drafts.find((d) => d.portfolioUsername === username);
+    if (!draft) return;
+
+    setEditDialog((prev) => ({ ...prev, loading: true }));
+    try {
+      const res = await fetch('/api/posts/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: draft.content, instructions }),
+      });
+      if (!res.ok) throw new Error('AI edit failed');
+      const data = await res.json();
+      setDrafts((prev) => {
+        const updated = prev.map((d) =>
+          d.portfolioUsername === username ? { ...d, content: data.content } : d,
+        );
+        saveCache(updated, disclaimers);
+        return updated;
+      });
+      setDisclaimers((prev) => ({
+        ...prev,
+        [username]: {
+          detected: [],
+          allAvailable: prev[username]?.allAvailable || [],
+          selected: new Set(),
+          loading: false,
+          loaded: false,
+        },
+      }));
+      toast.success('Content updated by AI');
+      setEditDialog({ open: false, username: '', instructions: '', loading: false });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'AI edit failed');
+      setEditDialog((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
   const getPostContentWithDisclaimers = (draft: EduDraft): string => {
     const disc = disclaimers[draft.portfolioUsername];
     if (!disc || disc.selected.size === 0) return draft.content;
@@ -525,13 +617,129 @@ export default function EducationalReviewPage() {
 
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Educational Content Review</CardTitle>
-              <CardDescription>
-                Review and edit AI-generated educational posts, detect
-                disclaimers, then publish.
-              </CardDescription>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <CardTitle>Educational Content Review</CardTitle>
+                  <CardDescription className="mt-1">
+                    Review and edit AI-generated educational posts, detect
+                    disclaimers, then publish.
+                  </CardDescription>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0"
+                  onClick={handleDetectAll}
+                  disabled={
+                    drafts.every((d) => d.status === 'posted' || !d.content.trim()) ||
+                    Object.values(disclaimers).some((d) => d.loading)
+                  }
+                >
+                  {Object.values(disclaimers).some((d) => d.loading) ? (
+                    <>
+                      <Loader2 className="h-3 w-3 mr-2 animate-spin" />
+                      Detecting...
+                    </>
+                  ) : (
+                    <>
+                      <Shield className="h-3 w-3 mr-2" />
+                      Detect All Disclaimers
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              <div className="mt-4">
+                <label
+                  className={`flex items-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                    globalImageUploading
+                      ? 'border-muted bg-muted/20 cursor-wait'
+                      : 'border-border hover:border-primary hover:bg-primary/5'
+                  }`}
+                >
+                  {globalImageUploading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">Uploading to all portfolios...</span>
+                    </>
+                  ) : (
+                    <>
+                      <ImagePlus className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        Attach image to all portfolios (optional)
+                      </span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    className="hidden"
+                    disabled={globalImageUploading}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleGlobalImageUpload(file);
+                      e.target.value = '';
+                    }}
+                  />
+                </label>
+              </div>
             </CardHeader>
           </Card>
+
+          {/* Edit with AI dialog */}
+          <Dialog
+            open={editDialog.open}
+            onOpenChange={(open) =>
+              !editDialog.loading && setEditDialog((prev) => ({ ...prev, open }))
+            }
+          >
+            <DialogContent className="sm:max-w-lg">
+              <DialogTitle>Edit with AI — @{editDialog.username}</DialogTitle>
+              <div className="mt-2 space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Describe what you want to change. The AI will apply your
+                  instructions and return the updated post.
+                </p>
+                <Textarea
+                  placeholder={`e.g. "Make the explanation simpler"\n"Add more detail about the holdings"\n"Shorten the post"`}
+                  rows={4}
+                  value={editDialog.instructions}
+                  onChange={(e) =>
+                    setEditDialog((prev) => ({ ...prev, instructions: e.target.value }))
+                  }
+                  disabled={editDialog.loading}
+                  className="text-sm"
+                />
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      setEditDialog({ open: false, username: '', instructions: '', loading: false })
+                    }
+                    disabled={editDialog.loading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleEditWithAI}
+                    disabled={editDialog.loading || !editDialog.instructions.trim()}
+                  >
+                    {editDialog.loading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Applying...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="h-4 w-4 mr-2" />
+                        Apply AI Edits
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
 
           <div className="space-y-6">
             {drafts.map((draft) => {
@@ -568,7 +776,28 @@ export default function EducationalReviewPage() {
                     ) : (
                       <>
                         <div className="mb-4">
-                          <Label>Content</Label>
+                          <div className="flex items-center justify-between mb-1">
+                            <Label>Content</Label>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                setEditDialog({
+                                  open: true,
+                                  username: draft.portfolioUsername,
+                                  instructions: '',
+                                  loading: false,
+                                })
+                              }
+                              disabled={
+                                draft.status === 'posted' ||
+                                !draft.content.trim()
+                              }
+                            >
+                              <Wand2 className="h-3 w-3 mr-1" />
+                              Edit with AI
+                            </Button>
+                          </div>
                           <Textarea
                             value={draft.content}
                             onChange={(e) =>
