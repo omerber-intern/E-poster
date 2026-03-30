@@ -1,6 +1,6 @@
 'use client';
 
-import { PenSquare, RefreshCw, History, Settings } from 'lucide-react';
+import { PenSquare, RefreshCw, CalendarDays, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -88,19 +88,19 @@ export default function DashboardPage() {
             </Link>
 
             <Link
-              href="/e-poster/history"
+              href="/e-poster/posts"
               className="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start gap-4">
                 <div className="rounded-lg bg-muted p-3">
-                  <History className="h-6 w-6 text-muted-foreground" />
+                  <CalendarDays className="h-6 w-6 text-muted-foreground" />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-lg mb-1">
-                    Post History
+                    Scheduled Posts
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    View previously published posts.
+                    Access post history and your scheduled posts calendar.
                   </p>
                 </div>
               </div>

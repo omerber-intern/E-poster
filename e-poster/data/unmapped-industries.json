@@ -1852,5 +1852,143 @@
       "majorCategory": "Materials, Real Assets & Commodities",
       "weight": 100
     }
+  ],
+  "18MN.DE": [
+    {
+      "topic": "Swiss Equity Index Tracking",
+      "subcategory": "Diversified Index Funds",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "100H.L": [
+    {
+      "topic": "UK Equity Index Tracking",
+      "subcategory": "Diversified Index Funds",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "ROP.ZU": [
+    {
+      "topic": "Pharmaceuticals & Biotechnology",
+      "subcategory": "Pharmaceutical Manufacturing",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 70
+    },
+    {
+      "topic": "Diagnostics & Medical Devices",
+      "subcategory": "In Vitro Diagnostics",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 30
+    }
+  ],
+  "SDF.DE": [
+    {
+      "topic": "Fertilizers & Chemicals",
+      "subcategory": "Potash & Mineral Salts",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "CTA": [
+    {
+      "topic": "Managed Futures & Alternative Strategies",
+      "subcategory": "Systematic Trading Strategies",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "BATS.L": [
+    {
+      "topic": "Tobacco Products",
+      "subcategory": "Cigarettes & Nicotine Products",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "FIS.RTH": [
+    {
+      "topic": "Financial Services Technology",
+      "subcategory": "Payment Processing & Settlement",
+      "majorCategory": "Tech & Data",
+      "weight": 50
+    },
+    {
+      "topic": "Financial Software & Services",
+      "subcategory": "Banking & Capital Markets Software",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 50
+    }
+  ],
+  "KIE.L": [
+    {
+      "topic": "Construction & Engineering Services",
+      "subcategory": "General Contractors",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "SBRY.L": [
+    {
+      "topic": "Grocery & Supermarket Retail",
+      "subcategory": "Food & Beverage Retail",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "GLE.PA": [
+    {
+      "topic": "Universal Banking",
+      "subcategory": "Commercial & Investment Banking",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 60
+    },
+    {
+      "topic": "Asset Management",
+      "subcategory": "Wealth & Investment Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 25
+    },
+    {
+      "topic": "Insurance Services",
+      "subcategory": "Insurance & Risk Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 15
+    }
+  ],
+  "RKT.L": [
+    {
+      "topic": "Consumer Health & Hygiene Products",
+      "subcategory": "Health & Personal Care",
+      "majorCategory": "Health & Life Sciences",
+      "weight": 70
+    },
+    {
+      "topic": "Household & Cleaning Products",
+      "subcategory": "Consumer Goods Manufacturing",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 30
+    }
+  ],
+  "ORK.OL": [
+    {
+      "topic": "Food & Beverage Manufacturing",
+      "subcategory": "Consumer Goods Manufacturing",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 50
+    },
+    {
+      "topic": "Specialty Chemicals & Materials",
+      "subcategory": "Chemical Manufacturing",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 30
+    },
+    {
+      "topic": "Branded Consumer Products",
+      "subcategory": "Consumer Goods Manufacturing",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 20
+    }
   ]
 }

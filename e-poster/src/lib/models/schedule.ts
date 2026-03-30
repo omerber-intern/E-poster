@@ -64,6 +64,7 @@ export interface PendingPost {
   reviewedAt?: string;
   postedAt?: string;
   error?: string;
+  imageUrl?: string;
 }
 
 export interface SchedulesData {

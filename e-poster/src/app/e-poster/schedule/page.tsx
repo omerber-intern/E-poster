@@ -235,6 +235,10 @@ export default function SchedulePage() {
 
   const { start: rangeStart, end: rangeEnd } = getDateRange();
   const calendarDays = eachDayOfInterval({ start: rangeStart, end: rangeEnd });
+
+  const displayedSchedules = selectedPortfolio
+    ? schedules.filter((s) => s.portfolioName === selectedPortfolio)
+    : schedules;
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const headerLabel =
@@ -466,17 +470,17 @@ export default function SchedulePage() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base">
-                    Active Schedules ({schedules.filter((s) => s.isActive).length})
+                    Active Schedules ({displayedSchedules.filter((s) => s.isActive).length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {schedules.length === 0 ? (
+                  {displayedSchedules.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
                       No schedules yet. Create one to get started.
                     </p>
                   ) : (
                     <div className="space-y-3">
-                      {schedules.map((schedule) => (
+                      {displayedSchedules.map((schedule) => (
                         <div
                           key={schedule.id}
                           className={`p-3 rounded-lg border text-sm ${

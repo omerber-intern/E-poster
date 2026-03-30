@@ -12,15 +12,18 @@ import {
   Clock,
   AlertCircle,
   Sparkles,
+  Search,
+  ImagePlus,
+  Wand2,
+  Images,
+  Trash2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import {
@@ -70,13 +73,29 @@ export default function PendingPostsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<FilterStatus>('pending_approval');
   const [portfolioFilter, setPortfolioFilter] = useState('');
+  const [scheduleNameFilter, setScheduleNameFilter] = useState('');
   const [portfolioNames, setPortfolioNames] = useState<string[]>([]);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
+
+  // Per-post image upload state: postId -> imageUrl
+  const [postImages, setPostImages] = useState<Record<string, string>>({});
+  const [uploadingIds, setUploadingIds] = useState<Set<string>>(new Set());
+  const photoInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
+  // Bulk image upload
+  const [isBulkUploading, setIsBulkUploading] = useState(false);
+  const bulkPhotoInputRef = useRef<HTMLInputElement | null>(null);
 
   // Edit dialog
   const [editingPost, setEditingPost] = useState<PendingPost | null>(null);
   const [editContent, setEditContent] = useState('');
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  // AI edit dialog
+  const [aiEditPost, setAiEditPost] = useState<PendingPost | null>(null);
+  const [aiInstructions, setAiInstructions] = useState('');
+  const [aiEditDialogOpen, setAiEditDialogOpen] = useState(false);
+  const [isAiEditing, setIsAiEditing] = useState(false);
 
   // Preview dialog
   const [previewPost, setPreviewPost] = useState<PendingPost | null>(null);
@@ -88,7 +107,6 @@ export default function PendingPostsPage() {
     if (!silent) setIsLoading(true);
     try {
       const params = new URLSearchParams();
-      // When filtering pending_approval, also fetch generating posts (shown at top)
       if (statusFilter !== 'all' && statusFilter !== 'pending_approval') {
         params.set('status', statusFilter);
       }
@@ -98,13 +116,11 @@ export default function PendingPostsPage() {
       const data = await res.json();
       const all: PendingPost[] = data.posts || [];
 
-      // When in pending_approval view, show generating + pending_approval
       const visible =
         statusFilter === 'pending_approval'
           ? all.filter((p) => p.status === 'generating' || p.status === 'pending_approval')
           : all;
 
-      // Sort: generating first, then by date desc
       visible.sort((a, b) => {
         if (a.status === 'generating' && b.status !== 'generating') return -1;
         if (b.status === 'generating' && a.status !== 'generating') return 1;
@@ -113,11 +129,19 @@ export default function PendingPostsPage() {
 
       setPosts(visible);
 
+      // Sync imageUrl from server into local state
+      setPostImages((prev) => {
+        const next = { ...prev };
+        for (const p of visible) {
+          if (p.imageUrl && !next[p.id]) next[p.id] = p.imageUrl;
+        }
+        return next;
+      });
+
       const names = new Set<string>();
       for (const p of all) names.add(p.portfolioName);
       setPortfolioNames(Array.from(names).sort());
 
-      // Start/stop polling based on whether any posts are generating
       const hasGenerating = visible.some((p) => p.status === 'generating');
       if (hasGenerating && !pollingRef.current) {
         pollingRef.current = setInterval(() => loadPosts(true), 5000);
@@ -142,6 +166,81 @@ export default function PendingPostsPage() {
     };
   }, [loadPosts]);
 
+  // Upload a photo file and return the resulting URL
+  const uploadPhoto = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch('/api/uploads', { method: 'POST', body: formData });
+    if (!res.ok) throw new Error('Upload failed');
+    const data = await res.json();
+    return data.url as string;
+  };
+
+  // Save imageUrl to a post on the server
+  const saveImageToPost = async (postId: string, imageUrl: string, currentContent: string) => {
+    await fetch('/api/pending-posts', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: postId, action: 'edit', content: currentContent, imageUrl }),
+    });
+  };
+
+  const handlePhotoUpload = async (postId: string, file: File, currentContent: string) => {
+    setUploadingIds((prev) => new Set(prev).add(postId));
+    try {
+      const url = await uploadPhoto(file);
+      setPostImages((prev) => ({ ...prev, [postId]: url }));
+      await saveImageToPost(postId, url, currentContent);
+      toast.success('Photo attached');
+    } catch {
+      toast.error('Failed to upload photo');
+    } finally {
+      setUploadingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(postId);
+        return next;
+      });
+    }
+  };
+
+  const handleRemovePhoto = async (postId: string, currentContent: string) => {
+    setPostImages((prev) => {
+      const next = { ...prev };
+      delete next[postId];
+      return next;
+    });
+    await fetch('/api/pending-posts', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: postId, action: 'edit', content: currentContent, imageUrl: '' }),
+    });
+  };
+
+  const handleBulkPhotoUpload = async (file: File) => {
+    setIsBulkUploading(true);
+    try {
+      const url = await uploadPhoto(file);
+      const targets = displayedPosts.filter((p) => p.status === 'pending_approval');
+      if (targets.length === 0) {
+        toast('No pending posts in current filter to attach to.');
+        return;
+      }
+      await Promise.all(
+        targets.map((p) => saveImageToPost(p.id, url, p.content)),
+      );
+      setPostImages((prev) => {
+        const next = { ...prev };
+        for (const p of targets) next[p.id] = url;
+        return next;
+      });
+      toast.success(`Photo attached to ${targets.length} post(s)`);
+    } catch {
+      toast.error('Failed to upload photo');
+    } finally {
+      setIsBulkUploading(false);
+    }
+  };
+
   const handleAction = async (
     postId: string,
     action: 'approve' | 'reject',
@@ -149,10 +248,14 @@ export default function PendingPostsPage() {
   ) => {
     setProcessingIds((prev) => new Set(prev).add(postId));
     try {
+      const body: Record<string, unknown> = { id: postId, action, content };
+      if (action === 'approve' && postImages[postId]) {
+        body.imageUrl = postImages[postId];
+      }
       const res = await fetch('/api/pending-posts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: postId, action, content }),
+        body: JSON.stringify(body),
       });
 
       if (!res.ok) {
@@ -160,11 +263,7 @@ export default function PendingPostsPage() {
         throw new Error(error.error || `Failed to ${action}`);
       }
 
-      toast.success(
-        action === 'approve'
-          ? 'Post approved and published!'
-          : 'Post rejected',
-      );
+      toast.success(action === 'approve' ? 'Post approved and published!' : 'Post rejected');
       loadPosts();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : `Failed to ${action}`);
@@ -185,7 +284,6 @@ export default function PendingPostsPage() {
 
   const handleSaveEdit = async () => {
     if (!editingPost) return;
-
     setProcessingIds((prev) => new Set(prev).add(editingPost.id));
     try {
       const res = await fetch('/api/pending-posts', {
@@ -195,11 +293,11 @@ export default function PendingPostsPage() {
           id: editingPost.id,
           action: 'edit',
           content: editContent,
+          imageUrl: postImages[editingPost.id],
         }),
       });
 
       if (!res.ok) throw new Error('Failed to save');
-
       toast.success('Content updated');
       setEditDialogOpen(false);
       loadPosts();
@@ -214,16 +312,59 @@ export default function PendingPostsPage() {
     }
   };
 
+  const handleOpenAiEdit = (post: PendingPost) => {
+    setAiEditPost(post);
+    setAiInstructions('');
+    setAiEditDialogOpen(true);
+  };
+
+  const handleAiEdit = async () => {
+    if (!aiEditPost || !aiInstructions.trim()) return;
+    setIsAiEditing(true);
+    try {
+      const res = await fetch('/api/posts/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: aiEditPost.content, instructions: aiInstructions }),
+      });
+      if (!res.ok) throw new Error('AI edit failed');
+      const data = await res.json();
+
+      await fetch('/api/pending-posts', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: aiEditPost.id,
+          action: 'edit',
+          content: data.content,
+          imageUrl: postImages[aiEditPost.id],
+        }),
+      });
+
+      toast.success('Post updated with AI edits');
+      setAiEditDialogOpen(false);
+      loadPosts();
+    } catch {
+      toast.error('AI edit failed');
+    } finally {
+      setIsAiEditing(false);
+    }
+  };
+
   const handleApproveAll = async () => {
     const pending = posts.filter((p) => p.status === 'pending_approval');
     if (pending.length === 0) return;
-
     if (!confirm(`Approve and publish ${pending.length} post(s)?`)) return;
-
     for (const post of pending) {
       await handleAction(post.id, 'approve');
     }
   };
+
+  const displayedPosts = scheduleNameFilter.trim()
+    ? posts.filter((p) =>
+        p.scheduleName.toLowerCase().includes(scheduleNameFilter.trim().toLowerCase()),
+      )
+    : posts;
 
   const pendingCount = posts.filter((p) => p.status === 'pending_approval').length;
 
@@ -256,8 +397,8 @@ export default function PendingPostsPage() {
           {/* Filters */}
           <Card className="mb-6">
             <CardContent className="py-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-1">
+              <div className="flex items-end gap-4 flex-wrap">
+                <div className="flex-1 min-w-[150px]">
                   <Label className="text-xs mb-1 block">Status</Label>
                   <select
                     value={statusFilter}
@@ -273,7 +414,7 @@ export default function PendingPostsPage() {
                     <option value="failed">Failed</option>
                   </select>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-[150px]">
                   <Label className="text-xs mb-1 block">Portfolio</Label>
                   <select
                     value={portfolioFilter}
@@ -288,6 +429,46 @@ export default function PendingPostsPage() {
                     ))}
                   </select>
                 </div>
+                <div className="flex-1 min-w-[150px]">
+                  <Label className="text-xs mb-1 block">Schedule Name</Label>
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+                    <Input
+                      placeholder="Search by name..."
+                      value={scheduleNameFilter}
+                      onChange={(e) => setScheduleNameFilter(e.target.value)}
+                      className="h-9 pl-8 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="shrink-0">
+                  <Label className="text-xs mb-1 block">Attach to all filtered</Label>
+                  <input
+                    ref={bulkPhotoInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleBulkPhotoUpload(file);
+                      e.target.value = '';
+                    }}
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-9"
+                    onClick={() => bulkPhotoInputRef.current?.click()}
+                    disabled={isBulkUploading}
+                  >
+                    {isBulkUploading ? (
+                      <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
+                    ) : (
+                      <Images className="h-4 w-4 mr-1.5" />
+                    )}
+                    {isBulkUploading ? 'Uploading...' : 'Bulk Photo'}
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -297,21 +478,25 @@ export default function PendingPostsPage() {
             <div className="text-center py-12 text-muted-foreground">
               Loading pending posts...
             </div>
-          ) : posts.length === 0 ? (
+          ) : displayedPosts.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center text-muted-foreground">
-                {statusFilter === 'pending_approval'
+                {scheduleNameFilter.trim()
+                  ? `No posts match schedule name "${scheduleNameFilter.trim()}".`
+                  : statusFilter === 'pending_approval'
                   ? 'No posts waiting for approval.'
                   : 'No posts match your filter.'}
               </CardContent>
             </Card>
           ) : (
             <div className="space-y-4">
-              {posts.map((post) => {
+              {displayedPosts.map((post) => {
                 const statusInfo = STATUS_CONFIG[post.status];
                 const isProcessing = processingIds.has(post.id);
                 const isPending = post.status === 'pending_approval';
                 const isGenerating = post.status === 'generating';
+                const isUploading = uploadingIds.has(post.id);
+                const attachedImage = postImages[post.id];
 
                 return (
                   <Card
@@ -335,14 +520,26 @@ export default function PendingPostsPage() {
                           <span
                             className={`text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${statusInfo.color}`}
                           >
-                            {isGenerating && (
-                              <Loader2 className="h-3 w-3 animate-spin" />
-                            )}
+                            {isGenerating && <Loader2 className="h-3 w-3 animate-spin" />}
                             {statusInfo.label}
                           </span>
                         </div>
-                        <div className="text-xs text-muted-foreground whitespace-nowrap">
-                          {format(new Date(post.generatedAt), 'MMM d, HH:mm')}
+                        <div className="flex items-center gap-2 shrink-0">
+                          {isPending && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-7 px-2 text-xs"
+                              onClick={() => handleOpenAiEdit(post)}
+                              disabled={isProcessing}
+                            >
+                              <Wand2 className="h-3.5 w-3.5 mr-1" />
+                              Edit with AI
+                            </Button>
+                          )}
+                          <div className="text-xs text-muted-foreground whitespace-nowrap">
+                            {format(new Date(post.generatedAt), 'MMM d, HH:mm')}
+                          </div>
                         </div>
                       </div>
 
@@ -362,9 +559,29 @@ export default function PendingPostsPage() {
                         </div>
                       ) : (
                         <>
-                          <p className="text-sm whitespace-pre-wrap line-clamp-6 mb-4 bg-muted/30 rounded-lg p-3">
+                          <p className="text-sm whitespace-pre-wrap line-clamp-6 mb-3 bg-muted/30 rounded-lg p-3">
                             {post.content}
                           </p>
+
+                          {/* Attached photo */}
+                          {attachedImage ? (
+                            <div className="relative inline-block mb-3">
+                              <img
+                                src={attachedImage}
+                                alt="Attached"
+                                className="h-24 w-auto rounded-lg border object-cover"
+                              />
+                              {isPending && (
+                                <button
+                                  className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:opacity-90"
+                                  onClick={() => handleRemovePhoto(post.id, post.content)}
+                                  title="Remove photo"
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
+                              )}
+                            </div>
+                          ) : null}
 
                           {post.error && (
                             <div className="text-sm text-red-600 mb-3 flex items-start gap-2">
@@ -373,7 +590,7 @@ export default function PendingPostsPage() {
                             </div>
                           )}
 
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Button
                               variant="ghost"
                               size="sm"
@@ -385,6 +602,7 @@ export default function PendingPostsPage() {
                               <Eye className="h-4 w-4 mr-1" />
                               Preview
                             </Button>
+
                             {isPending && (
                               <>
                                 <Button
@@ -396,6 +614,45 @@ export default function PendingPostsPage() {
                                   <Edit3 className="h-4 w-4 mr-1" />
                                   Edit
                                 </Button>
+
+                                {/* Per-post photo upload */}
+                                <input
+                                  ref={(el) => { photoInputRefs.current[post.id] = el; }}
+                                  type="file"
+                                  accept="image/jpeg,image/png,image/gif,image/webp"
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) handlePhotoUpload(post.id, file, post.content);
+                                    e.target.value = '';
+                                  }}
+                                />
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => photoInputRefs.current[post.id]?.click()}
+                                  disabled={isProcessing || isUploading}
+                                >
+                                  {isUploading ? (
+                                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                                  ) : (
+                                    <ImagePlus className="h-4 w-4 mr-1" />
+                                  )}
+                                  {isUploading ? 'Uploading...' : attachedImage ? 'Change Photo' : 'Add Photo'}
+                                </Button>
+
+                                {attachedImage && (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleRemovePhoto(post.id, post.content)}
+                                    disabled={isProcessing}
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-1 text-muted-foreground" />
+                                    Remove Photo
+                                  </Button>
+                                )}
+
                                 <div className="flex-1" />
                                 <Button
                                   variant="outline"
@@ -444,7 +701,8 @@ export default function PendingPostsPage() {
               <DialogHeader>
                 <DialogTitle>Edit Post Content</DialogTitle>
                 <DialogDescription>
-                  {editingPost?.portfolioName} - {POST_TYPE_LABELS[editingPost?.postType || 'news']}
+                  {editingPost?.portfolioName} -{' '}
+                  {POST_TYPE_LABELS[editingPost?.postType || 'news']}
                 </DialogDescription>
               </DialogHeader>
               <Textarea
@@ -454,13 +712,73 @@ export default function PendingPostsPage() {
                 className="font-mono text-sm"
               />
               <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setEditDialogOpen(false)}
-                >
+                <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
                   Cancel
                 </Button>
                 <Button onClick={handleSaveEdit}>Save Changes</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* AI Edit Dialog */}
+          <Dialog open={aiEditDialogOpen} onOpenChange={setAiEditDialogOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Wand2 className="h-5 w-5" />
+                  Edit with AI
+                </DialogTitle>
+                <DialogDescription>
+                  {aiEditPost?.portfolioName} -{' '}
+                  {POST_TYPE_LABELS[aiEditPost?.postType || 'news']}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4">
+                <div>
+                  <Label className="text-sm font-medium mb-1.5 block">Current content</Label>
+                  <div className="text-sm bg-muted/30 rounded-lg p-3 whitespace-pre-wrap max-h-40 overflow-y-auto">
+                    {aiEditPost?.content}
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="ai-instructions" className="text-sm font-medium mb-1.5 block">
+                    Instructions for AI
+                  </Label>
+                  <Textarea
+                    id="ai-instructions"
+                    placeholder="e.g. Make it shorter, use a more formal tone, add a call-to-action..."
+                    value={aiInstructions}
+                    onChange={(e) => setAiInstructions(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setAiEditDialogOpen(false)}
+                  disabled={isAiEditing}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleAiEdit}
+                  disabled={isAiEditing || !aiInstructions.trim()}
+                >
+                  {isAiEditing ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      Editing…
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 className="h-4 w-4 mr-2" />
+                      Apply AI Edit
+                    </>
+                  )}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -474,11 +792,18 @@ export default function PendingPostsPage() {
                   {previewPost?.portfolioName} (@{previewPost?.portfolioUsername})
                 </DialogDescription>
               </DialogHeader>
-              <div className="bg-gray-50 rounded-xl p-6 max-h-[600px] overflow-y-auto">
+              <div className="bg-gray-50 rounded-xl p-6 max-h-[600px] overflow-y-auto space-y-4">
                 <EtoroPostMockup
                   username={previewPost?.portfolioUsername ?? ''}
                   content={previewPost?.content ?? ''}
                 />
+                {previewPost && postImages[previewPost.id] && (
+                  <img
+                    src={postImages[previewPost.id]}
+                    alt="Attached photo"
+                    className="w-full rounded-lg border object-cover max-h-64"
+                  />
+                )}
               </div>
               {previewPost?.status === 'pending_approval' && (
                 <DialogFooter>

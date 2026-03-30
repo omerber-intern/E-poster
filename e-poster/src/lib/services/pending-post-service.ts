@@ -95,7 +95,7 @@ export function getPendingCount(): number {
 
 export function updatePendingPost(
   id: string,
-  updates: Partial<Pick<PendingPost, 'content' | 'status' | 'error'>>,
+  updates: Partial<Pick<PendingPost, 'content' | 'status' | 'error' | 'imageUrl'>>,
 ): PendingPost | null {
   const data = readPending();
   const post = data.posts.find((p) => p.id === id);
@@ -103,6 +103,7 @@ export function updatePendingPost(
 
   if (updates.content !== undefined) post.content = updates.content;
   if (updates.error !== undefined) post.error = updates.error;
+  if (updates.imageUrl !== undefined) post.imageUrl = updates.imageUrl;
   if (updates.status !== undefined) {
     post.status = updates.status;
     if (updates.status === 'approved' || updates.status === 'rejected') {

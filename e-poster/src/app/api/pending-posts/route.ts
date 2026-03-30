@@ -44,10 +44,11 @@ export async function GET(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, action, content } = body as {
+    const { id, action, content, imageUrl } = body as {
       id: string;
       action: 'approve' | 'reject' | 'edit';
       content?: string;
+      imageUrl?: string;
     };
 
     if (!id || !action) {
@@ -72,7 +73,7 @@ export async function PATCH(request: NextRequest) {
           { status: 400 },
         );
       }
-      const updated = updatePendingPost(id, { content });
+      const updated = updatePendingPost(id, { content, imageUrl });
       return NextResponse.json({ post: updated });
     }
 
@@ -103,10 +104,21 @@ export async function PATCH(request: NextRequest) {
       }
 
       try {
-        const payload = {
+        const finalImageUrl = imageUrl ?? post.imageUrl;
+        const payload: Record<string, unknown> = {
           owner: parseInt(creds.gcid, 10),
           message: finalContent,
         };
+
+        if (finalImageUrl) {
+          payload.attachments = [
+            {
+              url: finalImageUrl,
+              mediaType: 'Image',
+              media: { image: { url: finalImageUrl } },
+            },
+          ];
+        }
 
         const url = `${ETORO_API_BASE_URL}${API_ENDPOINTS.FEEDS_POST}`;
         const response = await fetch(url, {
@@ -138,7 +150,11 @@ export async function PATCH(request: NextRequest) {
           etoroPostId: data.id,
         });
 
-        updatePendingPost(id, { status: 'posted', content: finalContent });
+        updatePendingPost(id, {
+          status: 'posted',
+          content: finalContent,
+          ...(imageUrl !== undefined ? { imageUrl } : {}),
+        });
 
         return NextResponse.json({
           success: true,
