@@ -1,0 +1,54 @@
+# Version control
+.git
+.gitignore
+
+# Docs / local artifacts
+README.md
+*.log
+.DS_Store
+
+# Node.js
+node_modules
+.next
+dist
+
+# Python
+__pycache__
+*.pyc
+.venv
+venv
+
+# Env and secrets
+.env
+.env.local
+.env*.local
+*.env
+
+# Local database
+dev.db
+dev.db-journal
+*.db
+*.db-journal
+
+# Secrets fallback (never include in image)
+data/app-secrets.json
+e-poster/data/app-secrets.json
+
+# Image templates (large binary files, not needed at runtime)
+e-poster/data/image-template
+
+# Backup / copy folders
+*- Copy
+*- Copy/
+* - Copy
+* - Copy/
+
+# Cursor / IDE
+.cursor
+
+# Specify
+.specify
+
+# Install scripts
+Install.bat
+Install.ps1
