@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       : undefined;
 
     const portfolios = await getSmartPortfolios(usernames);
-    const withCredentials = await getPortfoliosWithCredentials();
+    const withCredentials = getPortfoliosWithCredentials();
 
     return NextResponse.json({
       portfolios,

@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const withCredentials = await getPortfoliosWithCredentials();
+    const withCredentials = getPortfoliosWithCredentials();
     const news = { headline, body, url };
 
     // -----------------------------------------------------------------------

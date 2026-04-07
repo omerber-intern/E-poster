@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { getAppSecret, setAppSecret, deleteAppSecret } from '../keyvault';
 import type {
   PortfolioConfigData,
   PortfolioConfigEntry,
@@ -10,8 +9,6 @@ import type {
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const CONFIG_FILE = path.join(DATA_DIR, 'portfolio-config.json');
-
-const CRED_KEY_PREFIX = 'portfolio-creds-';
 
 const DEFAULT_PORTFOLIOS = [
   'Short-Tech',
@@ -39,10 +36,6 @@ function parseEnvCredentials(): Record<string, PortfolioCredentials> {
   } catch {
     return {};
   }
-}
-
-function credKey(username: string): string {
-  return `${CRED_KEY_PREFIX}${username}`;
 }
 
 function seedConfigFromDefaults(): PortfolioConfigData {
@@ -90,33 +83,17 @@ export function getPortfolioUsernames(): string[] {
   return config.portfolios.map((p) => p.username);
 }
 
-export async function getCredentials(username: string): Promise<PortfolioCredentials | null> {
-  const stored = await getAppSecret(credKey(username));
-  if (stored) {
-    try {
-      return JSON.parse(stored) as PortfolioCredentials;
-    } catch { /* fall through */ }
-  }
-
+export function getCredentials(username: string): PortfolioCredentials | null {
   const envCreds = parseEnvCredentials();
   return envCreds[username] ?? null;
 }
 
-export async function getUsernamesWithCredentials(): Promise<string[]> {
+export function getUsernamesWithCredentials(): string[] {
   const config = readPortfolioConfig();
   const envCreds = parseEnvCredentials();
-  const results: string[] = [];
-
-  for (const p of config.portfolios) {
-    if (envCreds[p.username]) {
-      results.push(p.username);
-      continue;
-    }
-    const stored = await getAppSecret(credKey(p.username));
-    if (stored) results.push(p.username);
-  }
-
-  return results;
+  return config.portfolios
+    .filter((p) => !!envCreds[p.username])
+    .map((p) => p.username);
 }
 
 function maskValue(value: string): string {
@@ -124,21 +101,13 @@ function maskValue(value: string): string {
   return value.slice(0, 5) + '***' + value.slice(-5);
 }
 
-export async function getMaskedConfigs(): Promise<MaskedPortfolioConfigEntry[]> {
+export function getMaskedConfigs(): MaskedPortfolioConfigEntry[] {
   const config = readPortfolioConfig();
   const envCreds = parseEnvCredentials();
-  const results: MaskedPortfolioConfigEntry[] = [];
 
-  for (const p of config.portfolios) {
-    let creds: PortfolioCredentials | null = null;
-
-    const stored = await getAppSecret(credKey(p.username));
-    if (stored) {
-      try { creds = JSON.parse(stored); } catch { /* ignore */ }
-    }
-    if (!creds) creds = envCreds[p.username] ?? null;
-
-    results.push({
+  return config.portfolios.map((p) => {
+    const creds = envCreds[p.username] ?? null;
+    return {
       username: p.username,
       hasCredentials: creds !== null,
       credentials: creds
@@ -148,15 +117,13 @@ export async function getMaskedConfigs(): Promise<MaskedPortfolioConfigEntry[]> 
             gcid: creds.gcid,
           }
         : null,
-    });
-  }
-
-  return results;
+    };
+  });
 }
 
-export async function addPortfolios(
+export function addPortfolios(
   entries: { username: string; credentials: PortfolioCredentials }[],
-): Promise<{ added: string[]; duplicates: string[] }> {
+): { added: string[]; duplicates: string[] } {
   const config = readPortfolioConfig();
   const existingSet = new Set(config.portfolios.map((p) => p.username));
   const added: string[] = [];
@@ -169,7 +136,6 @@ export async function addPortfolios(
     }
     config.portfolios.push({ username: entry.username, credentials: null });
     existingSet.add(entry.username);
-    await setAppSecret(credKey(entry.username), JSON.stringify(entry.credentials));
     added.push(entry.username);
   }
 
@@ -178,22 +144,20 @@ export async function addPortfolios(
   return { added, duplicates };
 }
 
-export async function updateCredentials(
+export function updateCredentials(
   username: string,
-  credentials: PortfolioCredentials,
-): Promise<boolean> {
+  _credentials: PortfolioCredentials,
+): boolean {
   const config = readPortfolioConfig();
   const entry = config.portfolios.find((p) => p.username === username);
   if (!entry) return false;
-
-  await setAppSecret(credKey(username), JSON.stringify(credentials));
 
   config.updatedAt = new Date().toISOString();
   writePortfolioConfig(config);
   return true;
 }
 
-export async function removePortfolio(username: string): Promise<boolean> {
+export function removePortfolio(username: string): boolean {
   const config = readPortfolioConfig();
   const idx = config.portfolios.findIndex((p) => p.username === username);
   if (idx === -1) return false;
@@ -201,7 +165,5 @@ export async function removePortfolio(username: string): Promise<boolean> {
   config.portfolios.splice(idx, 1);
   config.updatedAt = new Date().toISOString();
   writePortfolioConfig(config);
-
-  await deleteAppSecret(credKey(username));
   return true;
 }

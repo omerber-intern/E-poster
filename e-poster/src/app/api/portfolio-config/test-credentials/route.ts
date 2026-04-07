@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       let userKey = entry.userKey;
 
       if (!apiKey || !userKey) {
-        const stored = await getPortfolioCredentials(entry.username);
+        const stored = getPortfolioCredentials(entry.username);
         if (!stored) {
           results.push({
             username: entry.username,

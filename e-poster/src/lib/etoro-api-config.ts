@@ -2,11 +2,11 @@
  * eToro API Configuration
  *
  * - GET requests use Short-Tech's credentials (ETORO_API_KEY / ETORO_USER_KEY).
- * - POST requests (posting) use per-portfolio credentials from Key Vault.
+ * - POST requests (posting) use per-portfolio credentials from PORTFOLIO_CREDENTIALS env var.
  */
 
 import type { PortfolioCredentials } from './models/portfolio';
-import { getCredentials as getCredentialsFromConfig } from './services/portfolio-config-service';
+import { getCredentials } from './services/portfolio-config-service';
 
 export const ETORO_API_BASE_URL =
   process.env.ETORO_API_BASE_URL || 'https://public-api.etoro.com';
@@ -38,35 +38,22 @@ export function getBaseHeaders(): Record<string, string> {
 }
 
 /**
- * Look up per-portfolio credentials from Key Vault,
- * falling back to the PORTFOLIO_CREDENTIALS env var.
+ * Look up per-portfolio credentials from the PORTFOLIO_CREDENTIALS env var.
  */
-export async function getPortfolioCredentials(
+export function getPortfolioCredentials(
   username: string,
-): Promise<PortfolioCredentials | null> {
-  const configCreds = await getCredentialsFromConfig(username);
-  if (configCreds) return configCreds;
-
-  const raw = process.env.PORTFOLIO_CREDENTIALS;
-  if (!raw) return null;
-
-  try {
-    const map: Record<string, PortfolioCredentials> = JSON.parse(raw);
-    return map[username] ?? null;
-  } catch {
-    console.error('Failed to parse PORTFOLIO_CREDENTIALS env var');
-    return null;
-  }
+): PortfolioCredentials | null {
+  return getCredentials(username);
 }
 
 /**
  * Headers used for POST requests (per-portfolio credentials).
  * Returns null if the portfolio has no credentials.
  */
-export async function getPostHeaders(
+export function getPostHeaders(
   username: string,
-): Promise<Record<string, string> | null> {
-  const creds = await getPortfolioCredentials(username);
+): Record<string, string> | null {
+  const creds = getPortfolioCredentials(username);
   if (!creds) return null;
 
   return {

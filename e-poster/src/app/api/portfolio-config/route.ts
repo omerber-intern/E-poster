@@ -12,7 +12,7 @@ import type { PortfolioCredentials } from '@/lib/models/portfolio';
  */
 export async function GET() {
   try {
-    const configs = await getMaskedConfigs();
+    const configs = getMaskedConfigs();
     return NextResponse.json({ portfolios: configs });
   } catch (error) {
     console.error('Error reading portfolio config:', error);
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const result = await addPortfolios(
+    const result = addPortfolios(
       entries.map((e) => ({
         username: e.username.trim(),
         credentials: e.credentials,

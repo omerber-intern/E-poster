@@ -85,7 +85,7 @@ export async function PATCH(request: NextRequest) {
     if (action === 'approve') {
       const finalContent = content || post.content;
 
-      const creds = await getPortfolioCredentials(post.portfolioUsername);
+      const creds = getPortfolioCredentials(post.portfolioUsername);
       if (!creds) {
         updatePendingPost(id, { status: 'failed', error: 'No API credentials' });
         return NextResponse.json(
@@ -94,7 +94,7 @@ export async function PATCH(request: NextRequest) {
         );
       }
 
-      const headers = await getPostHeaders(post.portfolioUsername);
+      const headers = getPostHeaders(post.portfolioUsername);
       if (!headers) {
         updatePendingPost(id, { status: 'failed', error: 'Could not build headers' });
         return NextResponse.json(

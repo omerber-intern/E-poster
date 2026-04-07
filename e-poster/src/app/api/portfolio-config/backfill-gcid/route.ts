@@ -22,7 +22,7 @@ export async function POST() {
     const needsGcid: { username: string; creds: import('@/lib/models/portfolio').PortfolioCredentials }[] = [];
 
     for (const username of usernames) {
-      const creds = await getCredentials(username);
+      const creds = getCredentials(username);
       if (creds && !creds.gcid) {
         needsGcid.push({ username, creds });
       }
@@ -66,7 +66,7 @@ export async function POST() {
         }
 
         const gcid = String(user.gcid);
-        await updateCredentials(username, { ...creds, gcid });
+        updateCredentials(username, { ...creds, gcid });
         updated.push(username);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);

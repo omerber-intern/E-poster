@@ -20,14 +20,14 @@ export interface CreatePostOptions {
 export async function createDiscussionPost(
   options: CreatePostOptions,
 ): Promise<CreatePostResponse> {
-  const creds = await getPortfolioCredentials(options.portfolioUsername);
+  const creds = getPortfolioCredentials(options.portfolioUsername);
   if (!creds) {
     throw new Error(
       `No API credentials configured for ${options.portfolioUsername}`,
     );
   }
 
-  const headers = await getPostHeaders(options.portfolioUsername);
+  const headers = getPostHeaders(options.portfolioUsername);
   if (!headers) {
     throw new Error(
       `Could not build headers for ${options.portfolioUsername}`,
