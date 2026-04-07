@@ -1,125 +1,20 @@
 {
   "portfolios": [
-    {
-      "username": "Short-Tech",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJibzFpblRNRk5yLlFmdUIyN1p4ZTJYT1NuV0s2WFJwZHpuVU1haUgudi05LU9KbjF3N09VOUJxeWpBMWg3ZTc3UkdFUW1pbkIzNlRoSFQ4M21pbjJZVGRkMzZ0d3FBZHZpR0hCRWg4QXpnY18ifQ__",
-        "gcid": "6517035"
-      }
-    },
-    {
-      "username": "PureGrowth",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJGLWc3UUVyZVJ1Q3AzWHJBTWNtLUg5RXQzWi1WVUlkMDMwcjl0OTdKckFwVDhZTkNDbzgyNFFjZTE5UTZJd0l1VDJjTG5NbVdUR0lncjZwZC5aaGZsb2ZESndSLllpYjdxQ0t4Mi01eWN6Y18ifQ__",
-        "gcid": "46059454"
-      }
-    },
-    {
-      "username": "Momentum-LS",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiIzLVUwT21jR0ZQOU9jNG02YjRFcnZUSHdVTEJKVWJpSmg0bW1wQlVNaVFob0J3NmRyVWVYNlU0dFJld01TY0pWRHUxUnpEcHpJVkt0Y1ptQjd6V3ouLVhEUXVJakhXa3d3RmlNWFhlUGZDSV8ifQ__",
-        "gcid": "33172644"
-      }
-    },
-    {
-      "username": "MarketPicks",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJsWGJxRmY0NG1ya0hMLVdoVDVyZHNZVHNYNFJ0Yk9qWVV4eGUyS3JKUGJOaDIzY3c1LlM0d242MTdpSi55WXBoTWpUdXdDLnVLOTVzNnNNdW91YWRRUkNkWUQ4WW9Ud1pYVXZ3RVdFZGFWSV8ifQ__",
-        "gcid": "45862002"
-      }
-    },
-    {
-      "username": "BalancedPicks",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJHeFJnY3dwUmliM09acXVpLUZQT3A3ZVJWOFU1ZUdoU003bWdKRnBoNEdteVVXalAxdGpieGdZRkRaVXhIeHF6T204UjhkMGl5YUN1VVc3clh3ZFZhMEY2VzE3bk1aQkhqSldlcEdLNHF3c18ifQ__",
-        "gcid": "45862084"
-      }
-    },
-    {
-      "username": "OutSmartNSDQ",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJUWjFRa0doR2huYm5pdkprODd2Qmc2MXpuUnFpc1pHVTZjeEg1Ri1vTVQtOHJDTElWcGhGTjFETEU4VHVrc2FiaE5hRllCdmlCTEZEZWNuS0NXZlZaeDd3NXdpVXouWG9nYzJUNXB0T2JkRV8ifQ__",
-        "gcid": "7446811"
-      }
-    },
-    {
-      "username": "ProPicks",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJEcGVOR2VjY1o3VkdTaDg3empzN2ZVdkdJZDNCMVJxSXpqNEVRLWFJcEZVSmtJaHVPSklqd01FcnBYakdkSGpGMmZLLkVQRUJTMENFUWxCVVh2WjM2WXVrWDdJdkJJYjBOQ1p1NHNUV1RjZ18ifQ__",
-        "gcid": "45787144"
-      }
-    },
-    {
-      "username": "GainersQtr",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJuVDNSZjA1Yjhzd3R0T2NELWdMVlFCR1pRZmFPdWh2UHRuYk13MTNwR1JPQmNNZHhsNGo0dWR1Q2dTREZVamIwM0V3VlJYdEhzTi1LTHYyS29FejdNMk02T3VuOEZzOUlKMk11dkg3Z3F4UV8ifQ__",
-        "gcid": "4934693"
-      }
-    },
-    {
-      "username": "ActiveTraders",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiI3RDFsSlI3ZTBUdjM3Wkt4NXloN2k4NWM0aEZBNlo5UUlmSWhsckUxUEdUdW9YZ0RtaUwxODdmLW5hUzBselhYRkp0R0gtTzlrYk9yMVJJVFVvN2x1R21MMjUzc0xPcy5CTTRVZ0kzOEl3VV8ifQ__",
-        "gcid": "4934697"
-      }
-    },
-    {
-      "username": "SharpTraders",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiIyQWt1cUV1N3guUnVPRGg2bjhCSzVpc09SdFU1WEtJcWRQcG5KTVQuNHNXS3N0Z2xBSndjWW5jQThsS2F3VXRHNklWZ2dNczJtMXZ4dFhYemZYTGNHcjcuS3FuY0FBNnZ3UWlQN0g3cVhWRV8ifQ__",
-        "gcid": "4934708"
-      }
-    },
-    {
-      "username": "SectorNeutral",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiIxcUlUU0NBekhSOHZJWk5ZUXRpU3BlOE16SVFNaHlXanV1YUVDWmh6YkQxMEo0T004dHZhekFEMEhhT2dOWXBtd1Q4LWFIUEE4R1pIM3o4YktEWElNeVBYWHBwazhOb0w0OE1jR2hON0R1UV8ifQ__",
-        "gcid": "36755095"
-      }
-    },
-    {
-      "username": "Pure-Value",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJnT0lRVURXUEo4M2hrWlEzWkZTZTFZQ3lLeDk3RUVCY0wtVUFBalVnMU5ONXZwMXdlcVItdDRxLWYydWdzd2hHTWh0eUlkQkpSRjUzZkFWd1lYNXN3eklScGxTTVBONmV0YVp0WnIuaEp3TV8ifQ__",
-        "gcid": "46001041"
-      }
-    },
-    {
-      "username": "SectorGurus",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJiQkNlQlhXRFNpTmlOMTRnRE0tZDJBSjVqRTRHd2luamZ5SVhwNE5VYzUtMmdjdkdRYkpSdU1MLU5lYi1iTlZjVUwwUWF2c1B5UXByS0JqclZOcHFsVUlodExOR042LUpRb21zSjFpbzEud18ifQ__",
-        "gcid": "43029478"
-      }
-    },
-    {
-      "username": "NasdaqAI-Inverse",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJCWi1SbzA5VzBpMHJRb1RkRTdQWmM1MmZ1V2IwWm96UlpyZTJXczUuS0ludkgxbGJyNU5QS2NFcmhNUEd0NHA3YXUuTFZHanZEaFVIazB0YU44dzdqT0lrY0ZMV0Z3enhEb1lTQnBwampGOF8ifQ__",
-        "gcid": "37154870"
-      }
-    },
-    {
-      "username": "PureMomentum",
-      "credentials": {
-        "apiKey": "sdgdskldFPLGfjHn1421dgnlxdGTbngdflg6290bRjslfihsjhSDsdgGHH25hjf",
-        "userKey": "eyJjaSI6IjYwY2FiYjBiLTU1OTctNDQ4NS04ZjYzLTdlOWUwNTZlMGJiOCIsImVhbiI6IlVucmVnaXN0ZXJlZEFwcGxpY2F0aW9uIiwiZWsiOiJnNWkuQThHcXNjT0FlSE1Qa3Z4Z1VocTZQbWl2Vk1wN3FQUXZnVjBwdnlqY05PWENySjlscGNDVkhJVXEuQm83ZEdGOWo1cWRnNmlsZkJ3d1NJUmJ5c3ZHSHVYWWdFUHlLN1JVZm85Yndza18ifQ__",
-        "gcid": "43173506"
-      }
-    }
+    { "username": "Short-Tech", "credentials": null },
+    { "username": "PureGrowth", "credentials": null },
+    { "username": "Momentum-LS", "credentials": null },
+    { "username": "MarketPicks", "credentials": null },
+    { "username": "BalancedPicks", "credentials": null },
+    { "username": "OutSmartNSDQ", "credentials": null },
+    { "username": "ProPicks", "credentials": null },
+    { "username": "GainersQtr", "credentials": null },
+    { "username": "ActiveTraders", "credentials": null },
+    { "username": "SharpTraders", "credentials": null },
+    { "username": "SectorNeutral", "credentials": null },
+    { "username": "Pure-Value", "credentials": null },
+    { "username": "SectorGurus", "credentials": null },
+    { "username": "NasdaqAI-Inverse", "credentials": null },
+    { "username": "PureMomentum", "credentials": null }
   ],
-  "updatedAt": "2026-03-16T09:31:09.548Z"
+  "updatedAt": "2026-04-07T00:00:00.000Z"
 }

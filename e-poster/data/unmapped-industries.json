@@ -1990,5 +1990,397 @@
       "majorCategory": "Consumer & Commerce",
       "weight": 20
     }
+  ],
+  "IVOA.DE": [
+    {
+      "topic": "Corporate Bonds",
+      "subcategory": "Fixed Income - Term Bonds",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "L100.L": [
+    {
+      "topic": "Equity Index Tracking",
+      "subcategory": "UK Large Cap Equities",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "D28G.L": [
+    {
+      "topic": "Corporate Bonds",
+      "subcategory": "Fixed Income - Term Bonds",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "D28A.L": [
+    {
+      "topic": "Corporate Bonds",
+      "subcategory": "Fixed Income - Term Bonds",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "EWSP.AS": [
+    {
+      "topic": "Equity Index Tracking",
+      "subcategory": "US Large Cap Equities",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "IJPH.L": [
+    {
+      "topic": "Equity Index Tracking",
+      "subcategory": "Japan Equities",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "MSEX.L": [
+    {
+      "topic": "Equity Index Tracking",
+      "subcategory": "Eurozone Large Cap Equities",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "MSEU.L": [
+    {
+      "topic": "Equity Index Tracking",
+      "subcategory": "Eurozone Large Cap Equities",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "C50.PA": [
+    {
+      "topic": "Equity Index Tracking",
+      "subcategory": "Eurozone Large Cap Equities",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "IGUS.L": [
+    {
+      "topic": "Equity Index Tracking",
+      "subcategory": "US Large Cap Equities",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "ESLT": [
+    {
+      "topic": "Defense & Aerospace",
+      "subcategory": "Defense Contractors",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "LSEG.L": [
+    {
+      "topic": "Financial Exchanges & Infrastructure",
+      "subcategory": "Stock Exchanges",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "CVSA": [
+    {
+      "topic": "Financial Services Software",
+      "subcategory": "Fintech Solutions",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "FOX.US": [
+    {
+      "topic": "Media & Broadcasting",
+      "subcategory": "Television & Entertainment",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "III.L": [
+    {
+      "topic": "Private Equity & Investment",
+      "subcategory": "Investment Firms",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "EL.PA": [
+    {
+      "topic": "Luxury Goods & Eyewear",
+      "subcategory": "Fashion & Accessories",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "LIT.US": [
+    {
+      "topic": "Lithium & Battery Technology",
+      "subcategory": "Energy Storage",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 60
+    },
+    {
+      "topic": "Exchange Traded Funds",
+      "subcategory": "Commodity & Thematic ETFs",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 40
+    }
+  ],
+  "LTM": [
+    {
+      "topic": "Airlines & Air Transport",
+      "subcategory": "Passenger Airlines",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "M.US": [
+    {
+      "topic": "Retail & Department Stores",
+      "subcategory": "General Merchandise Retail",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "ASPI": [
+    {
+      "topic": "Specialty Chemicals & Isotopes",
+      "subcategory": "Chemical Manufacturing",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "IGLN.L": [
+    {
+      "topic": "Precious Metals",
+      "subcategory": "Gold",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 70
+    },
+    {
+      "topic": "Exchange Traded Commodities",
+      "subcategory": "Commodity ETCs",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 30
+    }
+  ],
+  "AV.L": [
+    {
+      "topic": "Insurance",
+      "subcategory": "General Insurance & Life Insurance",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "ID34.L": [
+    {
+      "topic": "Fixed Income & Bonds",
+      "subcategory": "Corporate Bond ETFs",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "EVD.DE": [
+    {
+      "topic": "Live Events & Entertainment",
+      "subcategory": "Event Ticketing & Promotion",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "HICL.L": [
+    {
+      "topic": "Infrastructure Investment",
+      "subcategory": "Public-Private Infrastructure",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "IEML.L": [
+    {
+      "topic": "Emerging Markets Government Bonds",
+      "subcategory": "Fixed Income & Bonds",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "MWOD.DE": [
+    {
+      "topic": "Materials & Commodities Index",
+      "subcategory": "Diversified Materials",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "NTGY.MC": [
+    {
+      "topic": "Utilities & Energy Distribution",
+      "subcategory": "Gas & Electricity Utilities",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "SREN.ZU": [
+    {
+      "topic": "Reinsurance",
+      "subcategory": "Insurance & Risk Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "INPP.L": [
+    {
+      "topic": "Infrastructure Investment",
+      "subcategory": "Public-Private Partnerships",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "NIGHT": [
+    {
+      "topic": "Unspecified/Insufficient Data",
+      "subcategory": "Unknown",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "CNA.L": [
+    {
+      "topic": "Utilities & Energy Distribution",
+      "subcategory": "Gas & Electricity Utilities",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "MNKS.L": [
+    {
+      "topic": "Diversified Investment Trust",
+      "subcategory": "Multi-Asset Portfolio",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "BBOX.L": [
+    {
+      "topic": "Industrial Real Estate",
+      "subcategory": "Logistics & Warehouse Properties",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 100
+    }
+  ],
+  "ALW.L": [
+    {
+      "topic": "Diversified Investment Trust",
+      "subcategory": "Multi-Asset Portfolio",
+      "majorCategory": "Multi-Asset, Indices & Strategies",
+      "weight": 100
+    }
+  ],
+  "MUV2.DE": [
+    {
+      "topic": "Reinsurance",
+      "subcategory": "Insurance & Risk Management",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "LHA.DE": [
+    {
+      "topic": "Airlines & Air Transport",
+      "subcategory": "Passenger & Cargo Aviation",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "SERV": [
+    {
+      "topic": "Robotics & Automation",
+      "subcategory": "Industrial Robotics",
+      "majorCategory": "Tech & Data",
+      "weight": 100
+    }
+  ],
+  "PAYP": [
+    {
+      "topic": "Digital Payments & Fintech",
+      "subcategory": "Payment Processing",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "TBBB": [
+    {
+      "topic": "Food & Beverage Manufacturing",
+      "subcategory": "Food Production",
+      "majorCategory": "Consumer & Commerce",
+      "weight": 100
+    }
+  ],
+  "SRFM": [
+    {
+      "topic": "Air Mobility & Urban Aviation",
+      "subcategory": "Electric Aircraft & Regional Air Transport",
+      "majorCategory": "Industrials, Transport & Infrastructure",
+      "weight": 100
+    }
+  ],
+  "GLEN.L": [
+    {
+      "topic": "Mining & Metals",
+      "subcategory": "Diversified Commodities Extraction",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 70
+    },
+    {
+      "topic": "Energy Production",
+      "subcategory": "Oil & Gas",
+      "majorCategory": "Energy & Utilities",
+      "weight": 30
+    }
+  ],
+  "VIE.PA": [
+    {
+      "topic": "Environmental Services & Utilities",
+      "subcategory": "Water, Waste & Environmental Management",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "AZM.MI": [
+    {
+      "topic": "Wealth & Asset Management",
+      "subcategory": "Investment Management & Advisory",
+      "majorCategory": "Financial Services & Fintech",
+      "weight": 100
+    }
+  ],
+  "UN0.DE": [
+    {
+      "topic": "Energy Generation & Supply",
+      "subcategory": "Utilities & Power Distribution",
+      "majorCategory": "Energy & Utilities",
+      "weight": 100
+    }
+  ],
+  "JMAT.L": [
+    {
+      "topic": "Specialty Chemicals & Materials",
+      "subcategory": "Catalysts & Advanced Materials",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 60
+    },
+    {
+      "topic": "Precious Metals & Refining",
+      "subcategory": "Platinum Group Metals Processing",
+      "majorCategory": "Materials, Real Assets & Commodities",
+      "weight": 40
+    }
   ]
 }

@@ -1,3 +1,26 @@
 
 # Cursor IDE
-.cursor/
+.cursor/debug-*.log
+
+# Env and secrets
+.env
+.env.local
+.env*.local
+*.env
+
+# Local database
+dev.db
+dev.db-journal
+*.db
+*.db-journal
+
+# Local Key Vault fallback (secrets — never commit)
+data/app-secrets.json
+e-poster/data/app-secrets.json
+
+# Binary image templates (generated, large)
+e-poster/data/image-template/
+
+# Backup / copy folders
+*- Copy/
+* - Copy/

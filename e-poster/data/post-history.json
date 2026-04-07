@@ -1,6 +1,47 @@
 {
   "posts": [
     {
+      "id": "post-1775551135515-dyj91g",
+      "newsId": "",
+      "portfolioId": "Short-Tech",
+      "portfolioName": "Short-Tech",
+      "postType": "monthly-update",
+      "content": "Dear Investors 🤝,\n\nHere is your monthly update for March 2026\n📉 @Short-Tech — March 2026 Pulse\nMonthly: +0.26% 🚀\nYTD: +7.27%\n\nShort-Tech delivered a modest but meaningful gain in March, extending its strong year-to-date run as tech sector headwinds continued to support the portfolio's short-biased strategy 🎯.\n\nMarch was a turbulent month for technology 💻, with major names facing renewed pressure from stretched valuations, softening ad spend signals, and persistent macro uncertainty. Rate expectations remained in flux 🌊, and investors grew increasingly cautious around high-multiple growth stocks — precisely the environment where Short-Tech is designed to thrive 💪.\n\nThe portfolio's short positioning across large-cap tech continued to capture downside momentum, while eToro's investment committee maintained disciplined rebalancing to keep allocations optimised 🛡️. With AI-driven hype cooling slightly and earnings guidance turning more conservative across the sector, the macro backdrop remains broadly supportive for this strategy heading into Q2 📊.\n\nFor investors looking to hedge technology exposure or profit from sector weakness, Short-Tech continues to demonstrate its value as a portfolio diversifier 🔥.\n\n@Short-Tech\n$IBCF.DE , $L100.L , $D28A.L , $EWSP.AS , $IJPH.L , $MSEX.L , $C50.PA , $100H.L\n\nCopy Trading does not amount to investment advice. The value of your investments may go up or down. Your capital is at risk.\nPast performance is not an indication of future results.\nForecasts are not a reliable indicator of future performance",
+      "tags": [],
+      "status": "posted",
+      "isDeleted": false,
+      "etoroPostId": "33daf150-325d-11f1-8080-80002a23b869",
+      "createdAt": "2026-04-07T08:38:55.515Z",
+      "postedAt": "2026-04-07T08:38:55.515Z"
+    },
+    {
+      "id": "post-1774867898384-1up4q8",
+      "newsId": "",
+      "portfolioId": "Short-Tech",
+      "portfolioName": "Short-Tech",
+      "postType": "news",
+      "content": "@Short-Tech\n\nTrump's announcement of a 5-day pause on military strikes against Iranian energy infrastructure has triggered a broad risk-on rally across global equity markets — a headwind for this short-tech portfolio as improved sentiment lifts indices worldwide.\n\n📉 $IGUS.L $L100.L $EWSP.AS\n\n👉 Over the weekend, Trump confirmed that the US and Iran have held \"productive conversations\" toward resolving Middle East hostilities. He has instructed the Department of Defense to postpone any military strikes on Iranian power plants and energy infrastructure for five days, pending ongoing negotiations.\n\n👉 The immediate market reaction is positive across the board. Reduced geopolitical risk lowers the energy price volatility that had been weighing on global growth expectations, boosting sentiment for equities from the US to Europe and Asia.\n\n👉 For Short-Tech, which holds short positions on major tech companies, a broad market rally driven by improved macro sentiment creates resistance. When risk appetite rises, tech stocks — even underperforming ones — tend to recover alongside the wider market.\n\n👉 European indices tracked by $EWSP.AS, $MSEU.L, and $C50.PA are also seeing positive momentum as lower oil price uncertainty benefits EU economies directly.\n\n🔗 Read more: https://edition.cnn.com/world/live-news/iran-war-us-israel-trump-03-23-26\n\n✨ @Short-Tech is eToro's hedging portfolio for investors expecting weakness in the technology sector, managed by eToro's investment committee.\n\nCopy Trading does not amount to investment advice. The value of your investments may go up or down. Your capital is at risk.\nPast performance is not an indication of future results.",
+      "tags": [],
+      "attachments": [
+        {
+          "url": "https://res.cloudinary.com/dgrqcwqlg/image/upload/v1774867864/e-poster/o5umrnnhjpdez5o2lrm0.png",
+          "mediaType": "Image",
+          "media": {
+            "image": {
+              "url": "https://res.cloudinary.com/dgrqcwqlg/image/upload/v1774867864/e-poster/o5umrnnhjpdez5o2lrm0.png",
+              "width": 1113,
+              "height": 582
+            }
+          }
+        }
+      ],
+      "status": "posted",
+      "isDeleted": false,
+      "etoroPostId": "6c32bd40-2c26-11f1-8080-80016aaf9314",
+      "createdAt": "2026-03-30T10:51:38.384Z",
+      "postedAt": "2026-03-30T10:51:38.384Z"
+    },
+    {
       "id": "post-1774279840578-7gsuhn",
       "newsId": "",
       "portfolioId": "Short-Tech",
@@ -247,6 +288,6 @@
       "postedAt": "2026-03-09T09:47:23.377Z"
     }
   ],
-  "updatedAt": "2026-03-23T15:30:40.578Z",
+  "updatedAt": "2026-04-07T08:38:55.515Z",
   "lastStatusCheck": "2026-03-23T12:28:38.981Z"
 }
