@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev --port 3001 --turbo",
     "build": "next build",
-    "start": "next start --port 3001",
+    "start": "next start --port 5000",
     "lint": "next lint"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
+    "@azure/identity": "^4.13.1",
+    "@azure/keyvault-secrets": "^4.10.0",
     "@extractus/article-extractor": "^8.0.20",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-accordion": "^1.2.10",

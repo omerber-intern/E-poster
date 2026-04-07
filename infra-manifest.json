@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "resources": {
+    "keyvault": {
+      "enabled": true,
+      "reason": "Store per-portfolio eToro API credentials at runtime"
+    }
+  }
+}

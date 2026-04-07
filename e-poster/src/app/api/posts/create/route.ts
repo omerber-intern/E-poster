@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const creds = getPortfolioCredentials(portfolioUsername);
+    const creds = await getPortfolioCredentials(portfolioUsername);
     if (!creds) {
       return NextResponse.json(
         { error: `No API credentials configured for ${portfolioUsername}` },
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const headers = getPostHeaders(portfolioUsername);
+    const headers = await getPostHeaders(portfolioUsername);
     if (!headers) {
       return NextResponse.json(
         { error: `Could not build headers for ${portfolioUsername}` },

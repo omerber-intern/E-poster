@@ -26,7 +26,7 @@ export async function PUT(
       );
     }
 
-    const updated = updateCredentials(decodeURIComponent(username), credentials);
+    const updated = await updateCredentials(decodeURIComponent(username), credentials);
     if (!updated) {
       return NextResponse.json(
         { error: `Portfolio '${username}' not found` },
@@ -55,7 +55,7 @@ export async function DELETE(
 ) {
   try {
     const { username } = await params;
-    const removed = removePortfolio(decodeURIComponent(username));
+    const removed = await removePortfolio(decodeURIComponent(username));
     if (!removed) {
       return NextResponse.json(
         { error: `Portfolio '${username}' not found` },

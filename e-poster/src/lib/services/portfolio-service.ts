@@ -88,7 +88,7 @@ export function getBioByUsername(username: string): PortfolioBio | null {
   return bios.find((b) => b.username === username) ?? null;
 }
 
-export function getPortfoliosWithCredentials(): string[] {
+export async function getPortfoliosWithCredentials(): Promise<string[]> {
   return getUsernamesWithCredentials();
 }
 

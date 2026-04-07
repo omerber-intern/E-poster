@@ -2,7 +2,7 @@
  * eToro API Configuration
  *
  * - GET requests use Short-Tech's credentials (ETORO_API_KEY / ETORO_USER_KEY).
- * - POST requests (posting) use per-portfolio credentials from PORTFOLIO_CREDENTIALS.
+ * - POST requests (posting) use per-portfolio credentials from Key Vault.
  */
 
 import type { PortfolioCredentials } from './models/portfolio';
@@ -38,13 +38,13 @@ export function getBaseHeaders(): Record<string, string> {
 }
 
 /**
- * Look up per-portfolio credentials.
- * Reads from portfolio-config.json first, falling back to the PORTFOLIO_CREDENTIALS env var.
+ * Look up per-portfolio credentials from Key Vault,
+ * falling back to the PORTFOLIO_CREDENTIALS env var.
  */
-export function getPortfolioCredentials(
+export async function getPortfolioCredentials(
   username: string,
-): PortfolioCredentials | null {
-  const configCreds = getCredentialsFromConfig(username);
+): Promise<PortfolioCredentials | null> {
+  const configCreds = await getCredentialsFromConfig(username);
   if (configCreds) return configCreds;
 
   const raw = process.env.PORTFOLIO_CREDENTIALS;
@@ -63,10 +63,10 @@ export function getPortfolioCredentials(
  * Headers used for POST requests (per-portfolio credentials).
  * Returns null if the portfolio has no credentials.
  */
-export function getPostHeaders(
+export async function getPostHeaders(
   username: string,
-): Record<string, string> | null {
-  const creds = getPortfolioCredentials(username);
+): Promise<Record<string, string> | null> {
+  const creds = await getPortfolioCredentials(username);
   if (!creds) return null;
 
   return {
@@ -81,7 +81,7 @@ export function getPostHeaders(
 export const API_ENDPOINTS = {
   USER_INFO: '/api/v1/user-info/people',
   FEEDS_POST: '/api/v1/feeds/post',
-  FEEDS_USER: '/api/v1/feeds/user/', // GET {userId} - user's feed posts
+  FEEDS_USER: '/api/v1/feeds/user/',
   INSTRUMENTS: '/api/v1/market-data/instruments',
   STOCKS_INDUSTRIES: '/api/v1/market-data/stocks-industries',
 };

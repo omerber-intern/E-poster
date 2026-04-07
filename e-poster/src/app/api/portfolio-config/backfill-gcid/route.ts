@@ -5,7 +5,8 @@ import {
   getBaseHeaders,
 } from '@/lib/etoro-api-config';
 import {
-  readPortfolioConfig,
+  getPortfolioUsernames,
+  getCredentials,
   updateCredentials,
 } from '@/lib/services/portfolio-config-service';
 
@@ -17,10 +18,15 @@ import {
  */
 export async function POST() {
   try {
-    const config = readPortfolioConfig();
-    const needsGcid = config.portfolios.filter(
-      (p) => p.credentials && !p.credentials.gcid,
-    );
+    const usernames = getPortfolioUsernames();
+    const needsGcid: { username: string; creds: import('@/lib/models/portfolio').PortfolioCredentials }[] = [];
+
+    for (const username of usernames) {
+      const creds = await getCredentials(username);
+      if (creds && !creds.gcid) {
+        needsGcid.push({ username, creds });
+      }
+    }
 
     if (needsGcid.length === 0) {
       return NextResponse.json({
@@ -33,12 +39,12 @@ export async function POST() {
     const updated: string[] = [];
     const errors: string[] = [];
 
-    for (const entry of needsGcid) {
+    for (const { username, creds } of needsGcid) {
       try {
         const url = new URL(
           `${ETORO_API_BASE_URL}${API_ENDPOINTS.USER_INFO}`,
         );
-        url.searchParams.append('usernames', entry.username);
+        url.searchParams.append('usernames', username);
 
         const res = await fetch(url.toString(), {
           method: 'GET',
@@ -47,7 +53,7 @@ export async function POST() {
         });
 
         if (!res.ok) {
-          errors.push(`${entry.username}: HTTP ${res.status}`);
+          errors.push(`${username}: HTTP ${res.status}`);
           continue;
         }
 
@@ -55,19 +61,16 @@ export async function POST() {
         const user = data?.users?.[0];
 
         if (!user?.gcid) {
-          errors.push(`${entry.username}: no GCID in response`);
+          errors.push(`${username}: no GCID in response`);
           continue;
         }
 
         const gcid = String(user.gcid);
-        updateCredentials(entry.username, {
-          ...entry.credentials!,
-          gcid,
-        });
-        updated.push(entry.username);
+        await updateCredentials(username, { ...creds, gcid });
+        updated.push(username);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        errors.push(`${entry.username}: ${msg}`);
+        errors.push(`${username}: ${msg}`);
       }
     }
 

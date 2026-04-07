@@ -181,13 +181,13 @@ export async function refreshPostStatuses(): Promise<{
   const portfolioIds = new Set(postsWithEtoroId.map((p) => p.portfolioId));
 
   for (const portfolioUsername of portfolioIds) {
-    const creds = getPortfolioCredentials(portfolioUsername);
+    const creds = await getPortfolioCredentials(portfolioUsername);
     if (!creds) {
       errors.push(`No credentials for ${portfolioUsername}`);
       continue;
     }
 
-    const headers = getPostHeaders(portfolioUsername);
+    const headers = await getPostHeaders(portfolioUsername);
     if (!headers) {
       errors.push(`Could not build headers for ${portfolioUsername}`);
       continue;

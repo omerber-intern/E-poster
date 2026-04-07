@@ -161,10 +161,10 @@ async function publishToEtoro(
   portfolioUsername: string,
   message: string,
 ): Promise<{ postId: string; postedAt: string }> {
-  const creds = getPortfolioCredentials(portfolioUsername);
+  const creds = await getPortfolioCredentials(portfolioUsername);
   if (!creds) throw new Error(`No API credentials for ${portfolioUsername}`);
 
-  const headers = getPostHeaders(portfolioUsername);
+  const headers = await getPostHeaders(portfolioUsername);
   if (!headers) throw new Error(`Could not build headers for ${portfolioUsername}`);
 
   const payload = {
